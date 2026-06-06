@@ -4,12 +4,12 @@ from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Library, District, Project, Coordinators, LibraryType
 
-
+# views.py
 # ==================== ГЛАВНАЯ СТРАНИЦА ====================
 
 def home(request):
     """Главная страница с информационными зонами"""
-    return render(request, 'home.html')
+    return render(request, 'main-page.html')
 
 
 # ==================== ПРОЕКТЫ ====================
@@ -29,21 +29,13 @@ def projects(request):
 # ==================== КАРТА БИБЛИОТЕК ====================
 
 def map_view(request):
-    """Страница с картой и списком библиотек"""
-    libraries = Library.objects.select_related(
-        'district', 'library_type').all()
-
-    # Все библиотеки с координатами
-    libraries = Library.objects.select_related(
-        'district', 'library_type'
-    )
+    """Страница с SVG-картой"""
+    districts = District.objects.all().order_by('name')
 
     context = {
-        'libraries': libraries,
-        'library_types': LibraryType.objects.all(),
-        'total_libraries': libraries.count(),
+        'districts': districts,
     }
-    return render(request, 'map.html', context)
+    return render(request, 'map-page.html', context)
 
 
 def get_libraries_by_district(request, district_id):

@@ -14,9 +14,28 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
+from library import views
 
 urlpatterns = [
+    # Админ панель
     path('admin/', admin.site.urls),
+    # Главная страница
+    path('', views.home, name='home'),
+
+    # Страница проектов
+    path('projects/', views.projects, name='projects'),
+
+    # Карта библиотек
+    path('map/', views.map_view, name='map'),
+
+    # Детальная страница библиотеки
+    # path('library/<int:pk>/', views.library_detail, name='library_detail'),
 ]
+
+# Это обязательно для разработки!
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

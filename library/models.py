@@ -1,5 +1,3 @@
-from enum import Enum
-
 from django.db import models
 
 
@@ -13,23 +11,72 @@ class Coordinators(models.Model):
 
 
 class Project(models.Model):
-    coordinator = models.ForeignKey(Coordinators, on_delete=models.CASCADE, related_name='projects')
+    # coordinator = models.ForeignKey(Coordinators, on_delete=models.CASCADE, related_name='projects')
     photo = models.ImageField(upload_to='projects/', blank=True)
-    name = models.CharField(max_length=100)
-    description = models.TextField(max_length=100)
+    name = models.CharField(max_length=200)
+    description = models.TextField()
 
     def __str__(self):
         return f"Проект: {self.name}"
 
 
-class Region(models.Choices):
-    pass
+class Settlement(models.Model):
+    """Населённый пункт внутри района"""
+    district = models.ForeignKey(
+        "District",
+        on_delete=models.CASCADE,
+        related_name='settlements',
+        verbose_name="Район"
+    )
+    name = models.CharField(max_length=200, verbose_name="Название")
+    is_main = models.BooleanField(
+        default=False,
+        verbose_name="Главный город района"
+    )
 
-# Create your models here.
+    class Meta:
+        verbose_name = "Населённый пункт"
+        verbose_name_plural = "Населённые пункты"
+        unique_together = ['district', 'name']
+        ordering = ['-is_main', 'name']  # Главный город первым
+
+    def __str__(self):
+        return f"{self.name} ({self.district.name})"
+
+    def save(self, *args, **kwargs):
+        # Сначала сохраняем сам settlement
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+
+        # Если это главный город
+        if self.is_main:
+            # Убираем is_main у других пунктов этого района
+            Settlement.objects.filter(
+                district=self.district,
+                is_main=True
+            ).exclude(pk=self.pk).update(is_main=False)
+
+            # Обновляем main_settlement у района
+            if self.district.main_settlement_id != self.pk:
+                District.objects.filter(pk=self.district_id).update(main_settlement=self)
+
+        # Если убрали is_main
+        elif not self.is_main:
+            if self.district.main_settlement_id == self.pk:
+                District.objects.filter(pk=self.district_id).update(main_settlement=None)
 
 class District(models.Model):
     """Муниципальный округ/район"""
     name = models.CharField(max_length=150, verbose_name="Название")
+
+    main_settlement = models.ForeignKey(
+        Settlement,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='main_for_district',
+        verbose_name="Главный город"
+    )
     # Привязка к SVG
     svg_id = models.CharField(
         max_length=50,
@@ -37,13 +84,12 @@ class District(models.Model):
         blank=True,
         null=True,
         verbose_name="ID региона в SVG",
-        help_text="Например: zjerdevka, michurinsk"
     )
 
     class Meta:
         verbose_name = "Муниципальный округ"
         verbose_name_plural = "Муниципальные округа"
-        unique_together = ['name', 'region']
+        unique_together = ['name']
         ordering = ['name']
 
     def __str__(self):
@@ -60,12 +106,12 @@ class LibraryType(models.TextChoices):
 class Library(models.Model):
     """Библиотека"""
     photo = models.ImageField(upload_to='libraries/', blank=True)
-    name = models.CharField(max_length=200)
+    name = models.CharField(verbose_name='Название', max_length=200)
 
-    library_type = models.CharField(max_length=20, choices=LibraryType)
-    district = models.ForeignKey(District, on_delete=models.CASCADE, related_name='libraries')
+    library_type = models.CharField(verbose_name='Тип библиотеки', max_length=20, choices=LibraryType.choices)
+    district = models.ForeignKey(District, verbose_name='Округ', on_delete=models.CASCADE, related_name='libraries')
 
-    status = models.CharField(max_length=300)
+    status = models.CharField(verbose_name='Статус', max_length=300)
     area = models.FloatField(
         null=True,
         blank=True,
@@ -76,20 +122,26 @@ class Library(models.Model):
         blank=True,
         verbose_name="Год модернизации"
     )
-    address = models.CharField(max_length=300)
+    settlement = models.ForeignKey(
+        Settlement,
+        verbose_name='Населённый пункт',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='libraries'
+    )
+    address = models.CharField(verbose_name='Адрес', max_length=300)
 
-    working_hours = models.TextField(blank=True)
+    working_hours = models.TextField(verbose_name='Рабочие часы', blank=True)
 
-    phone = models.CharField(max_length=20, blank=True)
-    phone_owner = models.CharField(max_length=200, blank=True)
+    phone = models.CharField(verbose_name='Телефон', max_length=200, blank=True)
+    phone_owner = models.CharField(verbose_name='Владелец телефона', max_length=200, blank=True)
 
-    email = models.EmailField(blank=True)
-
-    history = models.TextField(verbose_name="Текст истории")
+    email = models.CharField(verbose_name='Почта', max_length=200, blank=True)
 
     pdf_file = models.FileField(
         upload_to='libraries/design_projects/',
-        verbose_name="PDF файл"
+        verbose_name="PDF файл", blank=True
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -113,6 +165,75 @@ class Library(models.Model):
         }
         return icons.get(self.library_type, 'images/map/icons/model-library.svg')
 
+
+class LibraryBlock(models.Model):
+    """
+    Универсальный текстовый блок на странице библиотеки.
+    Может содержать историю, концепцию, описание зон и т.д.
+    """
+
+    class BlockType(models.TextChoices):
+        PROJECT = 'project', 'Включена в проект'
+        DIRECTION = 'direction', 'Направление в сфере'
+        INFO = 'info', 'Информационный блок'
+        LIST = 'list', 'Список'
+
+    library = models.ForeignKey(
+        Library,
+        on_delete=models.CASCADE,
+        related_name='blocks'
+    )
+    block_type = models.CharField(
+        max_length=30,
+        choices=BlockType.choices,
+        verbose_name="Тип блока"
+    )
+    title = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name="Заголовок блока"
+    )
+    # Год (только для проектов)
+    year = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Год",
+        help_text="Год включения в проект"
+    )
+    content = models.TextField(
+        verbose_name="Содержание",
+        help_text="Основной текст блока. Используй Markdown для форматирования (списки, жирный, ссылки)"
+    )
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        verbose_name="Порядок отображения"
+    )
+    is_visible = models.BooleanField(
+        default=True,
+        verbose_name="Отображать на сайте"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Текстовый блок"
+        verbose_name_plural = "Текстовые блоки"
+        ordering = ['order', 'created_at']  # Один тип блока на библиотеку
+
+    def __str__(self):
+        return f"{self.get_block_type_display()}: {self.library.name}"
+
+    def get_title(self):
+        """Возвращает заголовок: пользовательский или стандартный"""
+        return self.title or self.get_block_type_display()
+
+    def get_items(self):
+        """Разбивает content на список (для типа LIST)"""
+        if self.block_type == self.BlockType.LIST and self.content:
+            return [line.strip() for line in self.content.strip().split('\n') if line.strip()]
+        return []
+
+
 class WebSite(models.Model):
     library = models.ForeignKey(
         Library,
@@ -124,49 +245,10 @@ class WebSite(models.Model):
 
     class Meta:
         verbose_name = "Веб-сайт / Соцсети"
+        verbose_name_plural = "Веб-сайт / Соцсети"
 
     def __str__(self):
         return self.url
-
-
-class Zone(models.Model):
-    """Зоны пространства библиотеки"""
-    library = models.ForeignKey(
-        Library,
-        on_delete=models.CASCADE,
-        related_name='zones'
-    )
-    name = models.CharField(max_length=200, verbose_name="Название зоны")
-    order = models.PositiveSmallIntegerField(
-        default=0,
-        verbose_name="Порядок сортировки"
-    )
-
-    class Meta:
-        verbose_name = "Зона пространства"
-        verbose_name_plural = "Зоны пространства"
-        ordering = ['order']
-        unique_together = ['library', 'name']
-
-    def __str__(self):
-        return f"{self.name} ({self.library.name})"
-
-
-class Technology(models.Model):
-    """Технологии и оборудование"""
-    library = models.ForeignKey(
-        Library,
-        on_delete=models.CASCADE,
-        related_name='technologies'
-    )
-    name = models.CharField(max_length=200, verbose_name="Название")
-
-    class Meta:
-        verbose_name = "Технология/оборудование"
-        verbose_name_plural = "Технологии и оборудование"
-
-    def __str__(self):
-        return f"{self.name} ({self.library.name})"
 
 
 class PhotoAlbum(models.Model):

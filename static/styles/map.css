@@ -1,91 +1,110 @@
-/* кирилл */
+/* static/styles/map.css */
 
-header {
+
+.simple-border {
+    padding: 60px;
+    text-align: center;
     display: flex;
-    justify-content: center;        
-    align-items: center;
-    padding: 10px 20px;            
-    width: 100%;
-    height: 80px;
-    background: transparent; 
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 10;
-    font-size: 22px;
-    letter-spacing: 0.05em;
-}
-
-.header-container {
-    display: flex;
-    align-items: center;
-    justify-content: center; 
-    gap: 36px;                      
-    width: 100%;
-    max-width: 1200px;          
-    margin: 0 auto;               
-}
-
-.circle-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 260px;
-    height: 56px;
-    border-radius: 40px;
-    background: #5D6939;
-    color: #FAF2E5;
-    text-decoration: none;
-    transition: all 500ms ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    font-size: 22px;
-    letter-spacing: 0.05em;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 160px;
-    height: 56px;
-    border-radius: 40px;
-    background-color: #5D6939;
-    background-image: url("../images/images_main/icon.png");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 50%;
-    text-decoration: none;
-    transition: background-color 500ms ease, box-shadow 500ms ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.hamburger {
-    display: none;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    cursor: pointer;
-    z-index: 100;
+    align-items: center;
+}
+
+.simple-border h1 {
+    font-size: clamp(38px, 5vw, 94px);
+    color: #000000;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    max-width: 90%;
+    margin-bottom: 30px;
+    font-weight: 300;
 }
 
 
-.library-marker {
-    cursor: pointer;
-    transition: all 0.3s;
-}
-.library-marker image {
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+.map_section {
+    background-color: #f5f0e8;
+    padding: 40px 20px;
+    text-align: center;
 }
 
-.line {
-    background: #FAF2E5;
-    width: 26px;
-    height: 2.5px;
-    margin: 4px 0;
-    border-radius: 2px;
-    transition: all 0.3s ease;
+.map_section h1 {
+    font-size: clamp(38px, 5vw, 70px);
+    font-weight: 300;
+    color: #000000;
+    letter-spacing: 0.08em;
+    margin-bottom: 40px;
+    line-height: 1.3;
 }
+
+.map_section .uppercase {
+    display: block;
+    text-transform: uppercase;
+    font-size: clamp(28px, 4vw, 50px);
+    letter-spacing: 0.12em;
+}
+
+
+.library-hero {
+    padding: 30px 30px 30px 50px;
+    margin: 0;
+}
+
+
+.map_wrapper {
+    background-color: #5D6939;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 500px;
+
+    padding: 30px 30px 30px 50px;
+    margin: 0;
+}
+
+.map_wrapper svg {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    height: auto;
+}
+
+/* ==================== НАЗВАНИЯ ГОРОДОВ ==================== */
+
+.city-labels text {
+    pointer-events: none;
+    user-select: none;
+    paint-order: stroke;
+    stroke: #FAF2E5;
+    stroke-width: 2.5px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    text-shadow: none;
+}
+
+/* ==================== МАРКЕРЫ БИБЛИОТЕК ==================== */
+
+/*.library-marker {*/
+/*    cursor: pointer;*/
+/*    transition: all 0.3s;*/
+/*}*/
+
+/*.library-marker:hover {*/
+/*    transform: scale(1.15);*/
+/*    transform-origin: center;*/
+/*}*/
+
+/*.library-marker:hover circle {*/
+/*    fill: #AAB97E;*/
+/*}*/
+
+/*.library-marker image {*/
+/*    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));*/
+/*    pointer-events: none;*/
+/*}*/
+
+/* ==================== ЛЕГЕНДА ==================== */
 
 .map-legend {
     display: flex;
@@ -94,9 +113,8 @@ header {
     gap: 30px;
     padding: 20px 15px;
     flex-wrap: wrap;
-    background-color: rgba(255, 255, 255, 0.15);
     border-radius: 12px;
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 .legend-item {
@@ -109,9 +127,77 @@ header {
     border-radius: 8px;
 }
 
-.legend-item:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
+/* ==================== СПИСОК ОКРУГОВ ==================== */
+
+.districts-list {
+    margin-top: 40px;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.districts-list h2 {
+    font-family: "Jost", sans-serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #000000;
+    letter-spacing: 0.06em;
+    margin-bottom: 30px;
+}
+
+.districts-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.district-link {
+    font-family: "Jost", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #5D6939;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 2px solid #5D6939;
+    border-radius: 40px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.district-link:hover,
+.district-link.active {
+    background-color: #5D6939;
+    color: #FAF2E5;
+}
+
+/* ==================== АДАПТИВ ==================== */
+
+@media (max-width: 768px) {
+    .districts-list h2 {
+        font-size: 28px;
+    }
+
+    .district-link {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .districts-grid {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 590px) {
+    .districts-list h2 {
+        font-size: 24px;
+    }
+
+    .district-link {
+        font-size: 13px;
+        padding: 6px 14px;
+    }
 }
 
 .legend-icon-wrapper {
@@ -119,7 +205,6 @@ header {
     height: 36px;
     border-radius: 50%;
     background: #DBDAAE;
-    /*border: 2px solid #7B8E4E;*/
     display: flex;
     align-items: center;
     justify-content: center;
@@ -139,50 +224,283 @@ header {
     white-space: nowrap;
 }
 
-.map_wrapper {
-    background-color: #7B8E4E;
-    padding: 20px;
-    border-radius: 16px;
+/* ==================== АДАПТИВНОСТЬ ==================== */
+
+@media (max-width: 1500px) {
+    .map_section h1 {
+        font-size: 60px;
+        margin-bottom: 35px;
+    }
+
+    .map_section .uppercase {
+        font-size: 42px;
+    }
+
+    .map_wrapper {
+        padding: 16px;
+    }
+
+    .map-legend {
+        gap: 24px;
+    }
+
+    .city-labels {
+        font-size: 12px;
+    }
 }
 
-.map_wrapper svg {
-    display: block;
-    margin: 0 auto;
+@media (max-width: 1340px) {
+    .map_section h1 {
+        font-size: 52px;
+    }
+
+    .map_section .uppercase {
+        font-size: 36px;
+    }
+
+    .map_wrapper {
+        padding: 14px;
+    }
+
+    .map-legend {
+        gap: 20px;
+        padding: 16px 12px;
+    }
+
+    .city-labels {
+        font-size: 11px;
+    }
 }
 
-.map_section {
-    background-color: #f5f0e8;
-    padding: 40px 20px;
+@media (max-width: 1120px) {
+    .map_section h1 {
+        font-size: 44px;
+        margin-bottom: 30px;
+    }
+
+    .map_section .uppercase {
+        font-size: 30px;
+    }
+
+    .map_wrapper {
+        padding: 12px;
+        border-radius: 14px;
+    }
+
+    .map-legend {
+        gap: 16px;
+    }
+
+    .legend-icon-wrapper {
+        width: 32px;
+        height: 32px;
+    }
+
+    .legend-icon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .legend-text {
+        font-size: 13px;
+    }
+
+    .city-labels {
+        font-size: 10px;
+    }
 }
 
-.mobile-menu {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 85%;
-    max-width: 450px;
-    min-width: 300px;
-    background: linear-gradient(135deg, rgba(90, 105, 57, 0.98), rgba(128, 143, 77, 0.98));
-    backdrop-filter: blur(16px);
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding: 35px 25px;
-    z-index: 99;
-    border-radius: 32px;
-    box-shadow: 0 25px 45px -10px rgba(0, 0, 0, 0.4), 
-                0 0 0 1px rgba(255, 255, 255, 0.2);
-    transition: all 300ms ease;
-    opacity: 0;
-    visibility: hidden;
-    transform-origin: center;
+@media (max-width: 910px) {
+    .map_section {
+        padding: 30px 16px;
+    }
+
+    .map_section h1 {
+        font-size: 36px;
+    }
+
+    .map_section .uppercase {
+        font-size: 26px;
+    }
+
+    .map_wrapper {
+        padding: 10px;
+    }
+
+    .map-legend {
+        gap: 12px;
+        padding: 14px 10px;
+    }
+
+    .legend-text {
+        font-size: 12px;
+    }
+
+    .city-labels {
+        font-size: 9px;
+    }
 }
 
-.mobile-menu.active {
-    display: flex;
-    opacity: 1;
-    visibility: visible;
-    animation: menuPopup 0.3s ease forwards;
+@media (max-width: 768px) {
+    .map_section {
+        padding: 20px 12px;
+    }
+
+    .map_section h1 {
+        font-size: 30px;
+        margin-bottom: 24px;
+    }
+
+    .map_section .uppercase {
+        font-size: 22px;
+    }
+
+    .map_wrapper {
+        padding: 8px;
+    }
+
+    .map-legend {
+        gap: 10px;
+        padding: 12px 8px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .legend-icon-wrapper {
+        width: 28px;
+        height: 28px;
+    }
+
+    .legend-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .legend-text {
+        font-size: 11px;
+    }
+
+    .city-labels {
+        font-size: 8px;
+    }
+}
+
+@media (max-width: 590px) {
+    .map_section h1 {
+        font-size: 26px;
+    }
+
+    .map_section .uppercase {
+        font-size: 18px;
+    }
+
+    .map-legend {
+        gap: 8px;
+    }
+
+    .city-labels {
+        font-size: 7px;
+    }
+}
+
+@media (max-width: 360px) {
+    .map_section {
+        padding: 16px 8px;
+    }
+
+    .map_section h1 {
+        font-size: 22px;
+    }
+
+    .map_section .uppercase {
+        font-size: 16px;
+    }
+
+    .map_wrapper {
+        padding: 6px;
+    }
+
+    .city-labels {
+        font-size: 6px;
+    }
+}
+
+/* ==================== НАЗВАНИЯ ГОРОДОВ НА КАРТЕ ==================== */
+/* ==================== НАЗВАНИЯ ГОРОДОВ НА КАРТЕ ==================== */
+
+/* ==================== НАЗВАНИЯ ГОРОДОВ НА КАРТЕ ==================== */
+
+.city-labels {
+    pointer-events: none;
+    user-select: none;
+}
+
+.city-label {
+    font-family: "Jost", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    fill: #2d2d2d;
+    letter-spacing: 0.04em;
+    text-anchor: middle;
+    paint-order: stroke;
+    stroke: #FAF2E5;
+    stroke-width: 2.5px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ==================== АДАПТИВНОСТЬ ТЕКСТА ==================== */
+
+@media (max-width: 1500px) {
+    .city-label {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 1340px) {
+    .city-label {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 1120px) {
+    .city-label {
+        font-size: 11px;
+        stroke-width: 2px;
+    }
+}
+
+@media (max-width: 910px) {
+    .city-label {
+        font-size: 10px;
+        stroke-width: 1.8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .city-label {
+        font-size: 9px;
+        stroke-width: 1.5px;
+    }
+}
+
+@media (max-width: 590px) {
+    .city-label {
+        font-size: 7px;
+        stroke-width: 1px;
+    }
+}
+
+@media (max-width: 470px) {
+    .city-label {
+        font-size: 6px;
+        stroke-width: 0.8px;
+    }
+}
+
+@media (max-width: 360px) {
+    .city-label {
+        font-size: 5px;
+        stroke-width: 0.5px;
+    }
 }
