@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ library.name }} — Библиотеки Тамбовской области{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/library-detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% with library as lib %}
+
+<!-- Фото библиотеки -->
+{% if lib.photo %}
+<div class="lib-photo">
+    <img src="{{ lib.photo.url }}" alt="{{ lib.name }}">
+</div>
+{% endif %}
+
+<!-- Статус и площадь -->
+<div class="lib-meta">
+    {% if lib.status %}
+    <span class="lib-meta__tag lib-meta__tag--status">Статус: {{ lib.status }}</span>
+    {% endif %}
+    {% if lib.area %}
+    <span class="lib-meta__tag lib-meta__tag--area">Площадь: {{ lib.area }} кв. м.</span>
+    {% endif %}
+</div>
+
+<!-- Название -->
+<section class="lib-header">
+    <h1 class="lib-header__name">{{ lib.name }}</h1>
+
+    <!-- Блоки типа PROJECT -->
+    {% for block in lib.blocks.all %}
+        {% if block.is_visible and block.block_type == 'project' %}
+        <div class="lib-project-badge">
+            Создана в рамках нацпроекта{% if block.title %} «{{ block.title }}»{% endif %}{% if block.year %}: {{ block.year }}{% endif %}.
+        </div>
+        {% endif %}
+    {% endfor %}
+</section>
+
+<!-- Контактная информация -->
+<section class="lib-contacts">
+    {% if lib.address %}
+    <p><strong>Адрес:</strong> {{ lib.address }}</p>
+    {% endif %}
+    {% if lib.working_hours %}
+    <p><strong>График работы:</strong> {{ lib.working_hours }}</p>
+    {% endif %}
+    {% if lib.phone %}
+    <p><strong>Контакты:</strong>
+        Телефон: {{ lib.phone }}{% if lib.phone_owner %} ({{ lib.phone_owner }}){% endif %}{% if lib.email %},&ensp;E-mail: <a href="mailto:{{ lib.email }}">{{ lib.email }}</a>{% endif %}
+    </p>
+    {% endif %}
+    {% if lib.website.all %}
+    <p><strong>Веб-сайт / Соцсети:</strong>
+        {% for site in lib.website.all %}
+            <a href="{{ site.url }}" target="_blank" rel="noopener noreferrer">{{ site.url }}</a>{% if not forloop.last %},&ensp;{% endif %}
+        {% endfor %}
+    </p>
+    {% endif %}
+</section>
+
+<!-- Блоки INFO, DIRECTION, LIST -->
+{% for block in lib.blocks.all %}
+{% if block.is_visible and block.block_type != 'project' %}
+
+<details class="lib-block lib-block--{{ block.block_type }}"
+         {% if block.block_type == 'info' or block.block_type == 'direction' %}{% endif %}>
+    <summary class="lib-block__summary">
+        <span>{{ block.get_title }}</span>
+        <svg class="lib-block__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"/>
+        </svg>
+    </summary>
+    <div class="lib-block__content">
+        {% if block.block_type == 'list' %}
+            {% for item in block.get_items %}
+            <p class="lib-block__list-item">· {{ item }}</p>
+            {% endfor %}
+        {% else %}
+            {{ block.content|linebreaksbr }}
+        {% endif %}
+    </div>
+</details>
+
+{% endif %}
+{% endfor %}
+
+<!-- Зонирование — статичный раздел если нет блоков -->
+{% if not lib.blocks.all %}
+<section class="lib-static-info">
+    <div class="lib-static-info__label">Зонирование библиотеки:</div>
+    <ul class="lib-static-info__list">
+        <li>Детская зона (игровая, развивающая, для чтения).</li>
+        <li>Зона тихого чтения и индивидуальной работы.</li>
+        <li>Многофункциональный зал для мероприятий.</li>
+        <li>Компьютерная зона с доступом к электронным ресурсам.</li>
+        <li>Коворкинг-зона.</li>
+        <li>Творческая лаборатория / мастерская.</li>
+        <li>Зона доступной среды.</li>
+        <li>Сервисная зона.</li>
+    </ul>
+</section>
+{% endif %}
+
+<!-- Кнопка дизайн-проекта -->
+{% if lib.pdf_file %}
+<div class="lib-pdf">
+    <a href="{{ lib.pdf_file.url }}" target="_blank" rel="noopener noreferrer" class="lib-pdf__btn">
+        ПОСМОТРЕТЬ ДИЗАЙН-ПРОЕКТ
+    </a>
+</div>
+{% endif %}
+
+<!-- Фотоальбомы -->
+{% if lib.photo_albums.all %}
+<section class="lib-albums">
+    <h2 class="lib-albums__title">Фотоальбомы</h2>
+    {% for album in lib.photo_albums.all %}
+    <div class="lib-album">
+        <h3 class="lib-album__title">{{ album.title }}</h3>
+        <div class="lib-album__grid">
+            {% for photo in album.photos.all %}
+            <figure class="lib-album__item">
+                <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:lib.name }}">
+                {% if photo.caption %}<figcaption>{{ photo.caption }}</figcaption>{% endif %}
+            </figure>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
+<!-- Видеовизитка -->
+{% if lib.video_business_card %}
+<section class="lib-video">
+    <h2 class="lib-video__title">Видеовизитка</h2>
+    {% if lib.video_business_card.description %}
+    <p class="lib-video__desc">{{ lib.video_business_card.description }}</p>
+    {% endif %}
+    {% if lib.video_business_card.video_url %}
+    <div class="lib-video__embed">
+        <iframe src="{{ lib.video_business_card.video_url }}" frameborder="0" allowfullscreen></iframe>
+    </div>
+    {% endif %}
+</section>
+{% endif %}
+
+{% endwith %}
+
+{% endblock %}

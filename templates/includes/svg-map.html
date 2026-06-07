@@ -85,36 +85,32 @@
     </defs>
 
     <!-- ГОРОДА НА КАРТЕ -->
-    <!-- ==================== ГОРОДА НА КАРТЕ ==================== -->
-    <!-- templates/includes/svg_map.html -->
-
-    <!-- ГОРОДА НА КАРТЕ -->
-    <g class="city-labels">
-        <text x="525" y="490" class="city-label">Тамбов</text>
-        <text x="490" y="515" class="city-label">Котовск</text>
-        <text x="160" y="375" class="city-label">Мичуринск</text>
-        <text x="450" y="175" class="city-label">Моршанск</text>
-        <text x="640" y="590" class="city-label">Рассказово</text>
-        <text x="830" y="795" class="city-label">Уварово</text>
-        <text x="940" y="580" class="city-label">Кирсанов</text>
-        <text x="640" y="870" class="city-label">Жердевка</text>
-        <text x="380" y="930" class="city-label">Токарёвка</text>
-        <text x="320" y="800" class="city-label">Мордово</text>
-        <text x="560" y="800" class="city-label">Сатинка</text>
-        <text x="700" y="260" class="city-label">Пичаево</text>
-        <text x="990" y="790" class="city-label">Инжавино</text>
-        <text x="700" y="690" class="city-label">Ржакса</text>
-        <text x="455" y="745" class="city-label">Знаменка</text>
-        <text x="340" y="460" class="city-label">Дмитриевка</text>
-        <text x="200" y="700" class="city-label">Петровское</text>
-        <text x="100" y="420" class="city-label">Первомайский</text>
-        <text x="400" y="300" class="city-label">Сосновка</text>
-        <text x="160" y="260" class="city-label">Староюрьево</text>
-        <text x="610" y="400" class="city-label">Бондари</text>
-        <text x="1040" y="420" class="city-label">Гавриловка</text>
-        <text x="1120" y="540" class="city-label">Умёт</text>
-        <text x="1020" y="850" class="city-label">Мучкап</text>
-    </g>
+<g class="city-labels">
+    <text x="617" y="697" class="city-label">Сампур</text>
+    <text x="544" y="887" class="city-label">Жердевка</text>
+    <text x="436" y="837" class="city-label">Токарёвка</text>
+    <text x="622" y="142" class="city-label">Моршанск</text>
+    <text x="795" y="279" class="city-label">Пичаево</text>
+    <text x="497" y="522" class="city-label">Тамбов</text>
+    <text x="525" y="609" class="city-label">Котовск</text>
+    <text x="300" y="800" class="city-label">Мордово</text>
+    <text x="795" y="832" class="city-label">Уварово</text>
+    <text x="930" y="727" class="city-label">Инжавино</text>
+    <text x="700" y="600" class="city-label">Рассказово</text>
+    <text x="718" y="767" class="city-label">Ржакса</text>
+    <text x="554" y="664" class="city-label">Знаменка</text>
+    <text x="300" y="438" class="city-label">Дмитриевка</text>
+    <text x="107" y="570" class="city-label">Петровское</text>
+    <text x="170" y="430" class="city-label">Мичуринск</text>
+    <text x="85" y="325" class="city-label">Первомайский</text>
+    <text x="455" y="302" class="city-label">Сосновка</text>
+    <text x="210" y="252" class="city-label">Староюрьево</text>
+    <text x="764" y="438" class="city-label">Бондари</text>
+    <text x="1062" y="465" class="city-label">Гавриловка</text>
+    <text x="1020" y="578" class="city-label">Кирсанов</text>
+    <text x="1117" y="622" class="city-label">Умёт</text>
+    <text x="873" y="860" class="city-label">Мучкап</text>
+</g>
 
 
     <!-- МАРКЕРЫ БИБЛИОТЕК БУДУТ ДОБАВЛЯТЬСЯ ЧЕРЕЗ DJANGO -->
@@ -150,3 +146,5 @@
         <span class="legend-text">Детские культурно-просветительские центры</span>
     </div>
 </div>
+
+{{ districts_json|json_script:"districts-data" }}

@@ -1,0 +1,437 @@
+/* ==================== СТРАНИЦА БИБЛИОТЕКИ ==================== */
+
+/* Фото */
+.lib-photo {
+    width: 100%;
+    max-height: 480px;
+    overflow: hidden;
+    background: #ddd;
+}
+
+.lib-photo img {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+/* Мета-теги (статус, площадь) */
+.lib-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 24px 60px 0;
+}
+
+.lib-meta__tag {
+    display: inline-block;
+    font-family: "Jura", sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    padding: 8px 20px;
+    border-radius: 40px;
+    font-weight: 500;
+}
+
+.lib-meta__tag--status {
+    background-color: #7F8F4D;
+    color: #FAF2E5;
+}
+
+.lib-meta__tag--area {
+    background-color: #AAB97E;
+    color: #FAF2E5;
+}
+
+/* Заголовок */
+.lib-header {
+    padding: 28px 60px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.lib-header__name {
+    font-family: "Jost", sans-serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #000;
+    line-height: 1.3;
+    letter-spacing: 0.03em;
+    max-width: 860px;
+}
+
+.lib-project-badge {
+    display: inline-block;
+    background-color: #AAB97E;
+    color: #2e2e1a;
+    font-family: "Jura", sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.07em;
+    padding: 9px 22px;
+    border-radius: 40px;
+    width: fit-content;
+}
+
+/* Контакты */
+.lib-contacts {
+    margin: 32px 60px;
+    background-color: #7F8F4D;
+    border-radius: 20px;
+    padding: 36px 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.lib-contacts p {
+    font-family: "Jura", sans-serif;
+    font-size: 17px;
+    color: #FAF2E5;
+    line-height: 165%;
+    letter-spacing: 0.05em;
+}
+
+.lib-contacts strong {
+    font-weight: 600;
+}
+
+.lib-contacts a {
+    color: #DBDAAE;
+    text-decoration: underline;
+    font-family: "Jura", sans-serif;
+    font-style: normal;
+}
+
+.lib-contacts a:hover {
+    color: #fff;
+}
+
+/* Блоки (accordion) */
+.lib-block {
+    margin: 0 60px;
+    border-radius: 16px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background-color: #EEE9DA;
+    border: 1.5px solid #c5c0aa;
+}
+
+.lib-block__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 32px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    gap: 20px;
+}
+
+.lib-block__summary::-webkit-details-marker {
+    display: none;
+}
+
+.lib-block__summary span {
+    font-family: "Jost", sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #3a3a1e;
+    letter-spacing: 0.04em;
+}
+
+.lib-block__chevron {
+    width: 28px;
+    height: 28px;
+    color: #5D6939;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+details[open] .lib-block__chevron {
+    transform: rotate(180deg);
+}
+
+.lib-block__content {
+    padding: 0 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.lib-block__content p,
+.lib-block__content br + br {
+    font-family: "Jura", sans-serif;
+    font-size: 17px;
+    color: #3a3a1e;
+    line-height: 175%;
+    letter-spacing: 0.04em;
+}
+
+.lib-block__list-item {
+    font-family: "Jura", sans-serif;
+    font-size: 17px;
+    color: #3a3a1e;
+    line-height: 175%;
+    letter-spacing: 0.04em;
+}
+
+/* Статичный раздел (заглушка) */
+.lib-static-info {
+    margin: 20px 60px;
+    padding: 28px 36px;
+    background: #EEE9DA;
+    border-radius: 16px;
+    border: 1.5px solid #c5c0aa;
+}
+
+.lib-static-info__label {
+    font-family: "Jura", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #5D6939;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+}
+
+.lib-static-info__list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lib-static-info__list li {
+    font-family: "Jura", sans-serif;
+    font-size: 17px;
+    color: #3a3a1e;
+    line-height: 165%;
+    letter-spacing: 0.04em;
+    padding-left: 16px;
+    position: relative;
+}
+
+.lib-static-info__list li::before {
+    content: "·";
+    position: absolute;
+    left: 0;
+    color: #5D6939;
+}
+
+/* PDF кнопка */
+.lib-pdf {
+    margin: 32px 60px;
+    display: flex;
+    justify-content: center;
+}
+
+.lib-pdf__btn {
+    display: inline-block;
+    font-family: "Jost", sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.12em;
+    color: #FAF2E5;
+    background-color: #5D6939;
+    padding: 16px 44px;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: background-color 400ms ease, box-shadow 400ms ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.lib-pdf__btn:hover {
+    background-color: #7F8F4D;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    color: #FAF2E5;
+    text-decoration: none;
+}
+
+/* Фотоальбомы */
+.lib-albums {
+    margin: 50px 60px;
+}
+
+.lib-albums__title {
+    font-family: "Jost", sans-serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: #000;
+    letter-spacing: 0.05em;
+    margin-bottom: 32px;
+}
+
+.lib-album {
+    margin-bottom: 40px;
+}
+
+.lib-album__title {
+    font-family: "Jura", sans-serif;
+    font-size: 20px;
+    color: #5D6939;
+    letter-spacing: 0.06em;
+    margin-bottom: 18px;
+    font-weight: 500;
+}
+
+.lib-album__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.lib-album__item {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ddd;
+}
+
+.lib-album__item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.lib-album__item figcaption {
+    font-family: "Jura", sans-serif;
+    font-size: 14px;
+    color: #555;
+    padding: 8px 12px;
+    letter-spacing: 0.04em;
+}
+
+/* Видеовизитка */
+.lib-video {
+    margin: 50px 60px;
+}
+
+.lib-video__title {
+    font-family: "Jost", sans-serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: #000;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+}
+
+.lib-video__desc {
+    font-family: "Jura", sans-serif;
+    font-size: 17px;
+    color: #3a3a1e;
+    line-height: 170%;
+    margin-bottom: 24px;
+}
+
+.lib-video__embed {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #000;
+}
+
+.lib-video__embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* ==================== АДАПТИВ ==================== */
+
+@media (max-width: 1100px) {
+    .lib-meta,
+    .lib-header,
+    .lib-contacts,
+    .lib-block,
+    .lib-static-info,
+    .lib-pdf,
+    .lib-albums,
+    .lib-video {
+        margin-left: 40px;
+        margin-right: 40px;
+    }
+
+    .lib-header__name {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 825px) {
+    .lib-meta,
+    .lib-header,
+    .lib-contacts,
+    .lib-block,
+    .lib-static-info,
+    .lib-pdf,
+    .lib-albums,
+    .lib-video {
+        margin-left: 24px;
+        margin-right: 24px;
+    }
+
+    .lib-photo img {
+        height: 320px;
+    }
+
+    .lib-contacts {
+        padding: 26px 28px;
+    }
+
+    .lib-block__summary {
+        padding: 18px 24px;
+    }
+
+    .lib-block__content {
+        padding: 0 24px 22px;
+    }
+}
+
+@media (max-width: 590px) {
+    .lib-meta,
+    .lib-header,
+    .lib-contacts,
+    .lib-block,
+    .lib-static-info,
+    .lib-pdf,
+    .lib-albums,
+    .lib-video {
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+
+    .lib-photo img {
+        height: 220px;
+    }
+
+    .lib-header__name {
+        font-size: 22px;
+    }
+
+    .lib-contacts p {
+        font-size: 15px;
+    }
+
+    .lib-block__summary span {
+        font-size: 18px;
+    }
+
+    .lib-albums__title,
+    .lib-video__title {
+        font-size: 24px;
+    }
+
+    .lib-album__grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 400px) {
+    .lib-album__grid {
+        grid-template-columns: 1fr;
+    }
+}

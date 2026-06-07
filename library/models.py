@@ -11,7 +11,7 @@ class Coordinators(models.Model):
 
 
 class Project(models.Model):
-    # coordinator = models.ForeignKey(Coordinators, on_delete=models.CASCADE, related_name='projects')
+    coordinator = models.ForeignKey(Coordinators, on_delete=models.CASCADE, related_name='projects', null=True, default=None)
     photo = models.ImageField(upload_to='projects/', blank=True)
     name = models.CharField(max_length=200)
     description = models.TextField()

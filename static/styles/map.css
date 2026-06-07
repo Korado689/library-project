@@ -41,10 +41,11 @@
     pointer-events: none;
     user-select: none;
 }
+/* static/styles/map.css */
 
 .city-label {
     font-family: "Jost", sans-serif;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 400;
     fill: #2d2d2d;
     letter-spacing: 0.04em;
@@ -267,7 +268,7 @@
     .map_section .uppercase { font-size: 42px; }
     .map_wrapper { padding: 16px; }
     .map-legend { gap: 24px; }
-    .city-label { font-size: 13px; }
+     .city-label { font-size: 18px; }
 }
 
 @media (max-width: 1340px) {
@@ -275,7 +276,7 @@
     .map_section .uppercase { font-size: 36px; }
     .map_wrapper { padding: 14px; }
     .map-legend { gap: 20px; padding: 16px 12px; }
-    .city-label { font-size: 12px; }
+    .city-label { font-size: 17px; }
 }
 
 @media (max-width: 1120px) {
@@ -286,7 +287,7 @@
     .legend-icon-wrapper { width: 32px; height: 32px; }
     .legend-icon { width: 34px; height: 34px; }
     .legend-text { font-size: 13px; }
-    .city-label { font-size: 11px; stroke-width: 2px; }
+    .city-label { font-size: 16px; stroke-width: 2px; }
 }
 
 @media (max-width: 910px) {
@@ -296,7 +297,7 @@
     .map_wrapper { padding: 10px; }
     .map-legend { gap: 12px; padding: 14px 10px; }
     .legend-text { font-size: 12px; }
-    .city-label { font-size: 10px; stroke-width: 1.8px; }
+    .city-label { font-size: 14px; stroke-width: 1.8px; }
 }
 
 @media (max-width: 768px) {
@@ -308,7 +309,7 @@
     .legend-icon-wrapper { width: 28px; height: 28px; }
     .legend-icon { width: 30px; height: 30px; }
     .legend-text { font-size: 11px; }
-    .city-label { font-size: 9px; stroke-width: 1.5px; }
+    .city-label { font-size: 12px; stroke-width: 1.5px; }
     .districts-list h2 { font-size: 28px; }
     .district-link { font-size: 14px; padding: 8px 16px; }
     .districts-grid { gap: 8px; }
@@ -318,13 +319,13 @@
     .map_section h1 { font-size: 26px; }
     .map_section .uppercase { font-size: 18px; }
     .map-legend { gap: 8px; }
-    .city-label { font-size: 7px; stroke-width: 1px; }
+     .city-label { font-size: 10px; stroke-width: 1px; }
     .districts-list h2 { font-size: 24px; }
     .district-link { font-size: 13px; padding: 6px 14px; }
 }
 
 @media (max-width: 470px) {
-    .city-label { font-size: 6px; stroke-width: 0.8px; }
+    .city-label { font-size: 9px; stroke-width: 0.8px; }
 }
 
 @media (max-width: 360px) {
@@ -332,5 +333,5 @@
     .map_section h1 { font-size: 22px; }
     .map_section .uppercase { font-size: 16px; }
     .map_wrapper { padding: 6px; }
-    .city-label { font-size: 5px; stroke-width: 0.5px; }
+    .city-label { font-size: 8px; stroke-width: 0.5px; }
 }

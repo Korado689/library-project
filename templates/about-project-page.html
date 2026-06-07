@@ -1,10 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block title %}Проекты — Библиотеки Тамбовской области{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/projects.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<article class="projects-hero simple-border">
+    <h1>Проекты</h1>
+</article>
+
+<section class="projects-intro">
+    <p>За каждым обновлённым библиотечным пространством стоит масштабная работа, объединившая ресурсы национальных проектов «Культура» и «Семья», стратегические приоритеты региональной политики и высокий профессионализм специалистов. Методическими центрами и главными проводниками преобразований выступают Тамбовская областная универсальная научная библиотека им. А. С. Пушкина и Тамбовская областная детская библиотека, под чьим руководством создаётся единое современное библиотечное пространство региона.</p>
+</section>
+
+<section class="projects-list">
+    {% for project in projects %}
+    <article class="project-card {% cycle 'project-card--left' 'project-card--right' %}">
+        <div class="project-card__image-wrap">
+            {% if project.photo %}
+                <img src="{{ project.photo.url }}" alt="{{ project.name }}" class="project-card__image">
+            {% endif %}
+        </div>
+        <div class="project-card__body">
+            <h2 class="project-card__title">{{ project.name }}</h2>
+            <p class="project-card__desc">{{ project.description }}</p>
+        </div>
+    </article>
+    {% endfor %}
+</section>
+
+<section class="coordinators">
+    <h2 class="coordinators__title">Координаторы<br>национальных проектов в<br>Тамбовской области</h2>
+
+    <div class="coordinators-list">
+        {% for coord in coordinators %}
+        <article class="coordinator-card">
+            {% if coord.photo %}
+            <div class="coordinator-card__image-wrap">
+                <img src="{{ coord.photo.url }}" alt="{{ coord.name }}" class="coordinator-card__image">
+            </div>
+            {% endif %}
+            <div class="coordinator-card__body">
+                <h3 class="coordinator-card__name">{{ coord.name }}</h3>
+                <p class="coordinator-card__desc">{{ coord.description }}</p>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}
