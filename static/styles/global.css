@@ -64,6 +64,39 @@ html {
     background-color: #B19C5D;
 }
 
+
+.simple-border {
+    border: 4px solid #5D6939;
+    padding: 110px;
+    margin: 40px 80px 70px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.simple-border h1 {
+    font-size: clamp(38px, 5vw, 94px);
+    color: #000000;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    max-width: 90%;
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+.simple-border p {
+    font-family: "FanwoodText", serif;
+    font-size: 32px;
+    font-style: italic;
+    color: #5D6939;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    word-spacing: 0.05em;
+    max-width: 54%;
+}
+
 header {
     display: flex;
     justify-content: center;
@@ -355,6 +388,21 @@ a {
         font-size: 36px;
     }
 
+    .simple-border {
+        margin: 36px 60px 60px;
+        padding: 90px 80px;
+    }
+
+    .simple-border h1 {
+        font-size: 82px;
+        max-width: 95%;
+    }
+
+    .simple-border p {
+        font-size: 28px;
+        max-width: 62%;
+    }
+
     .contacts {
         max-width: 920px;
         font-size: 20px;
@@ -367,6 +415,21 @@ a {
 }
 
 @media (max-width: 1340px) {
+    .simple-border {
+        margin: 32px 48px 56px;
+        padding: 78px 64px;
+    }
+
+    .simple-border h1 {
+        font-size: 72px;
+        max-width: 100%;
+    }
+
+    .simple-border p {
+        font-size: 24px;
+        max-width: 61%;
+    }
+
     .header-container {
         max-width: 1120px;
         gap: 22px;
@@ -412,6 +475,20 @@ a {
 
 
 @media (max-width: 1200px) {
+    .simple-border {
+        margin: 28px 40px 50px;
+        padding: 60px 50px;
+    }
+
+    .simple-border h1 {
+        font-size: 60px;
+    }
+
+    .simple-border p {
+        font-size: 22px;
+        max-width: 62%;
+    }
+
     .site-footer {
         padding: 35px 20px;
         gap: 28px;
@@ -510,6 +587,21 @@ a {
 
 
 @media (max-width: 910px) {
+    .simple-border {
+        margin: 24px 30px 40px;
+        padding: 45px 35px;
+    }
+
+    .simple-border h1 {
+        font-size: 48px;
+        margin-bottom: 20px;
+    }
+
+    .simple-border p {
+        font-size: 20px;
+        max-width: 72%;
+    }
+
     .header-container {
         max-width: 900px;
         gap: 14px;
@@ -566,7 +658,18 @@ a {
         max-width: 100px;
     }
 }
+
 @media (max-width: 768px) {
+    .simple-border {
+        padding: 60px 16px;
+        margin: 16px 60px 30px;
+    }
+
+    .simple-border p {
+        font-size: 22px;
+        max-width: 90%;
+    }
+
     .circle-btn {
         display: none;
     }
@@ -662,6 +765,10 @@ a {
 }
 
 @media (max-width: 650px) {
+    .simple-border h1 {
+        font-size: 44px;
+    }
+
     .mobile-menu {
         width: 88%;
         max-width: 400px;
@@ -684,6 +791,7 @@ a {
         width: 64px;
         height: 64px;
     }
+
     .site-footer {
         gap: 22px;
         padding: 28px 15px;
@@ -699,9 +807,14 @@ a {
 
     .footer-row img {
         max-width: 140px;
-    }}
+    }
+}
 
 @media (max-width: 620px) {
+    .simple-border h1 {
+        font-size: 38px;
+    }
+
     .site-footer {
         gap: 16px;
         padding: 22px 15px;
@@ -719,7 +832,16 @@ a {
         max-width: 70px;
     }
 }
+
 @media (max-width: 590px) {
+    .simple-border h1 {
+        font-size: 34px;
+    }
+
+    .simple-border p {
+        font-size: 18px;
+    }
+
     .hamburger {
         height: 46px;
     }
@@ -752,6 +874,7 @@ a {
         height: 60px;
         margin-bottom: -20px;
     }
+
     .site-footer {
         gap: 20px;
         padding: 25px 15px;
@@ -767,8 +890,15 @@ a {
 
     .footer-row img {
         max-width: 130px;
-    }}
+    }
+}
+
 @media (max-width: 470px) {
+    .simple-border {
+        padding: 40px 16px;
+        margin: 10px 40px 30px;
+    }
+
     .header-container {
         padding-top: 8px;
     }
@@ -800,6 +930,7 @@ a {
         font-size: 18px;
         padding: 12px 18px;
     }
+
     .site-footer {
         gap: 18px;
         padding: 22px 12px;
@@ -815,7 +946,8 @@ a {
 
     .footer-row img {
         max-width: 120px;
-    }}
+    }
+}
 
 @media (max-width: 400px) {
     .contacts {
@@ -830,7 +962,22 @@ a {
         max-width: 110px;
     }
 }
+
 @media (max-width: 360px) {
+    .simple-border {
+        padding: 20px 16px;
+        margin: 16px 20px 30px;
+    }
+
+    .simple-border h1 {
+        font-size: 28px;
+        margin-bottom: 4px;
+    }
+
+    .simple-border p {
+        font-size: 16px;
+    }
+
     .header-container {
         padding-top: 10px;
     }

@@ -3,70 +3,76 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>{% block title %}Библиотеки Тамбовской области{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {# Основные стили #}
-    <link rel="stylesheet" href="{% static 'fonts/fonts.css' %}" />
-    <link rel="stylesheet" href="{% static 'styles/global.css' %}" />
+    <link rel="stylesheet" href="{% static 'fonts/fonts.css' %}"/>
+    <link rel="stylesheet" href="{% static 'styles/global.css' %}"/>
 
     {# Дополнительные стили для конкретных страниц #}
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    {# Шапка сайта #}
-    {% block header %}
-    <header class="header">
-        <div class="header-container">
-            <a href="{% url 'map' %}" class="circle-btn">Карта</a>
-            <a href="{% url 'home' %}" class="logo"></a>
-            <a href="{% url 'projects' %}" class="circle-btn">Проекты</a>
-            <div class="hamburger" id="hamburger">
-                <span class="line"></span>
-                <span class="line"></span>
-                <span class="line"></span>
-            </div>
+{# Шапка сайта #}
+{% block header %}
+<header class="header">
+    <div class="header-container">
+        <a href="{% url 'map' %}" class="circle-btn">Карта</a>
+        <a href="{% url 'home' %}" class="logo"></a>
+        <a href="{% url 'projects' %}" class="circle-btn">Проекты</a>
+        <div class="hamburger" id="hamburger">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
         </div>
-        <div class="mobile-menu" id="mobileMenu">
-            <div class="mobile-menu__title">НАВИГАЦИЯ</div>
-            <a href="{% url 'map' %}" class="mobile-menu__item">
-                <img src="{% static 'images/images_main/map.png' %}" alt="Карта" class="menu-icon">
-                <span class="menu-text">Карта</span>
-            </a>
-            <a href="{% url 'projects' %}" class="mobile-menu__item">
-                <img src="{% static 'images/images_main/briefcase.png' %}" alt="Портфель" class="menu-icon">
-                <span class="menu-text">Проекты</span>
-            </a>
-        </div>
-    </header>
-    {% endblock %}
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu__title">НАВИГАЦИЯ</div>
+        <a href="{% url 'map' %}" class="mobile-menu__item">
+            <img src="{% static 'images/images_main/map.png' %}" alt="Карта" class="menu-icon">
+            <span class="menu-text">Карта</span>
+        </a>
+        <a href="{% url 'projects' %}" class="mobile-menu__item">
+            <img src="{% static 'images/images_main/briefcase.png' %}" alt="Портфель" class="menu-icon">
+            <span class="menu-text">Проекты</span>
+        </a>
+    </div>
+</header>
+{% endblock %}
 
-    {# Основной контент #}
+{# Основной контент #}
+
+<main>
     {% block content %}{% endblock %}
+</main>
+{% block footer %}
+<footer class="site-footer">
+    <div class="contacts">
+        <a href="https://prlib.tambovlib.ru" target="_blank" rel="noopener noreferrer">tambovlib.ru</a>
+        <a href="https://новаябиблиотека.рф" target="_blank" rel="noopener noreferrer">новаябиблиотека.рф</a>
+    </div>
+    <div class="footer-row footer-row--top">
+        <img src="{% static 'images/images_footer/logo_culture.png' %}" alt="Логотип национального проекта «Культура»">
+        <img src="{% static 'images/images_footer/logo_Pushkin_library.png' %}"
+             alt="Логотип Тамбовской областной универсальной научной библиотеки имени А.С.Пушкина">
+        <img src="{% static 'images/images_footer/logo_library_kids.png' %}"
+             alt="Логотип Тамбовской областной детской библиотеки">
+        <img src="{% static 'images/images_footer/logo_new_library.png' %}"
+             alt="Логотип проекта «Библиотека нового поколения»">
+    </div>
+    <div class="footer-row footer-row--bottom">
+        <img src="{% static 'images/images_footer/logo_family.png' %}" alt="Логотип национального проекта «Семья»">
+        <img src="{% static 'images/images_footer/logo_ministry.png' %}"
+             alt="Логотип Правительства Тамбовской области | Министерство культуры Тамбовской области">
+        <img src="{% static 'images/images_footer/logo_genius.png' %}" alt="Логотип проекта «Гений места»">
+    </div>
+</footer>
+{% endblock %}
 
-    {% block footer %}
-    <footer class="site-footer">
-        <div class="contacts">
-            <a href="https://prlib.tambovlib.ru" target="_blank" rel="noopener noreferrer">tambovlib.ru</a>
-            <a href="https://новаябиблиотека.рф" target="_blank" rel="noopener noreferrer">новаябиблиотека.рф</a>
-        </div>
-        <div class="footer-row footer-row--top">
-            <img src="{% static 'images/images_footer/logo_culture.png' %}" alt="Логотип национального проекта «Культура»">
-            <img src="{% static 'images/images_footer/logo_Pushkin_library.png' %}" alt="Логотип Тамбовской областной универсальной научной библиотеки имени А.С.Пушкина">
-            <img src="{% static 'images/images_footer/logo_library_kids.png' %}" alt="Логотип Тамбовской областной детской библиотеки">
-            <img src="{% static 'images/images_footer/logo_new_library.png' %}" alt="Логотип проекта «Библиотека нового поколения»">
-        </div>
-        <div class="footer-row footer-row--bottom">
-            <img src="{% static 'images/images_footer/logo_family.png' %}" alt="Логотип национального проекта «Семья»">
-            <img src="{% static 'images/images_footer/logo_ministry.png' %}" alt="Логотип Правительства Тамбовской области | Министерство культуры Тамбовской области">
-            <img src="{% static 'images/images_footer/logo_genius.png' %}" alt="Логотип проекта «Гений места»">
-        </div>
-    </footer>
-    {% endblock %}
+<script src="{% static 'scripts/main.js' %}"></script>
 
-    <script src="{% static 'scripts/main.js' %}"></script>
-
-    {% block extra_js %}{% endblock %}
+{% block extra_js %}{% endblock %}
 </body>
 </html>

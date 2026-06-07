@@ -1,3 +1,5 @@
+import json
+
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
@@ -29,8 +31,9 @@ def projects(request):
 # ==================== КАРТА БИБЛИОТЕК ====================
 
 def map_view(request):
-    """Страница с SVG-картой"""
-    districts = District.objects.all().order_by('name')
+    districts = District.objects.prefetch_related(
+        'settlements__libraries'
+    ).all().order_by('name')
 
     context = {
         'districts': districts,

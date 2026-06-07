@@ -8,23 +8,57 @@
 <link rel="stylesheet" href="{% static 'styles/map.css' %}">
 {% endblock %}
 
+{% block extra_js %}
+<script src="{% static 'scripts/map.js' %}"></script>
+{% endblock %}
+
 {% block content %}
-<section class="map_section">
-    <div class="simple-border">
-        <h1>Карта библиотек <br>ТАМБОВСКОЙ ОБЛАСТИ
-        </h1>
+<article class="simple-border">
+    <h1>Карта библиотек ТАМБОВСКОЙ ОБЛАСТИ</h1>
+</article>
+<article class="map_wrapper">
+    {% include 'includes/svg-map.html' %}
+</article>
+<article class="districts-list">
+    <h2>Муниципальные округа</h2>
+    <div class="districts-grid">
+        {% for district in districts %}
+        <div class="district-link" data-svg-id="{{ district.svg_id }}">
+            {{ district.name }}
+        </div>
+        {% endfor %}
     </div>
-    <div class="map_wrapper">
-        {% include 'includes/svg-map.html' %}
+</article>
+<!-- БИБЛИОТЕКИ ПО ОКРУГАМ -->
+{% for district in districts %}
+<article class="district-libraries" data-svg-id="{{ district.svg_id }}" style="display: none;">
+    <div class="district-libraries__header">
+        <h2>{{ district.name }}</h2>
+        <button class="district-libraries__back" data-district-id="{{ district.id }}">← К округам</button>
     </div>
-    <div class="districts-list">
-        <h2>Муниципальные округа</h2>
-        <div class="districts-grid">
-            {% for district in districts %}
-            <a href="#" class="district-link" data-svg-id="{{ district.svg_id }}">
-                {{ district.name }}
+
+    {% for settlement in district.settlements.all %}
+    {% if settlement.libraries.exists %}
+    <div class="settlement-group">
+        <h3 class="settlement-name">
+            {{ settlement.name }}
+            {% if settlement.is_main %}<span class="settlement-badge">центр</span>{% endif %}
+        </h3>
+        <div class="libraries-grid">
+            {% for library in settlement.libraries.all %}
+            <a href="/library/{{ library.id }}/" class="library-card">
+                <img src="{% static library.marker_icon %}" alt="{{ library.get_library_type_display }}"
+                     class="library-card__icon">
+                <div class="library-card__info">
+                    <span class="library-card__name">{{ library.name }}</span>
+                    <span class="library-card__type">{{ library.get_library_type_display }}</span>
+                </div>
             </a>
             {% endfor %}
         </div>
-</section>
+    </div>
+    {% endif %}
+    {% endfor %}
+</article>
+{% endfor %}
 {% endblock %}
