@@ -32,25 +32,4 @@
     </article>
     {% endfor %}
 </section>
-
-<section class="coordinators">
-    <h2 class="coordinators__title">Координаторы<br>национальных проектов в<br>Тамбовской области</h2>
-
-    <div class="coordinators-list">
-        {% for coord in coordinators %}
-        <article class="coordinator-card">
-            {% if coord.photo %}
-            <div class="coordinator-card__image-wrap">
-                <img src="{{ coord.photo.url }}" alt="{{ coord.name }}" class="coordinator-card__image">
-            </div>
-            {% endif %}
-            <div class="coordinator-card__body">
-                <h3 class="coordinator-card__name">{{ coord.name }}</h3>
-                <p class="coordinator-card__desc">{{ coord.description }}</p>
-            </div>
-        </article>
-        {% endfor %}
-    </div>
-</section>
-
 {% endblock %}

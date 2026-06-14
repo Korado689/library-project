@@ -46,11 +46,11 @@
         <div class="libraries-grid">
             {% for library in settlement.libraries.all %}
             <a href="/library/{{ library.id }}/" class="library-card">
-                <img src="{% static library.marker_icon %}" alt="{{ library.get_library_type_display }}"
+                <img src="{% static library.marker_icon %}" alt="{{ library.library_type.name }}"
                      class="library-card__icon">
                 <div class="library-card__info">
                     <span class="library-card__name">{{ library.name }}</span>
-                    <span class="library-card__type">{{ library.get_library_type_display }}</span>
+                    <span class="library-card__type">{{ library.library_type.name }}</span>
                 </div>
             </a>
             {% endfor %}

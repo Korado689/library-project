@@ -1,23 +1,8 @@
+import os
+import zipfile
+
+from django.core.files.base import ContentFile
 from django.db import models
-
-
-class Coordinators(models.Model):
-    photo = models.ImageField(upload_to='projects/', blank=True)
-    name = models.CharField(max_length=100)
-    description = models.TextField(max_length=100)
-
-    def __str__(self):
-        return f"Координаторы: {self.name}"
-
-
-class Project(models.Model):
-    coordinator = models.ForeignKey(Coordinators, on_delete=models.CASCADE, related_name='projects', null=True, default=None)
-    photo = models.ImageField(upload_to='projects/', blank=True)
-    name = models.CharField(max_length=200)
-    description = models.TextField()
-
-    def __str__(self):
-        return f"Проект: {self.name}"
 
 
 class Settlement(models.Model):
@@ -65,6 +50,7 @@ class Settlement(models.Model):
             if self.district.main_settlement_id == self.pk:
                 District.objects.filter(pk=self.district_id).update(main_settlement=None)
 
+
 class District(models.Model):
     """Муниципальный округ/район"""
     name = models.CharField(max_length=150, verbose_name="Название")
@@ -96,56 +82,84 @@ class District(models.Model):
         return f"{self.name}"
 
 
-class LibraryType(models.TextChoices):
-    MODEL = 'model', 'Модельная библиотека'
-    GENIUS_LAB = 'genius_lab', 'Модельная + Гений места'
-    GENIUS = 'genius', 'Творческая лаборатория Гений места'
-    CHILDREN = 'children', 'Детский центр'
+class Project(models.Model):
+    photo = models.ImageField(upload_to='projects/', blank=True)
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+
+    def __str__(self):
+        return f"Проект: {self.name}"
+
+
+class ProjectFieldTemplate(models.Model):
+    """
+    Определяет название будущего поля для конкретного проекта.
+    Сами значения будут заполняться позже в ProjectFieldValue.
+    """
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name='field_templates'
+    )
+    field_name = models.CharField(max_length=255)
+
+
+    def __str__(self):
+        return f"{self.project.name} — {self.field_name}"
+
+class LibraryType(models.Model):
+    name = models.CharField(verbose_name='Тип библиотеки', max_length=255)
+    logo = models.ImageField(upload_to='library-logo/', blank=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+    # MODEL = 'model', 'Модельная библиотека'
+    # GENIUS_LAB = 'genius_lab', 'Модельная библиотека с творческой лабораторией \"Гений места\"'
+    # GENIUS = 'genius', 'Творческая лаборатория \"Гений места\"'
+    # CHILDREN = 'children', 'Детский центр'
+
+
+class ContactsType(models.TextChoices):
+    PHONE = 'phone', 'Телефон'
+    EMAIL = 'email', 'Электронная почта'
+    WEBSITE = 'website', 'Веб-сайт'
+    SOCIALMEDIA = 'socialmedia', 'Соц-сети'
+
+
+class Contacts(models.Model):
+    type = models.CharField(verbose_name="Вид контакта", max_length=255, choices=ContactsType.choices)
+    value = models.TextField(verbose_name="Значение контакта")
+    description = models.TextField(verbose_name="Подпись контакта")
+
+    def __str__(self):
+
+        type_:str = self.type
+        if type_ == ContactsType.WEBSITE or type_ == ContactsType.SOCIALMEDIA:
+            return f"{self.get_type_display()}: {self.value[:self.value.find('/',10)]} ({self.description})"
+        return f"{self.get_type_display()}: {self.value} ({self.description})"
+
+
+
+
 
 
 class Library(models.Model):
     """Библиотека"""
-    photo = models.ImageField(upload_to='libraries/', blank=True)
-    name = models.CharField(verbose_name='Название', max_length=200)
 
-    library_type = models.CharField(verbose_name='Тип библиотеки', max_length=20, choices=LibraryType.choices)
-    district = models.ForeignKey(District, verbose_name='Округ', on_delete=models.CASCADE, related_name='libraries')
+    library_type = models.ForeignKey(LibraryType, on_delete=models.PROTECT, verbose_name='Тип библиотеки')
+    projects = models.ManyToManyField(Project)
+    photo = models.ImageField(upload_to='libraries/main-photo/', blank=True)
+    name = models.CharField(verbose_name='Название библиотеки', max_length=255)
+    status = models.CharField(verbose_name='Статус', blank=True, null=True, max_length=255)
+    area = models.FloatField(verbose_name="Площадь (кв. м)", blank=True, null=True)
+    address = models.TextField(verbose_name='Адрес')
+    working_hours = models.TextField(verbose_name='Рабочие часы', blank=True, null=True)
+    contacts = models.ManyToManyField(Contacts)
 
-    status = models.CharField(verbose_name='Статус', max_length=300)
-    area = models.FloatField(
-        null=True,
-        blank=True,
-        verbose_name="Площадь (кв. м)"
-    )
-    modernization_year = models.PositiveSmallIntegerField(
-        null=True,
-        blank=True,
-        verbose_name="Год модернизации"
-    )
-    settlement = models.ForeignKey(
-        Settlement,
-        verbose_name='Населённый пункт',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='libraries'
-    )
-    address = models.CharField(verbose_name='Адрес', max_length=300)
-
-    working_hours = models.TextField(verbose_name='Рабочие часы', blank=True)
-
-    phone = models.CharField(verbose_name='Телефон', max_length=200, blank=True)
-    phone_owner = models.CharField(verbose_name='Владелец телефона', max_length=200, blank=True)
-
-    email = models.CharField(verbose_name='Почта', max_length=200, blank=True)
-
-    pdf_file = models.FileField(
-        upload_to='libraries/design_projects/',
-        verbose_name="PDF файл", blank=True
-    )
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    district = models.ForeignKey(District, verbose_name='Округ', on_delete=models.PROTECT, related_name='libraries')
+    settlement = models.ForeignKey(Settlement, verbose_name='Населённый пункт', on_delete=models.PROTECT,
+                                   blank=True, null=True, related_name='libraries')
 
     class Meta:
         verbose_name = "Библиотека"
@@ -163,7 +177,28 @@ class Library(models.Model):
             'genius': 'images/map/icons/genius.svg',
             'children': 'images/map/icons/children-center.svg',
         }
-        return icons.get(self.library_type, 'images/map/icons/model-library.svg')
+
+        if self.library_type and self.library_type.logo:
+            return self.library_type.logo.url
+        return 'images/map/icons/model-library.svg'
+
+
+class ProjectFieldValue(models.Model):
+    template = models.ForeignKey(
+        ProjectFieldTemplate,
+        on_delete=models.CASCADE,
+        related_name='values'
+    )
+    library = models.ForeignKey(
+        Library,
+        on_delete=models.CASCADE,
+        related_name='project_field_values',
+        verbose_name="Библиотека",
+    )
+    value = models.TextField()  # Универсальное текстовое поле для хранения данных
+
+    class Meta:
+        unique_together = (('template', 'library'),)
 
 
 class LibraryBlock(models.Model):
@@ -173,8 +208,9 @@ class LibraryBlock(models.Model):
     """
 
     class BlockType(models.TextChoices):
-        PROJECT = 'project', 'Включена в проект'
-        DIRECTION = 'direction', 'Направление в сфере'
+        FILE = 'file', 'Блок с файлом'
+        VIDEO = 'video', 'Видеовизитка'
+        PHOTOALBUM = 'photoalbum', 'Фотоальбом'
         INFO = 'info', 'Информационный блок'
         LIST = 'list', 'Список'
 
@@ -193,90 +229,169 @@ class LibraryBlock(models.Model):
         blank=True,
         verbose_name="Заголовок блока"
     )
-    # Год (только для проектов)
-    year = models.PositiveSmallIntegerField(
-        null=True,
+    is_visible = models.BooleanField(default=True, verbose_name='Отображать')
+
+    # Поля для info_block
+    text = models.TextField(blank=True, null=True, verbose_name='Текст')
+
+    # Поля для file
+    pdf_file = models.FileField(
+        upload_to='library/files/',
         blank=True,
-        verbose_name="Год",
-        help_text="Год включения в проект"
+        null=True,
+        verbose_name='PDF файл'
     )
-    content = models.TextField(
-        verbose_name="Содержание",
-        help_text="Основной текст блока. Используй Markdown для форматирования (списки, жирный, ссылки)"
+
+    # Поля для video
+    video_description = models.TextField(blank=True, null=True, verbose_name='Описание видео')
+    video_url = models.URLField(blank=True, null=True, verbose_name='Ссылка на видео')
+
+    # Поля для photo_album
+    album_description = models.TextField(blank=True, null=True, verbose_name='Описание альбома')
+
+
+    zip_archive = models.FileField(
+        upload_to='library/temp_zips/',
+        blank=True,
+        null=True,
+        verbose_name='ZIP архив с фотографиями',
+        help_text='Загрузите ZIP-архив с фотографиями. Они будут автоматически распакованы.'
     )
-    order = models.PositiveSmallIntegerField(
-        default=0,
-        verbose_name="Порядок отображения"
-    )
-    is_visible = models.BooleanField(
-        default=True,
-        verbose_name="Отображать на сайте"
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+
 
     class Meta:
-        verbose_name = "Текстовый блок"
-        verbose_name_plural = "Текстовые блоки"
-        ordering = ['order', 'created_at']  # Один тип блока на библиотеку
+        verbose_name = 'Секция'
+        verbose_name_plural = 'Секции'
 
     def __str__(self):
-        return f"{self.get_block_type_display()}: {self.library.name}"
+        return f"{self.library.name} — {self.title} [{self.get_block_type_display()}]"
 
-    def get_title(self):
-        """Возвращает заголовок: пользовательский или стандартный"""
-        return self.title or self.get_block_type_display()
+    def extract_photos_from_zip(self):
+        """Распаковывает ZIP-архив и создаёт объекты Photo"""
+        if not self.zip_archive:
+            return 0
 
-    def get_items(self):
-        """Разбивает content на список (для типа LIST)"""
-        if self.block_type == self.BlockType.LIST and self.content:
-            return [line.strip() for line in self.content.strip().split('\n') if line.strip()]
-        return []
+        created = 0
+        try:
+            with zipfile.ZipFile(self.zip_archive.path, 'r') as zip_ref:
+                for filename in zip_ref.namelist():
+                    # Пропускаем папки и скрытые файлы
+                    if filename.endswith('/') or os.path.basename(filename).startswith('.'):
+                        continue
+
+                    # Проверяем расширение
+                    ext = os.path.splitext(filename)[1].lower()
+                    if ext not in ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp']:
+                        continue
+
+                    # Читаем файл из архива
+                    file_data = zip_ref.read(filename)
+
+                    # Создаём объект Photo
+                    photo = Photo(
+                        block=self,
+                        caption=os.path.splitext(os.path.basename(filename))[0]
+                    )
+
+                    # Сохраняем изображение
+                    photo.image.save(
+                        os.path.basename(filename),
+                        ContentFile(file_data),
+                        save=False
+                    )
+                    photo.save()
+                    created += 1
+
+        except (zipfile.BadZipFile, FileNotFoundError) as e:
+            # Можно залогировать ошибку
+            pass
+
+        # Удаляем архив после распаковки
+        if self.zip_archive:
+            self.zip_archive.delete(save=False)
+            self.zip_archive = None
+
+        return created
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+
+        # Распаковываем архив после сохранения
+        if self.block_type == 'photoalbum' and self.zip_archive:
+            self.extract_photos_from_zip()
+            # Сохраняем ещё раз, чтобы убрать ссылку на архив
+            super().save(update_fields=['zip_archive'])
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+
+        type_required_fields = {
+            'info': ['text'],
+            'file': ['pdf_file'],
+            'video': ['video_url'],
+        }
+
+        required = type_required_fields.get(self.block_type, [])
+        for field in required:
+            if not getattr(self, field):
+                raise ValidationError({
+                    field: f'Это поле обязательно для типа «{self.get_block_type_display()}»'
+                })
+
+        # Очищаем поля, не относящиеся к типу
+        all_fields = {'text', 'pdf_file', 'video_description', 'video_url', 'album_description'}
+        keep_fields = set(required)
+        if self.block_type == 'video':
+            keep_fields.add('video_description')
+        if self.block_type == 'photo_album':
+            keep_fields.add('album_description')
+
+        for field in all_fields - keep_fields:
+            setattr(self, field, None)
 
 
-class WebSite(models.Model):
-    library = models.ForeignKey(
-        Library,
+class ListItem(models.Model):
+    """Элемент списка для секции типа 'list'"""
+    block = models.ForeignKey(
+        LibraryBlock,
         on_delete=models.CASCADE,
-        related_name='website'
+        related_name='list_items'
     )
-
-    url = models.URLField(verbose_name="Ссылка")
-
+    text = models.TextField(verbose_name='Текст элемента')
     class Meta:
-        verbose_name = "Веб-сайт / Соцсети"
-        verbose_name_plural = "Веб-сайт / Соцсети"
+        verbose_name = 'Элемент списка'
+        verbose_name_plural = 'Элементы списка'
 
     def __str__(self):
-        return self.url
+        return self.text[:50]
 
 
-class PhotoAlbum(models.Model):
-    """Фотоальбомы (до/после модернизации)"""
-
-    library = models.ForeignKey(
-        Library,
-        on_delete=models.CASCADE,
-        related_name='photo_albums'
-    )
-    title = models.CharField(max_length=200, verbose_name="Название альбома")
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = "Фотоальбом"
-        verbose_name_plural = "Фотоальбомы"
-
-    def __str__(self):
-        return f"{self.title} ({self.library.name})"
+# class PhotoAlbum(models.Model):
+#     """Фотоальбомы (до/после модернизации)"""
+#
+#     library = models.ForeignKey(
+#         Library,
+#         on_delete=models.CASCADE,
+#         related_name='photo_albums'
+#     )
+#     title = models.CharField(max_length=200, verbose_name="Название альбома")
+#
+#     class Meta:
+#         verbose_name = "Фотоальбом"
+#         verbose_name_plural = "Фотоальбомы"
+#
+#     def __str__(self):
+#         return f"{self.title} ({self.library.name})"
 
 
 class Photo(models.Model):
     """Фотографии в альбомах"""
-    album = models.ForeignKey(
-        PhotoAlbum,
+    block = models.ForeignKey(
+        LibraryBlock,
         on_delete=models.CASCADE,
-        related_name='photos'
+        related_name='photos',
+        verbose_name="Блок"
     )
     image = models.ImageField(
         upload_to='libraries/photos/',
@@ -295,39 +410,5 @@ class Photo(models.Model):
     def __str__(self):
         return f"Фото: {self.caption}"
 
-
-class VideoBusinessCard(models.Model):
-    """Видеовизитка библиотеки"""
-    library = models.OneToOneField(
-        Library,
-        on_delete=models.CASCADE,
-        related_name='video_business_card',
-        verbose_name="Библиотека"
-    )
-
-    description = models.TextField(
-        blank=True,
-        verbose_name="Описание видео"
-    )
-
-    # Или ссылка на внешний видеохостинг
-    video_url = models.URLField(
-        blank=True,
-        verbose_name="Ссылка на видео",
-        help_text="Ссылка на YouTube, VK Видео, Rutube и др."
-    )
-
-    # Превью для видео
-    thumbnail = models.ImageField(
-        upload_to='libraries/videos/thumbnails/',
-        blank=True,
-        null=True,
-        verbose_name="Превью видео"
-    )
-
-    class Meta:
-        verbose_name = "Видеовизитка"
-        verbose_name_plural = "Видеовизитки"
-
-    def __str__(self):
-        return f"Видеовизитка: {self.library.name}"
+class Her(models.Model):
+    pass

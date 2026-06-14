@@ -9,148 +9,126 @@
 
 {% block content %}
 
-{% with library as lib %}
-
 <!-- Фото библиотеки -->
-{% if lib.photo %}
+{% if library.photo %}
 <div class="lib-photo">
-    <img src="{{ lib.photo.url }}" alt="{{ lib.name }}">
+    <img src="{{ library.photo.url }}" alt="{{ library.name }}">
 </div>
 {% endif %}
 
 <!-- Статус и площадь -->
 <div class="lib-meta">
-    {% if lib.status %}
-    <span class="lib-meta__tag lib-meta__tag--status">Статус: {{ lib.status }}</span>
+    {% if library.status %}
+    <span class="lib-meta__tag lib-meta__tag--status">Статус: {{ library.status }}</span>
     {% endif %}
-    {% if lib.area %}
-    <span class="lib-meta__tag lib-meta__tag--area">Площадь: {{ lib.area }} кв. м.</span>
+    {% if library.area %}
+    <span class="lib-meta__tag lib-meta__tag--area">Площадь: {{ library.area }} кв. м.</span>
     {% endif %}
 </div>
 
-<!-- Название -->
+<!-- Название и тип -->
 <section class="lib-header">
-    <h1 class="lib-header__name">{{ lib.name }}</h1>
-
-    <!-- Блоки типа PROJECT -->
-    {% for block in lib.blocks.all %}
-        {% if block.is_visible and block.block_type == 'project' %}
-        <div class="lib-project-badge">
-            Создана в рамках нацпроекта{% if block.title %} «{{ block.title }}»{% endif %}{% if block.year %}: {{ block.year }}{% endif %}.
-        </div>
-        {% endif %}
-    {% endfor %}
+    <h1 class="lib-header__name">{{ library.name }}</h1>
+    {% if library.library_type %}
+    <div class="lib-type-badge">{{ library.library_type.name }}</div>
+    {% endif %}
 </section>
 
 <!-- Контактная информация -->
 <section class="lib-contacts">
-    {% if lib.address %}
-    <p><strong>Адрес:</strong> {{ lib.address }}</p>
+    {% if library.address %}
+    <p><strong>Адрес:</strong> {{ library.address }}</p>
     {% endif %}
-    {% if lib.working_hours %}
-    <p><strong>График работы:</strong> {{ lib.working_hours }}</p>
+    {% if library.working_hours %}
+    <p><strong>График работы:</strong> {{ library.working_hours }}</p>
     {% endif %}
-    {% if lib.phone %}
-    <p><strong>Контакты:</strong>
-        Телефон: {{ lib.phone }}{% if lib.phone_owner %} ({{ lib.phone_owner }}){% endif %}{% if lib.email %},&ensp;E-mail: <a href="mailto:{{ lib.email }}">{{ lib.email }}</a>{% endif %}
-    </p>
-    {% endif %}
-    {% if lib.website.all %}
-    <p><strong>Веб-сайт / Соцсети:</strong>
-        {% for site in lib.website.all %}
-            <a href="{{ site.url }}" target="_blank" rel="noopener noreferrer">{{ site.url }}</a>{% if not forloop.last %},&ensp;{% endif %}
+    {% if library.contacts.all %}
+    <p><strong>Контакты:</strong></p>
+    <ul>
+        {% for contact in library.contacts.all %}
+        <li>
+            {% if contact.type == 'phone' %}
+            <span>Телефон: {{ contact.value }}</span>
+            {% elif contact.type == 'email' %}
+            <span>Почта: {{ contact.value }}</span>
+            <a href="mailto:{{ contact.value }}">{{ contact.value }}</a>
+            {% elif contact.type == 'website' %}
+            <span>Веб-сайт: {{ contact.value }}</span>
+            <a href="{{ contact.value }}" target="_blank" rel="noopener">{{ contact.value }}</a>
+            {% elif contact.type == 'socialmedia' %}
+            <span>Соц-сети: {{ contact.value }}</span>
+            <a href="{{ contact.value }}" target="_blank" rel="noopener">{{ contact.value }}</a>
+            {% else %}
+            {{ contact.value }}
+            {% endif %}
+            {% if contact.description %}({{ contact.description }}){% endif %}
+        </li>
         {% endfor %}
-    </p>
+    </ul>
     {% endif %}
 </section>
 
-<!-- Блоки INFO, DIRECTION, LIST -->
-{% for block in lib.blocks.all %}
-{% if block.is_visible and block.block_type != 'project' %}
+<!-- Блоки -->
+{% for block in library.blocks.all %}
+{% if block.is_visible %}
 
-<details class="lib-block lib-block--{{ block.block_type }}"
-         {% if block.block_type == 'info' or block.block_type == 'direction' %}{% endif %}>
-    <summary class="lib-block__summary">
-        <span>{{ block.get_title }}</span>
-        <svg class="lib-block__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6 9 12 15 18 9"/>
-        </svg>
-    </summary>
+{% if block.block_type == 'info' %}
+<section class="lib-block lib-block--info">
+    <h2>{{ block.title }}</h2>
     <div class="lib-block__content">
-        {% if block.block_type == 'list' %}
-            {% for item in block.get_items %}
-            <p class="lib-block__list-item">· {{ item }}</p>
-            {% endfor %}
-        {% else %}
-            {{ block.content|linebreaksbr }}
-        {% endif %}
+        {{ block.text|linebreaksbr }}
     </div>
-</details>
+</section>
+
+{% elif block.block_type == 'list' %}
+<section class="lib-block lib-block--list">
+    <h2>{{ block.title }}</h2>
+    <ul class="lib-block__list">
+        {% for item in block.list_items.all %}
+        <li>{{ item.text }}</li>
+        {% endfor %}
+    </ul>
+</section>
+
+{% elif block.block_type == 'file' and block.pdf_file %}
+<section class="lib-block lib-block--file">
+    <a href="{{ block.pdf_file.url }}" target="_blank" rel="noopener" class="lib-pdf__btn">
+        {% if block.title %}{{ block.title }}{% else %}Скачать PDF{% endif %}
+    </a>
+</section>
+
+{% elif block.block_type == 'video' and block.video_url %}
+<section class="lib-block lib-block--video">
+    <h2>{{ block.title }}</h2>
+    {% if block.video_description %}
+    <p>{{ block.video_description }}</p>
+    {% endif %}
+    <div class="lib-video__embed">
+        <iframe src="{{ block.video_url }}" frameborder="0" allowfullscreen></iframe>
+    </div>
+</section>
+
+{% elif block.block_type == 'photoalbum' %}
+<section class="lib-block lib-block--photoalbum">
+    <h2>{{ block.title }}</h2>
+    {% if block.album_description %}
+    <p>{{ block.album_description }}</p>
+    {% endif %}
+    <div class="lib-album__grid">
+        {% for photo in block.photos.all %}
+        <figure class="lib-album__item">
+            <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:library.name }}">
+            {% if photo.caption %}
+            <figcaption>{{ photo.caption }}</figcaption>
+            {% endif %}
+        </figure>
+        {% endfor %}
+    </div>
+</section>
+
+{% endif %}
 
 {% endif %}
 {% endfor %}
-
-<!-- Зонирование — статичный раздел если нет блоков -->
-{% if not lib.blocks.all %}
-<section class="lib-static-info">
-    <div class="lib-static-info__label">Зонирование библиотеки:</div>
-    <ul class="lib-static-info__list">
-        <li>Детская зона (игровая, развивающая, для чтения).</li>
-        <li>Зона тихого чтения и индивидуальной работы.</li>
-        <li>Многофункциональный зал для мероприятий.</li>
-        <li>Компьютерная зона с доступом к электронным ресурсам.</li>
-        <li>Коворкинг-зона.</li>
-        <li>Творческая лаборатория / мастерская.</li>
-        <li>Зона доступной среды.</li>
-        <li>Сервисная зона.</li>
-    </ul>
-</section>
-{% endif %}
-
-<!-- Кнопка дизайн-проекта -->
-{% if lib.pdf_file %}
-<div class="lib-pdf">
-    <a href="{{ lib.pdf_file.url }}" target="_blank" rel="noopener noreferrer" class="lib-pdf__btn">
-        ПОСМОТРЕТЬ ДИЗАЙН-ПРОЕКТ
-    </a>
-</div>
-{% endif %}
-
-<!-- Фотоальбомы -->
-{% if lib.photo_albums.all %}
-<section class="lib-albums">
-    <h2 class="lib-albums__title">Фотоальбомы</h2>
-    {% for album in lib.photo_albums.all %}
-    <div class="lib-album">
-        <h3 class="lib-album__title">{{ album.title }}</h3>
-        <div class="lib-album__grid">
-            {% for photo in album.photos.all %}
-            <figure class="lib-album__item">
-                <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:lib.name }}">
-                {% if photo.caption %}<figcaption>{{ photo.caption }}</figcaption>{% endif %}
-            </figure>
-            {% endfor %}
-        </div>
-    </div>
-    {% endfor %}
-</section>
-{% endif %}
-
-<!-- Видеовизитка -->
-{% if lib.video_business_card %}
-<section class="lib-video">
-    <h2 class="lib-video__title">Видеовизитка</h2>
-    {% if lib.video_business_card.description %}
-    <p class="lib-video__desc">{{ lib.video_business_card.description }}</p>
-    {% endif %}
-    {% if lib.video_business_card.video_url %}
-    <div class="lib-video__embed">
-        <iframe src="{{ lib.video_business_card.video_url }}" frameborder="0" allowfullscreen></iframe>
-    </div>
-    {% endif %}
-</section>
-{% endif %}
-
-{% endwith %}
 
 {% endblock %}

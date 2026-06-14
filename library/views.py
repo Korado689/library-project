@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Library, District, Project, Coordinators, LibraryType
+from .models import Library, District, Project, LibraryType
 
 # views.py
 # ==================== ГЛАВНАЯ СТРАНИЦА ====================
@@ -18,12 +18,10 @@ def home(request):
 
 def projects(request):
     """Страница с проектами и координаторами"""
-    projects_list = Project.objects.select_related('coordinator').all()
-    coordinators_list = Coordinators.objects.prefetch_related('projects').all()
+    projects_list = Project.objects.all()
 
     context = {
         'projects': projects_list,
-        'coordinators': coordinators_list,
     }
     return render(request, 'about-project-page.html', context)
 
@@ -45,8 +43,7 @@ def map_view(request):
                 libraries_data.append({
                     'id': library.id,
                     'name': library.name,
-                    'type': library.library_type,
-                    'type_label': library.get_library_type_display(),
+                    'type': library.library_type.name,
                     'icon': library.marker_icon,
                     'url': f'/library/{library.id}/',
                 })
@@ -91,11 +88,7 @@ def get_libraries_by_district(request, district_id):
             'id': lib.id,
             'name': lib.name,
             'address': lib.address,
-            'marker_type': lib.marker_type,
             'marker_icon': lib.marker_icon,
-            'marker_size': lib.marker_size,
-            'svg_x': lib.svg_x,
-            'svg_y': lib.svg_y,
             'detail_url': f'/library/{lib.id}/',
         })
 
@@ -125,10 +118,8 @@ def libraries_map_data(request):
             'district_name': lib.district.name,
             'district_svg_id': lib.district.svg_id,
             'marker_icon': lib.marker_icon,
-            'marker_size': lib.marker_size,
-            'marker_type': lib.get_marker_type_display(),
+            'marker_type': lib.library_type.name,
             'detail_url': f'/library/{lib.id}/',
-            'modernization_year': lib.modernization_year,
         })
 
     return JsonResponse({'markers': markers})
