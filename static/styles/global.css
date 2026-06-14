@@ -1,4 +1,41 @@
-/* настя */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0 auto;
+    display: flex;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: inherit;
+}
+
+img {
+    width: 100%;
+}
+
+button {
+    font: inherit;
+}
+
 
 * {
     margin: 0;
@@ -27,14 +64,47 @@ html {
     background-color: #B19C5D;
 }
 
+
+.simple-border {
+    border: 4px solid #5D6939;
+    padding: 110px;
+    margin: 40px 80px 70px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.simple-border h1 {
+    font-size: clamp(38px, 5vw, 94px);
+    color: #000000;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    max-width: 90%;
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+.simple-border p {
+    font-family: "FanwoodText", serif;
+    font-size: 32px;
+    font-style: italic;
+    color: #5D6939;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    word-spacing: 0.05em;
+    max-width: 54%;
+}
+
 header {
     display: flex;
-    justify-content: center;        
+    justify-content: center;
     align-items: center;
-    padding: 10px 20px;            
+    padding: 10px 20px;
     width: 100%;
     height: 80px;
-    background: transparent; 
+    background: transparent;
     position: fixed;
     top: 0;
     left: 0;
@@ -47,11 +117,11 @@ header {
 .header-container {
     display: flex;
     align-items: center;
-    justify-content: center; 
-    gap: 36px;                      
+    justify-content: center;
+    gap: 36px;
     width: 100%;
-    max-width: 1200px;          
-    margin: 0 auto;               
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .circle-btn {
@@ -122,8 +192,8 @@ header {
     padding: 35px 25px;
     z-index: 99;
     border-radius: 32px;
-    box-shadow: 0 25px 45px -10px rgba(0, 0, 0, 0.4), 
-                0 0 0 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 45px -10px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
     transition: all 300ms ease;
     opacity: 0;
     visibility: hidden;
@@ -225,154 +295,6 @@ header {
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
 }
 
-.simple-border {
-    border: 4px solid #5D6939;
-    padding: 110px;
-    margin: 40px 80px 70px 80px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.simple-border h1 {
-    font-size: clamp(38px, 5vw, 94px);
-    color: #000000;
-    line-height: 1.3;
-    letter-spacing: 0.08em;
-    max-width: 90%;
-    margin-bottom: 30px;
-    font-weight: 300;
-}
-
-.simple-border p {
-    font-family: "FanwoodText", serif;
-    font-size: 32px;
-    font-style: italic;
-    color: #5D6939;
-    line-height: 1.2;
-    letter-spacing: 0.08em;
-    word-spacing: 0.05em;
-    max-width: 54%;
-}
-
-.library-hero {
-    padding: 30px 30px 30px 50px;
-    margin: 0;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 500px;
-    background-color: #5D6939;
-}
-
-.library-hero__header {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 48px;
-    margin-left: 60px;
-}
-
-.circle {
-    background-color: #FAF2E5;
-    background-image: url("../images/images_main/lighthouse.png");
-    background-repeat: no-repeat;
-    background-size: 92%;
-    background-position: center;
-    width: 104px;
-    height: 104px;
-    border-radius: 50%;
-    margin-bottom: 24px;
-}
-
-.library-hero__header h2 {
-    font-family: "Jura", sans-serif;
-    font-size: 58px;
-    font-weight: 300;
-    color: #FAF2E5;
-    line-height: 118%;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
-    max-width: 80%;
-    text-align: left;
-    margin-bottom: 30px;
-}
-
-.library-hero p {
-    font-family: "Jura", sans-serif;
-    font-size: 26px;
-    color: #FAF2E5;
-    line-height: 200%;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
-    max-width: 90%;
-    text-align: left;
-    padding-left: 30px;
-    padding-right: 30px;
-}
-
-.question {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 60px;
-    margin-top: 60px;
-    margin-bottom: 40px;
-}
-
-.question h3 {
-    font-size: 70px;
-    color: #000000;
-    line-height: 1.1;
-    text-align: center;
-    letter-spacing: 0.06em;
-    font-weight: 300;
-    max-width: 90%;
-}
-
-.variants {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    justify-content: center;
-    align-items: start;
-    width: auto;
-    max-width: 1320px;
-    gap: 50px;
-    margin: 0 auto;
-}
-
-.variant {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    flex: 1;
-    gap: 32px;
-    color: #000000;
-    border-radius: 24px;
-    max-width: 400px;
-    padding: 40px 24px 38px 24px;
-    height: clamp(300px, 74vh, 600px);
-}
-
-.variant--green {
-    background-color: #7F8F4D;
-}
-
-.variant--light-green {
-    background-color: #AAB97E;
-}
-
-.variant--beige {
-    background-color: #DBDAAE;
-}
-
 h4 {
     font-size: 42px;
     color: #000000;
@@ -383,15 +305,6 @@ h4 {
     max-width: 90%;
 }
 
-.variants p {
-    font-family: "Jura", sans-serif;
-    font-size: 26px;
-    color: #000000;
-    line-height: 140%;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
-    max-width: 90%;
-}
 
 .site-footer {
     display: flex;
@@ -449,7 +362,7 @@ a {
     font-style: normal;
     color: #FFFFFF;
     text-align: center;
-    text-decoration: none; 
+    text-decoration: none;
 }
 
 @media (max-width: 1500px) {
@@ -471,6 +384,10 @@ a {
         background-size: 48%;
     }
 
+    h4 {
+        font-size: 36px;
+    }
+
     .simple-border {
         margin: 36px 60px 60px;
         padding: 90px 80px;
@@ -486,64 +403,11 @@ a {
         max-width: 62%;
     }
 
-    .library-hero {
-        padding: 28px 28px 28px 40px;
-        min-height: 460px;
-    }
-
-    .library-hero__header {
-        gap: 36px;
-        margin-left: 30px;
-    }
-
-    .library-hero__header h2 {
-        font-size: 50px;
-        max-width: 78%;
-    }
-
-    .library-hero p {
-        font-size: 22px;
-        max-width: 92%;
-        line-height: 1.8;
-    }
-
-    .question {
-        gap: 48px;
-        margin-top: 50px;
-        margin-bottom: 36px;
-    }
-
-    .question h3 {
-        font-size: 60px;
-        max-width: 86%;
-    }
-
-    .variants {
-        gap: 32px;
-        max-width: 1240px;
-        padding: 0 24px;
-    }
-
-    .variant {
-        max-width: 360px;
-        gap: 24px;
-        padding: 34px 22px;
-        max-height: 500px;
-    }
-
-    h4 {
-        font-size: 36px;
-    }
-
-    .variants p {
-        font-size: 22px;
-    }
-
     .contacts {
         max-width: 920px;
         font-size: 20px;
     }
-    
+
     .footer-row {
         max-width: 920px;
         gap: 100px;
@@ -551,6 +415,21 @@ a {
 }
 
 @media (max-width: 1340px) {
+    .simple-border {
+        margin: 32px 48px 56px;
+        padding: 78px 64px;
+    }
+
+    .simple-border h1 {
+        font-size: 72px;
+        max-width: 100%;
+    }
+
+    .simple-border p {
+        font-size: 24px;
+        max-width: 61%;
+    }
+
     .header-container {
         max-width: 1120px;
         gap: 22px;
@@ -569,77 +448,13 @@ a {
         background-size: 46%;
     }
 
-    .simple-border {
-        margin: 32px 48px 56px;
-        padding: 78px 64px;
-    }
-
-    .simple-border h1 {
-        font-size: 72px;
-        max-width: 100%;
-    }
-
-    .simple-border p {
-        font-size: 24px;
-        max-width: 61%;
-    }
-
-    .library-hero {
-        padding: 26px 24px 26px 34px;
-        min-height: 420px;
-    }
-
-    .library-hero__header {
-        gap: 80px;
-        margin-left: 24px;
-    }
-
     .circle {
         width: 92px;
         height: 92px;
     }
 
-    .library-hero__header h2 {
-        font-size: 42px;
-        max-width: 74%;
-    }
-
-    .library-hero p {
-        font-size: 20px;
-        line-height: 1.75;
-        max-width: 100%;
-    }
-
-    .question {
-        gap: 40px;
-        margin-top: 48px;
-        margin-bottom: 34px;
-    }
-
-    .question h3 {
-        font-size: 52px;
-        max-width: 84%;
-    }
-
-    .variants {
-        max-width: 1180px;
-        gap: 24px;
-        padding: 0 20px;
-    }
-
-    .variant {
-        max-width: 330px;
-        gap: 22px;
-        padding: 30px 20px;
-        max-height: 480px;
-    }
-
     h4 {
         font-size: 32px;
-    }
-
-    .variants p {
-        font-size: 20px;
     }
 
     .contacts {
@@ -647,32 +462,47 @@ a {
         font-size: 19px;
         padding: 0 10px;
     }
-    
+
     .footer-row {
         max-width: 860px;
         gap: 60px;
     }
-    
+
     .footer-row img {
         max-width: 180px;
     }
 }
 
+
 @media (max-width: 1200px) {
+    .simple-border {
+        margin: 28px 40px 50px;
+        padding: 60px 50px;
+    }
+
+    .simple-border h1 {
+        font-size: 60px;
+    }
+
+    .simple-border p {
+        font-size: 22px;
+        max-width: 62%;
+    }
+
     .site-footer {
         padding: 35px 20px;
         gap: 28px;
     }
-    
+
     .contacts {
         max-width: 900px;
         font-size: 20px;
     }
-    
+
     .footer-row {
         gap: 45px;
     }
-    
+
     .footer-row img {
         max-width: 180px;
     }
@@ -697,94 +527,30 @@ a {
         background-size: 44%;
     }
 
-    .simple-border {
-        margin: 28px 40px 50px;
-        padding: 60px 50px;
-    }
-
-    .simple-border h1 {
-        font-size: 60px;
-    }
-
-    .simple-border p {
-        font-size: 22px;
-        max-width: 62%;
-    }
-
-    .library-hero {
-        padding: 24px 20px 24px 28px;
-        min-height: 380px;
-    }
-
-    .library-hero__header {
-        gap: 60px;
-        margin-left: 16px;
-    }
-
     .circle {
         width: 80px;
         height: 80px;
-    }
-
-    .library-hero__header h2 {
-        font-size: 36px;
-        max-width: 76%;
-    }
-
-    .library-hero p {
-        font-size: 18px;
-        line-height: 1.7;
-        max-width: 98%;
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-
-    .question {
-        gap: 36px;
-        margin-top: 42px;
-        margin-bottom: 30px;
-    }
-
-    .question h3 {
-        font-size: 44px;
-        max-width: 86%;
-    }
-
-    .variants {
-        max-width: 1000px;
-        gap: 20px;
-        padding: 0 16px;
-    }
-
-    .variant {
-        max-width: 290px;
-        max-height: 400px;
-        gap: 20px;
-        padding: 26px 18px;
     }
 
     h4 {
         font-size: 28px;
     }
 
-    .variants p {
-        font-size: 18px;
-    }
-
     .contacts {
         max-width: 780px;
         font-size: 17px;
     }
-    
+
     .footer-row {
         max-width: 780px;
         gap: 30px;
     }
-    
+
     .footer-row img {
         max-width: 140px;
     }
 }
+
 
 @media (max-width: 1040px) {
     body {
@@ -800,187 +566,120 @@ a {
         padding-top: 14px;
     }
 
-    .variants {
-        max-width: 900px;
-    }
-
-    .variant {
-        height: 380px;
-    }
-
     .site-footer {
         padding: 35px 18px;
         gap: 26px;
     }
-    
+
     .contacts {
         max-width: 820px;
         font-size: 19px;
     }
-    
+
     .footer-row {
         gap: 40px;
     }
-    
+
     .footer-row img {
         max-width: 170px;
     }
 }
 
+
 @media (max-width: 910px) {
+    .simple-border {
+        margin: 24px 30px 40px;
+        padding: 45px 35px;
+    }
+
+    .simple-border h1 {
+        font-size: 48px;
+        margin-bottom: 20px;
+    }
+
+    .simple-border p {
+        font-size: 20px;
+        max-width: 72%;
+    }
+
     .header-container {
         max-width: 900px;
         gap: 14px;
         padding: 10px 10px;
     }
-    
+
     .circle-btn {
         width: 150px;
         height: 40px;
         font-size: 14px;
     }
-    
+
     .logo {
         width: 110px;
         height: 40px;
         background-size: 42%;
     }
-    
-    .simple-border {
-        margin: 24px 30px 40px;
-        padding: 45px 35px;
-    }
-    
-    .simple-border h1 {
-        font-size: 48px;
-        margin-bottom: 20px;
-    }
-    
-    .simple-border p {
-        font-size: 20px;
-        max-width: 72%;
-    }
-    
-    .library-hero {
-        padding: 20px 16px;
-        min-height: 300px;
-    }
-    
-    .library-hero__header {
-        gap: 50px;
-    }
-    
+
     .circle {
         width: 70px;
         height: 70px;
         margin-bottom: 20px;
     }
-    
-    .library-hero__header h2 {
-        font-size: 30px;
-        max-width: 78%;
-        margin-bottom: 25px;
-    }
-    
-    .library-hero p {
-        font-size: 16px;
-        line-height: 1.65;
-        max-width: 100%;
-        padding-left: 10px;
-        padding-right: 10px;
-        text-align: center;
-    }
-    
-    .question {
-        gap: 30px;
-        margin-top: 28px;
-        margin-bottom: 28px;
-    }
-    
-    .question h3 {
-        font-size: 36px;
-        max-width: 86%;
-    }
-    
-    .variant {
-        max-height: 370px;
-        gap: 4px;
-        padding: 28px 20px;
-    }
-    
+
     h4 {
         font-size: 26px;
     }
-    
-    .variants p {
-        font-size: 16px;
-        text-align: center;
-        max-width: 88%;
-        flex: 1;
-        display: flex;
-        align-items: center;
-    }
-    
+
     .site-footer {
         gap: 28px;
         padding: 32px 16px;
     }
-    
+
     .contacts {
         max-width: 95%;
         font-size: 18px;
     }
-    
+
     .footer-row {
         gap: 35px;
     }
-    
+
     .footer-row img {
         max-width: 160px;
     }
 }
 
 @media (max-width: 825px) {
-    .variants {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 24px;
-        max-width: 600px;
-        margin: 0 auto;
-    }
-    
-    .variant {
-        max-height: 300px;
-        max-width: 100%;
-    }
-    
-    .variant:nth-child(3) {
-        grid-column: span 2;
-        max-width: 350px;
-        justify-self: center;
-        max-height: 240px;
-    }
-
     .footer-row {
         gap: 25px;
     }
-    
+
     .footer-row img {
         max-width: 100px;
     }
 }
 
 @media (max-width: 768px) {
+    .simple-border {
+        padding: 60px 16px;
+        margin: 16px 60px 30px;
+    }
+
+    .simple-border p {
+        font-size: 22px;
+        max-width: 90%;
+    }
+
     .circle-btn {
         display: none;
     }
-    
+
     .header-container {
         justify-content: space-between;
         gap: 0;
         padding: 10px 40px;
     }
-    
+
     .logo {
         width: 100px;
         height: 48px;
@@ -988,7 +687,7 @@ a {
         background-size: 92%;
         order: 1;
     }
-    
+
     .hamburger {
         order: 2;
         width: 100px;
@@ -1004,23 +703,23 @@ a {
         cursor: pointer;
         padding-right: 34px;
     }
-    
+
     .hamburger:hover {
         background-color: #AAB97E;
         box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
         transform: scale(1.02);
     }
-    
+
     .hamburger.active {
         background-color: #AAB97E;
         box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
     }
-    
+
     .hamburger.active:hover {
         background-color: #8DA36B;
         transform: scale(1.02);
     }
-    
+
     .line {
         background: #FAF2E5;
         width: 26px;
@@ -1033,49 +732,43 @@ a {
     .line:nth-child(2) {
         width: 20px;
     }
-    
+
     .hamburger.active .line:nth-child(1) {
         transform: rotate(-45deg) translate(-5px, 6px);
     }
-    
+
     .hamburger.active .line:nth-child(2) {
         opacity: 0;
     }
-    
+
     .hamburger.active .line:nth-child(3) {
         transform: rotate(45deg) translate(-5px, -6px);
-    }
-
-    .simple-border {
-        padding: 60px 16px;
-        margin: 16px 60px 30px;
-    }
-    
-    .simple-border p {
-        font-size: 22px;
-        max-width: 90%;
     }
 
     .site-footer {
         gap: 25px;
         padding: 30px 20px;
     }
-    
+
     .contacts {
         font-size: 17px;
         padding: 0 20px;
     }
-    
+
     .footer-row {
         gap: 30px;
     }
-    
+
     .footer-row img {
         max-width: 150px;
     }
 }
 
 @media (max-width: 650px) {
+    .simple-border h1 {
+        font-size: 44px;
+    }
+
     .mobile-menu {
         width: 88%;
         max-width: 400px;
@@ -1083,51 +776,35 @@ a {
         padding: 28px 20px;
         gap: 18px;
     }
-    
+
     .mobile-menu__title {
         font-size: 26px;
         padding: 0 0 12px 0;
     }
-    
+
     .mobile-menu__item {
         font-size: 21px;
         padding: 15px 22px;
     }
 
-    .simple-border h1 {
-        font-size: 44px;
-    }
-    
-    .library-hero {
-        min-height: 340px;
-    }
-    
-    .library-hero__header {
-        gap: 30px;
-    }
-    
     .circle {
         width: 64px;
         height: 64px;
-    }
-    
-    .question h3 {
-        font-size: 34px;
     }
 
     .site-footer {
         gap: 22px;
         padding: 28px 15px;
     }
-    
+
     .contacts {
         font-size: 16px;
     }
-    
+
     .footer-row {
         gap: 28px;
     }
-    
+
     .footer-row img {
         max-width: 140px;
     }
@@ -1138,65 +815,25 @@ a {
         font-size: 38px;
     }
 
-    .library-hero__header h2 {
-        margin-bottom: 12px;
-        max-width: 70%;
-    }
-
-    .library-hero__header {
-        gap: 40px;
-    }
-
-    .question h3 {
-        font-size: 30px;
-    }
-
     .site-footer {
         gap: 16px;
         padding: 22px 15px;
     }
-    
+
     .contacts {
         font-size: 12px;
     }
-    
+
     .footer-row {
         gap: 18px;
     }
-    
+
     .footer-row img {
         max-width: 70px;
     }
 }
 
 @media (max-width: 590px) {
-    .hamburger {
-        height: 46px;
-    }
-
-    .logo {
-        height: 46px;
-        background-size: 80%;
-    }
-    
-    .mobile-menu {
-        width: 90%;
-        max-width: 380px;
-        min-width: 280px;
-        padding: 30px 20px;
-        gap: 18px;
-    }
-    
-    .mobile-menu__title {
-        font-size: 24px;
-        padding: 0 0 12px 0;
-    }
-    
-    .mobile-menu__item {
-        font-size: 20px;
-        padding: 14px 20px;
-    }
-
     .simple-border h1 {
         font-size: 34px;
     }
@@ -1205,80 +842,63 @@ a {
         font-size: 18px;
     }
 
-    .library-hero {
-        min-height: 240px;
+    .hamburger {
+        height: 46px;
     }
-    
+
+    .logo {
+        height: 46px;
+        background-size: 80%;
+    }
+
+    .mobile-menu {
+        width: 90%;
+        max-width: 380px;
+        min-width: 280px;
+        padding: 30px 20px;
+        gap: 18px;
+    }
+
+    .mobile-menu__title {
+        font-size: 24px;
+        padding: 0 0 12px 0;
+    }
+
+    .mobile-menu__item {
+        font-size: 20px;
+        padding: 14px 20px;
+    }
+
     .circle {
         width: 60px;
         height: 60px;
         margin-bottom: -20px;
     }
 
-    .library-hero__header {
-        flex-direction: column;
-        align-items: center;
-        margin-left: 0;
-        text-align: center;
-        gap: 30px;
-    }
-
-    .library-hero__header h2 {
-        font-size: 24px;
-        text-align: center;
-    }
-    
-    .library-hero p {
-        font-size: 14px;
-    }
-
-    .variants {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-        width: auto;
-        max-width: 100%;
-        margin: 0 auto;
-    }
-
-    .variant {
-        max-height: 260px;
-        max-width: 80%;
-        gap: 10px;
-    }
-
-    .variant:nth-child(3) {
-        max-width: 80%;
-    }
-
-    .variant h4 {
-        font-size: 20px;
-    }
-
-    .variant p {
-        font-size: 14px;
-    }
-
     .site-footer {
         gap: 20px;
         padding: 25px 15px;
     }
-    
+
     .contacts {
         font-size: 15px;
     }
-    
+
     .footer-row {
         gap: 25px;
     }
-    
+
     .footer-row img {
         max-width: 130px;
     }
 }
 
 @media (max-width: 470px) {
+    .simple-border {
+        padding: 40px 16px;
+        margin: 10px 40px 30px;
+    }
+
     .header-container {
         padding-top: 8px;
     }
@@ -1300,35 +920,30 @@ a {
         padding: 25px 18px;
         gap: 16px;
     }
-    
+
     .mobile-menu__title {
         font-size: 22px;
         padding: 0 0 10px 0;
     }
-    
+
     .mobile-menu__item {
         font-size: 18px;
         padding: 12px 18px;
-    }
-
-    .simple-border {
-        padding: 40px 16px;
-        margin: 10px 40px 30px;
     }
 
     .site-footer {
         gap: 18px;
         padding: 22px 12px;
     }
-    
+
     .contacts {
         font-size: 14px;
     }
-    
+
     .footer-row {
         gap: 22px;
     }
-    
+
     .footer-row img {
         max-width: 120px;
     }
@@ -1338,17 +953,31 @@ a {
     .contacts {
         font-size: 13px;
     }
-    
+
     .footer-row {
         gap: 18px;
     }
-    
+
     .footer-row img {
         max-width: 110px;
     }
 }
 
 @media (max-width: 360px) {
+    .simple-border {
+        padding: 20px 16px;
+        margin: 16px 20px 30px;
+    }
+
+    .simple-border h1 {
+        font-size: 28px;
+        margin-bottom: 4px;
+    }
+
+    .simple-border p {
+        font-size: 16px;
+    }
+
     .header-container {
         padding-top: 10px;
     }
@@ -1371,82 +1000,30 @@ a {
         padding: 22px 15px;
         gap: 14px;
     }
-    
+
     .mobile-menu__title {
         font-size: 20px;
         padding: 0 0 8px 0;
     }
-    
+
     .mobile-menu__item {
         font-size: 17px;
         padding: 10px 16px;
-    }
-
-    .simple-border {
-        padding: 20px 16px;
-        margin: 16px 20px 30px;
-    }
-
-    .simple-border h1 {
-        font-size: 28px;
-        margin-bottom: 4px;
-    }
-
-    .simple-border p {
-        font-size: 16px;
-    }
-
-    .library-hero {
-        min-height: 220px;
-    }
-
-    .library-hero__header {
-        margin-left: 0;
-        text-align: center;
-        gap: 30px;
-    }
-
-    .library-hero__header h2 {
-        font-size: 22px;
-        text-align: center;
-        max-width: 100%;
-    }
-
-    .question h3 {
-        font-size: 24px;
-    }
-
-    .variants {
-        gap: 20px;
-    }
-
-    .variant {
-        max-height: 260px;
-        max-width: 100%;
-        gap: 10px;
-    }
-
-    .variant:nth-child(3) {
-        max-width: 100%;
-    }
-
-    .variant p {
-        font-size: 12px;
     }
 
     .site-footer {
         gap: 15px;
         padding: 20px 10px;
     }
-    
+
     .contacts {
         font-size: 12px;
     }
-    
+
     .footer-row {
         gap: 16px;
     }
-    
+
     .footer-row img {
         max-width: 100px;
     }

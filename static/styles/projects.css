@@ -1,0 +1,260 @@
+/* ==================== СТРАНИЦА ПРОЕКТОВ ==================== */
+
+.projects-hero {
+    margin-bottom: 0;
+}
+
+/* Вводной текст */
+.projects-intro {
+    max-width: 900px;
+    margin: 60px auto 70px;
+    padding: 0 40px;
+}
+
+.projects-intro p {
+    font-family: "Jura", sans-serif;
+    font-size: 22px;
+    line-height: 200%;
+    letter-spacing: 0.06em;
+    color: #2a2a2a;
+}
+
+/* Список проектов */
+.projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+}
+
+.project-card {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 280px;
+    border-top: 2px solid #5D6939;
+}
+
+.project-card:last-child {
+    border-bottom: 2px solid #5D6939;
+}
+
+.project-card--right {
+    flex-direction: row-reverse;
+}
+
+.project-card__image-wrap {
+    flex: 0 0 340px;
+    max-width: 340px;
+    background-color: #e8e4d8;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 30px;
+}
+
+.project-card__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 60px;
+    gap: 20px;
+}
+
+.project-card--right .project-card__body {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.project-card__title {
+    font-family: "Jost", sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: #000;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+}
+
+.project-card__desc {
+    font-family: "Jura", sans-serif;
+    font-size: 18px;
+    color: #3a3a3a;
+    line-height: 175%;
+    letter-spacing: 0.05em;
+    max-width: 560px;
+}
+
+/* Координаторы */
+.coordinators {
+    margin: 80px auto;
+    max-width: 1100px;
+    padding: 0 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 60px;
+}
+
+.coordinators__title {
+    font-family: "Jost", sans-serif;
+    font-size: 52px;
+    font-weight: 300;
+    color: #000;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.coordinators-list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
+}
+
+.coordinator-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 50px;
+    background-color: #EEE9DA;
+    border-radius: 24px;
+    padding: 40px 50px;
+    border: 2px solid #c5c0aa;
+}
+
+.coordinator-card__image-wrap {
+    flex: 0 0 200px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.coordinator-card__image {
+    max-width: 200px;
+    max-height: 120px;
+    object-fit: contain;
+    width: auto;
+}
+
+.coordinator-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.coordinator-card__name {
+    font-family: "Jost", sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #3a3a1e;
+    letter-spacing: 0.04em;
+}
+
+.coordinator-card__desc {
+    font-family: "Jura", sans-serif;
+    font-size: 17px;
+    color: #4a4a30;
+    line-height: 170%;
+    letter-spacing: 0.04em;
+}
+
+/* ==================== АДАПТИВ ==================== */
+
+@media (max-width: 1100px) {
+    .project-card__image-wrap {
+        flex: 0 0 260px;
+        max-width: 260px;
+    }
+
+    .project-card__body {
+        padding: 30px 40px;
+    }
+
+    .coordinators__title {
+        font-size: 42px;
+    }
+}
+
+@media (max-width: 825px) {
+    .project-card,
+    .project-card--right {
+        flex-direction: column;
+    }
+
+    .project-card__image-wrap {
+        flex: none;
+        max-width: 100%;
+        height: 220px;
+    }
+
+    .project-card__body {
+        padding: 28px 30px;
+        align-items: flex-start !important;
+        text-align: left !important;
+    }
+
+    .coordinators {
+        gap: 40px;
+        margin: 60px auto;
+    }
+
+    .coordinators__title {
+        font-size: 34px;
+    }
+
+    .coordinator-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 30px;
+        gap: 24px;
+    }
+}
+
+@media (max-width: 590px) {
+    .projects-intro {
+        margin: 40px auto 50px;
+        padding: 0 20px;
+    }
+
+    .projects-intro p {
+        font-size: 16px;
+    }
+
+    .project-card__title {
+        font-size: 24px;
+    }
+
+    .project-card__desc {
+        font-size: 15px;
+    }
+
+    .coordinators {
+        padding: 0 20px;
+    }
+
+    .coordinators__title {
+        font-size: 28px;
+    }
+
+    .coordinator-card {
+        padding: 24px 20px;
+    }
+
+    .coordinator-card__name {
+        font-size: 18px;
+    }
+
+    .coordinator-card__desc {
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ library.name }} — Библиотеки Тамбовской области{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/library-detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Фото библиотеки -->
+{% if library.photo %}
+<div class="lib-photo">
+    <img src="{{ library.photo.url }}" alt="{{ library.name }}">
+</div>
+{% endif %}
+
+<!-- Статус и площадь -->
+<div class="lib-meta">
+    {% if library.status %}
+    <span class="lib-meta__tag lib-meta__tag--status">Статус: {{ library.status }}</span>
+    {% endif %}
+    {% if library.area %}
+    <span class="lib-meta__tag lib-meta__tag--area">Площадь: {{ library.area }} кв. м.</span>
+    {% endif %}
+</div>
+
+<!-- Название и тип -->
+<section class="lib-header">
+    <h1 class="lib-header__name">{{ library.name }}</h1>
+    {% if library.library_type %}
+    <div class="lib-type-badge">{{ library.library_type.name }}</div>
+    {% endif %}
+</section>
+
+<!-- Контактная информация -->
+<section class="lib-contacts">
+    {% if library.address %}
+    <p><strong>Адрес:</strong> {{ library.address }}</p>
+    {% endif %}
+    {% if library.working_hours %}
+    <p><strong>График работы:</strong> {{ library.working_hours }}</p>
+    {% endif %}
+    {% if library.contacts.all %}
+    <p><strong>Контакты:</strong></p>
+    <ul>
+        {% for contact in library.contacts.all %}
+        <li>
+            {% if contact.type == 'phone' %}
+            <span>Телефон: {{ contact.value }}</span>
+            {% elif contact.type == 'email' %}
+            <span>Почта: {{ contact.value }}</span>
+            <a href="mailto:{{ contact.value }}">{{ contact.value }}</a>
+            {% elif contact.type == 'website' %}
+            <span>Веб-сайт: {{ contact.value }}</span>
+            <a href="{{ contact.value }}" target="_blank" rel="noopener">{{ contact.value }}</a>
+            {% elif contact.type == 'socialmedia' %}
+            <span>Соц-сети: {{ contact.value }}</span>
+            <a href="{{ contact.value }}" target="_blank" rel="noopener">{{ contact.value }}</a>
+            {% else %}
+            {{ contact.value }}
+            {% endif %}
+            {% if contact.description %}({{ contact.description }}){% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</section>
+
+<!-- Блоки -->
+{% for block in library.blocks.all %}
+{% if block.is_visible %}
+
+{% if block.block_type == 'info' %}
+<section class="lib-block lib-block--info">
+    <h2>{{ block.title }}</h2>
+    <div class="lib-block__content">
+        {{ block.text|linebreaksbr }}
+    </div>
+</section>
+
+{% elif block.block_type == 'list' %}
+<section class="lib-block lib-block--list">
+    <h2>{{ block.title }}</h2>
+    <ul class="lib-block__list">
+        {% for item in block.list_items.all %}
+        <li>{{ item.text }}</li>
+        {% endfor %}
+    </ul>
+</section>
+
+{% elif block.block_type == 'file' and block.pdf_file %}
+<section class="lib-block lib-block--file">
+    <a href="{{ block.pdf_file.url }}" target="_blank" rel="noopener" class="lib-pdf__btn">
+        {% if block.title %}{{ block.title }}{% else %}Скачать PDF{% endif %}
+    </a>
+</section>
+
+{% elif block.block_type == 'video' and block.video_url %}
+<section class="lib-block lib-block--video">
+    <h2>{{ block.title }}</h2>
+    {% if block.video_description %}
+    <p>{{ block.video_description }}</p>
+    {% endif %}
+    <div class="lib-video__embed">
+        <iframe src="{{ block.video_url }}" frameborder="0" allowfullscreen></iframe>
+    </div>
+</section>
+
+{% elif block.block_type == 'photoalbum' %}
+<section class="lib-block lib-block--photoalbum">
+    <h2>{{ block.title }}</h2>
+    {% if block.album_description %}
+    <p>{{ block.album_description }}</p>
+    {% endif %}
+    <div class="lib-album__grid">
+        {% for photo in block.photos.all %}
+        <figure class="lib-album__item">
+            <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:library.name }}">
+            {% if photo.caption %}
+            <figcaption>{{ photo.caption }}</figcaption>
+            {% endif %}
+        </figure>
+        {% endfor %}
+    </div>
+</section>
+
+{% endif %}
+
+{% endif %}
+{% endfor %}
+
+{% endblock %}
