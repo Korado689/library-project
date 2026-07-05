@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Проекты{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/about.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="title_proj">Проекты</h1>
+
+<section class="about">
+    <p class="about_text">
+        За каждым обновлённым библиотечным пространством стоит масштабная
+        работа, объединившая ресурсы национальных проектов «Культура» и
+        «Семья», стратегические приоритеты региональной политики и высокий
+        профессионализм специалистов. Методическими центрами и главными
+        проводниками преобразований выступают Тамбовская областная
+        универсальная научная библиотека им. А. С. Пушкина и Тамбовская
+        областная детская библиотека, под чьим руководством создаётся единое
+        современное библиотечное пространство региона.
+    </p>
+</section>
+
+<section class="proj-grid">
+    {% for project in projects %}
+    <div class="project-row
+                {% cycle 'project-row--left' 'project-row--right' %}
+                {% cycle 'project-row--accent-green' 'project-row--accent-green' 'project-row--accent-beige' 'project-row--accent-beige' %}">
+        <article
+                class="project-card {% if project.text_split %}project-card--horizontal{% else %}project-card--vertical{% endif %}">
+            {% if project.image %}
+            {% if project.url %}
+            <a href="{{ project.url }}" target="_blank" rel="noopener noreferrer" class="project-card__image-link">
+                {% endif %}
+                <img class="project-card__image" src="{{ project.image.url }}"
+                     alt="{{ project.title|default:'Логотип проекта' }}">
+                {% if project.url %}
+            </a>
+            {% endif %}
+            {% endif %}
+            <div class="project-card__text">
+                <p class="text_card">{{ project.description }}</p>
+            </div>
+        </article>
+    </div>
+    {% empty %}
+    <p class="text_card">Проекты пока не добавлены.</p>
+    {% endfor %}
+</section>
+{% endblock %}
+

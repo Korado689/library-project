@@ -1,0 +1,9 @@
+/* Скрытые поля не должны мерцать при загрузке */
+.form-row,
+.fieldBox {
+    transition: none;
+}
+
+.inline-related .inline-group {
+    display: none !important;
+}

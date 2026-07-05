@@ -32,6 +32,57 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    function highlightLink(svgId) {
+        districtLinks.forEach(function (l) {
+            l.classList.remove('active');
+            if (l.dataset.svgId === svgId) l.classList.add('active');
+        });
+    }
+
+    function highlightRegion(svgId) {
+        paths.forEach(function (p) {
+            paths.forEach(p => p.classList.toggle('map-region--active', p.id === svgId));
+        });
+    }
+
+    function showDistrict(svgId) {
+        // Скрыть все блоки библиотек
+        let allLibraries = document.querySelectorAll('.district-libraries');
+        allLibraries.forEach(function (el) {
+            el.style.display = 'none';
+        });
+
+        // Показать нужный — ищем по data-svg-id
+        let block = document.querySelector('.district-libraries[data-svg-id="' + svgId + '"]');
+        if (block) block.style.display = 'block';
+
+        // Скрыть список округов
+        if (districtsList) districtsList.style.display = 'none';
+
+        // Подсветка
+        highlightLink(svgId);
+        highlightRegion(svgId);
+    }
+
+    function showAllDistricts() {
+        let allLibraries = document.querySelectorAll('.district-libraries');
+        allLibraries.forEach(function (el) {
+            el.style.display = 'none';
+        });
+
+        districtLinks.forEach(function (l) {
+            l.classList.remove('active');
+        });
+
+        paths.forEach(function (p) {
+            p.setAttribute('fill', '#faf2e5');
+        });
+
+        if (districtsList) districtsList.style.display = 'block';
+    }
+});
+
+
 
     // По нажатию на карту появится точка и в консоли будут её координаты на карте
 //     (function() {
@@ -58,55 +109,3 @@ document.addEventListener('DOMContentLoaded', function () {
 //     });
 //
 // })();
-
-
-
-function highlightLink(svgId) {
-    districtLinks.forEach(function (l) {
-        l.classList.remove('active');
-        if (l.dataset.svgId === svgId) l.classList.add('active');
-    });
-}
-
-function highlightRegion(svgId) {
-    paths.forEach(function (p) {
-        p.setAttribute('fill', p.id === svgId ? '#DBDAAE' : '#faf2e5');
-    });
-}
-
-function showDistrict(svgId) {
-    // Скрыть все блоки библиотек
-    let allLibraries = document.querySelectorAll('.district-libraries');
-    allLibraries.forEach(function (el) {
-        el.style.display = 'none';
-    });
-
-    // Показать нужный — ищем по data-svg-id
-    let block = document.querySelector('.district-libraries[data-svg-id="' + svgId + '"]');
-    if (block) block.style.display = 'block';
-
-    // Скрыть список округов
-    if (districtsList) districtsList.style.display = 'none';
-
-    // Подсветка
-    highlightLink(svgId);
-    highlightRegion(svgId);
-}
-
-function showAllDistricts() {
-    let allLibraries = document.querySelectorAll('.district-libraries');
-    allLibraries.forEach(function (el) {
-        el.style.display = 'none';
-    });
-    districtLinks.forEach(function (l) {
-        l.classList.remove('active');
-    });
-    paths.forEach(function (p) {
-        p.setAttribute('fill', '#faf2e5');
-    });
-    if (districtsList) districtsList.style.display = 'block';
-}
-
-});
-
-

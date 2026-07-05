@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load library_extras %}
+
+
+{% block title %}{{ library.name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/library_detail.css' %}">
+{% if library.albums.all %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.css"/>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<!-- ===================== ОСНОВНАЯ КАРТОЧКА БИБЛИОТЕКИ ===================== -->
+<section class="library-card-section">
+    <div class="library-card-section__inner">
+        <article class="library-card">
+            <div class="library-card__image-container">
+                {% if library.image %}
+                <img src="{{ library.image.url }}" alt="Здание {{ library.name }}" class="library-card__image" loading="lazy">
+                {% endif %}
+            </div>
+            <div class="library-card__tags">
+                <span class="library-card__tag library-card__tag--status">Статус: {{ library.status }}</span>
+                <span class="library-card__tag library-card__tag--area">Площадь: {{ library.area }} кв. м.</span>
+            </div>
+            <div class="library-card__content">
+                <h2 class="library-card__title">{{ library.name }}</h2>
+                {% for membership in library.projectlibrarymembership_set.all %}
+                <div class="library-card__footer">
+                    <p>{{ membership.project.lib_desc }}: {{ membership.date_linked }}.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </article>
+    </div>
+</section>
+
+<!-- ===================== КОНТАКТЫ БИБЛИОТЕКИ ===================== -->
+<section class="library-contacts">
+    <div class="library-contacts__inner">
+        <address class="library-contacts__info">
+            {% if library.address %}
+            <div class="library-contacts__item">
+                <span class="library-contacts__label">Адрес:</span> {{ library.address }}.
+            </div>
+            {% endif %}
+
+            <div class="library-contacts__item">
+                <span class="library-contacts__label">График работы:</span> {{ library.schedule }}.
+            </div>
+
+            {% if library.phones.all or library.emails.all %}
+            <div class="library-contacts__item">
+                <span class="library-contacts__label">Контакты: </span>
+                {% if library.phones.all %}
+                Телефон:
+                {% for phone in library.phones.all %}
+                <a href="tel:{{ phone.number }}" class="library-contacts__link">{{ phone.formatted_number }}</a>
+                {% if phone.owner %}({{ phone.owner }}){% endif %}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+                {% endif %}
+                {% if library.phones.all and library.emails.all %}<br>{% endif %}
+                {% for email in library.emails.all %}
+                E-mail: <a href="mailto:{{ email.email }}" class="library-contacts__link">{{ email.email }}</a>
+                {% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if library.links.all %}
+            <div class="library-contacts__item library-contacts__item--socials">
+                <span class="library-contacts__label">Веб-сайт / Соцсети:</span>
+                <div class="library-contacts__social-icons">
+                    {% for link in library.links.all %}
+                    <a href="{{ link.url }}" class="library-contacts__link" target="_blank" rel="noopener">
+                        {{ link.title }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </address>
+    </div>
+</section>
+
+<!-- ===================== АККОРДЕОН ===================== -->
+{% if library.collapsible_blocks.all %}
+<section class="library-accordion-section">
+    <div class="library-accordion-section__inner">
+        <div class="library-accordion">
+            {% for block in library.collapsible_blocks.all %}
+            <details class="library-accordion__item">
+                <summary class="library-accordion__header">
+                    <span class="library-accordion__title">{{ block.title }}</span>
+                    <span class="library-accordion__arrow" aria-hidden="true">
+                        {% include 'includes/icon_chevron.html' %}
+                    </span>
+                </summary>
+                <div class="library-accordion__content">
+                    <p>{{ block.text }}</p>
+                </div>
+            </details>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ===================== Списки ===================== -->
+{% if library.list_blocks.all %}
+<section class="library-features-section">
+    <div class="library-features-section__inner">
+        <div class="library-features">
+            {% for block in library.list_blocks.all %}
+            <div class="library-features__group">
+                <h3 class="library-features__badge">{{ block.title }}:</h3>
+                <ul class="library-features__list">
+                    {% for item in block.elements.all %}
+                    <li>{{ item.text }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ===================== ССЫЛКА НА ДИЗАЙН-ПРОЕКТ ===================== -->
+{% if library.design_project %}
+<section class="library-project-section">
+    <div class="library-project-section__inner">
+        <a href="{{ library.design_project.url }}" class="library-project-btn" target="_blank" rel="noopener" download>
+            ПОСМОТРЕТЬ ДИЗАЙН-ПРОЕКТ
+        </a>
+    </div>
+</section>
+{% endif %}
+
+<!-- ===================== ФОТОАЛЬБОМЫ ===================== -->
+{% if library.albums.all %}
+<section class="photo-albums-section">
+    <div class="photo-albums-container">
+        <h2 class="photo-albums-title">Фотоальбомы</h2>
+        <div class="photo-albums-grid">
+            {% for album in library.albums.all %}
+            {% with cover=album.photos.first %}
+            {% if cover %}
+            <div class="photo-album-card">
+                <a href="{{ cover.image.url }}" class="photo-album-card__image-link"
+                   data-fancybox="album-{{ album.id }}" data-caption="{{ album.title }}">
+                    <div class="photo-album-card__image-wrapper">
+                        <img src="{{ cover.image.url }}" alt="{{ album.title }}" class="photo-album-card__img" loading="lazy">
+                    </div>
+                </a>
+                {% for photo in album.photos.all %}
+                {% if not forloop.first %}
+                <a href="{{ photo.image.url }}" data-fancybox="album-{{ album.id }}"
+                   data-caption="{{ photo.title|default:album.title }}" style="display:none;"></a>
+                {% endif %}
+                {% endfor %}
+                <div class="photo-album-card__content">
+                    <h3 class="photo-album-card__title">{{ album.title }}</h3>
+                    <a href="{{ cover.image.url }}" class="photo-album-card__btn" data-fancybox="album-{{ album.id }}">
+                        Посмотреть{% if album.photos.count > 1 %} ({{ album.photos.count }} фото){% endif %}
+                        <svg class="photo-album-card__btn-arrow" width="22" height="10" viewBox="0 0 22 10" fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 5H21M21 5L17 1M21 5L17 9" stroke="#382D0C" stroke-width="1.5"
+                                  stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+            {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ===================== ВИДЕО ===================== -->
+{% if library.video %}
+<section class="library-video-section">
+    <div class="library-video-section__inner">
+        <h2 class="library-video-section__title">Видеовизитка</h2>
+        <div class="library-video-card">
+            <div class="library-video-aspect-ratio">
+                <iframe
+                        src="{{ library.video|video_embed_url }}"
+                        class="library-video-iframe"
+                        frameborder="0"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                </iframe>
+            </div>
+            {% if library.video_desc %}
+            <p class="library-video-section__desc">{{ library.video_desc }}</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if library.albums.all %}
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script>
+<script>Fancybox.bind("[data-fancybox]", {});</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,167 @@
+.title_proj {
+  font-size: 100px;
+  font-family: var(--font-jost);
+  color: var(--color-title);
+  font-weight: 400;
+  margin-top: 100px;
+}
+
+.about {
+  justify-content: center;
+  background-color: var(--color-accent);
+  margin-top: 70px;
+  margin-bottom: 100px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.about_text {
+  color: var(--color-text-light);
+  font-family: var(--font-jura);
+  font-weight: 400;
+  font-size: var(--text-clamp);
+  padding: 25px 50px 25px 50px;
+  letter-spacing: 0.3%;
+}
+
+.proj-grid {
+  --card-edge-gap: 9%;
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+  width: 100%;
+  padding: 20px 0 80px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.project-row {
+  position: relative;
+  width: 100%;
+}
+
+.project-row::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: calc(100% - var(--card-edge-gap));
+  height: 15px;
+  transform: translateY(-50%);
+  z-index: 0;
+  pointer-events: none;
+}
+.project-row--left::after { right: 0; }
+.project-row--right::after { left: 0; }
+.project-row--accent-green::after { background-color: var(--color-card-green); }
+.project-row--accent-beige::after { background-color: var(--color-card-beige); }
+
+
+.project-row--left .project-card { margin-left: var(--card-edge-gap); margin-right: auto; }
+.project-row--right .project-card { margin-right: var(--card-edge-gap); margin-left: auto; }
+
+.project-card {
+  position: relative;
+  z-index: 1;
+  background-color: var(--color-bg);
+  display: flex;
+  gap: 30px;
+  border-radius: 24px;
+  border: 6px solid var(--color-card-green);
+  width: 620px;
+  max-width: 54%;
+  padding: 30px;
+  box-sizing: border-box;
+}
+.project-row--accent-beige .project-card { border-color: var(--color-card-beige); }
+
+a.project-card,
+a.project-card:hover {
+  text-decoration: none;
+  color: inherit;
+}
+a.project-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+a.project-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.project-card--horizontal {
+  flex-direction: row;
+  align-items: center;
+}
+
+.project-card--vertical {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.project-card__image {
+  max-width: 240px;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.project-card--vertical .project-card__image {
+  max-width: 280px;
+}
+
+.project-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.project-card__title {
+  font-family: var(--font-jost);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--color-title);
+  margin: 0;
+}
+.text_card {
+  font-size: 20px;
+  font-family: var(--font-jura);
+  line-height: 1.4;
+  font-weight: 400;
+  text-align: left;
+  margin: 0;
+}
+.project-card--vertical .text_card {
+  text-align: center;
+}
+
+/* ---------- АДАПТИВНОСТЬ ---------- */
+@media (width <= 900px) {
+  /* На средних и узких экранах шахматка перестаёт помещаться красиво —
+     переходим на простой центрированный список без линии на всю ширину */
+  .project-row::after { display: none; }
+  .project-row--left .project-card,
+  .project-row--right .project-card {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .project-card { max-width: 80%; }
+}
+@media (width <= 768px) {
+  .title_proj { font-size: 49px; }
+  .text_card { font-size: 18px; }
+  .proj-grid { padding: 0 20px 40px; gap: 28px; }
+  .project-card { width: 100%; max-width: 100%; }
+  .project-card--horizontal {
+    flex-direction: column;
+    text-align: center;
+  }
+  .project-card--horizontal .text_card { text-align: center; }
+}
+@media (width <= 425px) {
+  .proj-grid { padding: 0 12px 30px; gap: 20px; }
+  .project-card { padding: 18px; border-radius: 16px; gap: 16px; }
+  .project-card__image { max-width: 160px; max-height: 140px; }
+  .text_card { font-size: 14px; line-height: 1.4; }
+  .project-card__title { font-size: 20px; }
+  .about_text { padding: 13px 20px; font-size: 11px; }
+}

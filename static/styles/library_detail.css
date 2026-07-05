@@ -1,0 +1,488 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500&display=swap');
+
+.library-card-section {
+  background-color: var(--color-bg);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 40px 24px;
+}
+.library-card-section__inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.library-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.library-card__image-container {
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+.library-card__image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.library-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.library-card__tag {
+  font-family: var(--font-jura);
+  font-size: 1rem;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+  color: #000000;
+  padding: 6px 16px;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.library-card__tag--status { background-color: var(--color-accent-hover); }
+.library-card__tag--area { background-color: var(--color-card-green); }
+.library-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.library-card__title {
+  font-family: var(--font-jost);
+  font-size: 2rem;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+  color: #000000;
+  margin: 0;
+}
+
+.library-card__footer {
+  background-color: var(--color-card-beige);
+  padding: 12px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+.library-card__footer + .library-card__footer {
+  margin-top: -4px;
+}
+.library-card__footer p {
+  font-family: var(--font-jura);
+  font-size: 1.05rem;
+  line-height: 1.4;
+  margin: 0;
+  color: #000000;
+}
+
+/* ---------- БЛОК КОНТАКТОВ (тёмно-зелёный фон) ---------- */
+.library-contacts {
+  background-color: var(--color-accent);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 40px 24px;
+}
+.library-contacts__inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.library-contacts__info {
+  font-family: var(--font-jost);
+  font-style: normal;
+  color: var(--color-text-light);
+  font-size: 1.2rem;
+  line-height: 1.4;
+  font-weight: 400;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.library-contacts__item { word-wrap: break-word; }
+.library-contacts__label { font-weight: 500; }
+.library-contacts__link {
+  color: var(--color-text-light);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: opacity 0.2s ease;
+}
+.library-contacts__link:hover { opacity: 0.8; }
+.library-contacts__item--socials {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+.library-contacts__social-icons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.library-contacts__icon-btn {
+  color: var(--color-accent);
+  background-color: var(--color-bg);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.library-contacts__icon-btn:hover {
+  transform: scale(1.08);
+  background-color: #ffffff;
+}
+
+/* ---------- АККОРДЕОН (CollapsibleBlock, произвольное число блоков) ---------- */
+.library-accordion-section {
+  background-color: var(--color-bg);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 40px 24px;
+}
+.library-accordion-section__inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.library-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+.library-accordion__item {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+.library-accordion__item summary::-webkit-details-marker { display: none; }
+.library-accordion__item summary { list-style: none; }
+.library-accordion__header {
+  background-color: var(--color-accent-hover);
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+.library-accordion__header:hover { background-color: #9ba970; }
+.library-accordion__title {
+  font-family: var(--font-jura);
+  font-size: 1.5rem;
+  line-height: 1.2;
+  font-weight: 400;
+  color: #000000;
+}
+.library-accordion__arrow {
+  width: 24px;
+  height: 24px;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.library-accordion__arrow svg { width: 100%; height: 100%; }
+.library-accordion__item[open] .library-accordion__arrow { transform: rotate(180deg); }
+.library-accordion__content {
+  background-color: var(--color-bg);
+  padding: 20px 24px;
+  border-left: 3px solid var(--color-accent-hover);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+.library-accordion__content p {
+  font-family: var(--font-jost);
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #000000;
+  margin: 0;
+}
+
+/* ---------- СПИСКИ (ListBlock/ListElement) ---------- */
+.library-features-section {
+  background-color: var(--color-bg);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 24px 40px 24px;
+}
+.library-features-section__inner {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+.library-features {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+.library-features__group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.library-features__badge {
+  font-family: var(--font-jura);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #000000;
+  background-color: var(--color-card-beige);
+  padding: 8px 18px;
+  border-radius: 8px;
+  margin: 0;
+  line-height: 1.2;
+}
+.library-features__list {
+  font-family: var(--font-jost);
+  font-size: 1.15rem;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #000000;
+  margin: 0;
+  padding-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style-type: disc;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+.library-features__list li { padding-left: 4px; }
+
+/* ---------- КНОПКА "ПОСМОТРЕТЬ ДИЗАЙН-ПРОЕКТ" (Library.design_project) ---------- */
+.library-project-section {
+  background-color: var(--color-bg);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 30px 24px 50px 24px;
+}
+.library-project-section__inner {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.library-project-btn {
+  font-family: var(--font-jura);
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+  background-color: var(--color-accent);
+  padding: 16px 36px;
+  border-radius: 12px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.library-project-btn:hover {
+  background-color: #6a7742;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(93, 105, 57, 0.15);
+}
+.library-project-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(93, 105, 57, 0.1);
+}
+
+/* ---------- ФОТОАЛЬБОМЫ (PhotoAlbum/Photo, произвольное число альбомов и фото) ---------- */
+.photo-albums-section {
+  background-color: var(--color-bg);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 40px 24px 60px 24px;
+}
+.photo-albums-container {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+.photo-albums-title {
+  font-family: var(--font-jura);
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--color-card-green);
+  margin: 0 0 28px 0;
+  text-align: left;
+}
+.photo-albums-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.photo-album-card {
+  background-color: var(--color-accent-hover);
+  border-radius: 17px;
+  padding: 16px;
+  box-sizing: border-box;
+  flex: 1 1 calc(50% - 12px);
+  max-width: calc(50% - 12px);
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.photo-album-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(127, 143, 77, 0.2);
+}
+.photo-album-card__image-link {
+  display: block;
+  text-decoration: none;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.photo-album-card__image-wrapper {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-color: var(--color-card-beige);
+  position: relative;
+  overflow: hidden;
+}
+.photo-album-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.photo-album-card:hover .photo-album-card__img { transform: scale(1.04); }
+.photo-album-card__content { padding: 16px 4px 4px 4px; text-align: center; }
+.photo-album-card__title {
+  font-family: var(--font-serif-tc);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #382d0c;
+  margin: 0 0 16px 0;
+}
+.photo-album-card__btn {
+  font-family: var(--font-jura);
+  font-size: 1rem;
+  font-weight: 500;
+  color: #382d0c;
+  background-color: var(--color-bg);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  border-radius: 100px;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+.photo-album-card__btn-arrow { margin-left: 10px; transition: transform 0.25s ease; }
+.photo-album-card__btn:hover { background-color: #382d0c; color: var(--color-bg); }
+.photo-album-card__btn:hover .photo-album-card__btn-arrow path { stroke: var(--color-bg); }
+.photo-album-card:hover .photo-album-card__btn-arrow { transform: translateX(4px); }
+
+.library-video-section {
+  background-color: var(--color-bg);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 40px 24px 60px 24px;
+}
+.library-video-section__inner {
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+.library-video-section__title {
+  font-family: var(--font-jost);
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--color-title);
+  text-align: center;
+  margin: 0 0 28px 0;
+}
+.library-video-wrapper {
+  background-color: var(--color-bg);
+  border: 4px solid var(--color-accent);
+  border-radius: 24px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.library-video-card {
+  background-color: var(--color-accent-hover);
+  border-radius: 24px;
+  padding: 28px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.library-video-aspect-ratio {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* соотношение сторон 16:9 */
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #000;
+}
+.library-video-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.library-video-section__desc {
+  font-family: var(--font-jura);
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--color-title);
+  text-align: left;
+  margin: 16px 4px 0;
+}
+
+/* ============================================================================
+   АДАПТИВНОСТЬ
+   ============================================================================ */
+@media (max-width: 768px) {
+  .library-features-section { padding: 15px 16px 30px 16px; }
+  .library-features { gap: 28px; }
+  .library-features__list { font-size: 1.05rem; padding-left: 20px; gap: 10px; }
+  .library-features__badge { font-size: 1.1rem; padding: 6px 14px; }
+}
+@media (max-width: 650px) {
+  .photo-albums-section { padding: 30px 16px 40px 16px; }
+  .photo-albums-title { font-size: 1.6rem; margin-bottom: 20px; text-align: center; }
+  .photo-albums-grid { flex-direction: column; gap: 20px; }
+  .photo-album-card { width: 100%; max-width: 100%; flex-basis: auto; }
+}
+@media (max-width: 576px) {
+  .library-video-section { padding: 30px 16px 40px 16px; }
+  .library-video-section__title { font-size: 1.5rem; margin-bottom: 20px; }
+  .library-video-wrapper { padding: 10px; border-width: 3px; border-radius: 16px; }
+  .library-video-aspect-ratio { border-radius: 10px; }
+  .library-card-section,
+  .library-contacts {
+    padding: 30px 16px;
+  }
+  .library-card__title { font-size: 1.6rem; }
+  .library-contacts__info { font-size: 1.1rem; gap: 14px; }
+  .library-contacts__item--socials { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .library-accordion-section { padding: 30px 16px; }
+  .library-accordion__header { padding: 14px 18px; }
+  .library-accordion__title { font-size: 1.2rem; }
+  .library-accordion__content { padding: 16px 18px; }
+  .library-project-section { padding: 20px 16px 40px 16px; }
+  .library-project-btn { width: 100%; font-size: 1.1rem; padding: 14px 24px; border-radius: 10px; }
+}

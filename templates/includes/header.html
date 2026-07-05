@@ -1,0 +1,29 @@
+{% load static %}
+
+<header class="header">
+    <div class="header-container">
+        <a href="{% url 'map' %}" class="circle-btn">Карта</a>
+        <a href="{% url 'home' %}" class="logo"></a>
+        <a href="{% url 'projects' %}" class="circle-btn">Проекты</a>
+
+        <!-- Кнопка-бургер, видна только на узких экранах (см. media-запросы в base.css) -->
+        <div class="hamburger" id="hamburger">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+        </div>
+    </div>
+
+    <!-- Всплывающее мобильное меню, открывается/закрывается через main.js по клику на #hamburger -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu__title">НАВИГАЦИЯ</div>
+        <a href="{% url 'map' %}" class="mobile-menu__item">
+            <img src="{% static 'images/images_main/map.png' %}" alt="Карта" class="menu-icon" />
+            <span class="menu-text">Карта</span>
+        </a>
+        <a href="{% url 'projects' %}" class="mobile-menu__item">
+            <img src="{% static 'images/images_main/briefcase.png' %}" alt="Портфель" class="menu-icon" />
+            <span class="menu-text">Проекты</span>
+        </a>
+    </div>
+</header>

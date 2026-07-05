@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Карта библиотек Тамбовской области{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/map.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'scripts/map.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<article class="simple-border">
+    <h1>Карта библиотек ТАМБОВСКОЙ ОБЛАСТИ</h1>
+</article>
+
+<article class="map_wrapper">
+    {% include 'includes/svg-map.html' %}
+</article>
+
+<article class="districts-list" id="districts-list">
+    <h2>Муниципальные округа</h2>
+    <div class="districts-grid">
+        {% for district in districts %}
+        <div class="district-link" data-svg-id="{{ district.map_id }}">
+            {{ district.name }}
+        </div>
+        {% endfor %}
+    </div>
+</article>
+
+<!-- БИБЛИОТЕКИ ПО ОКРУГАМ -->
+{% for district in districts %}
+<article class="district-libraries" data-svg-id="{{ district.map_id }}" style="display: none;">
+    <div class="district-libraries__header">
+        <h2>{{ district.name }} округ</h2>
+        <button class="district-libraries__back">← К округам</button>
+    </div>
+    {% for city in district.cities.all %}
+    {% if city.libraries.exists %}
+    <div class="settlement-group">
+        <h3 class="settlement-name">{{ city.name }}</h3>
+        <div class="libraries-grid">
+            {% for library in city.libraries.all %}
+            <a href="{% url 'library_detail' library.id %}" class="library-card">
+                {% if library.type == 'model_lib' %}
+                <img src="{% static 'images/map/icons/model-library.svg' %}"
+                     alt="{{ library.short_name|default:library.name }}"
+                     class="library-card__icon">
+                {% elif library.type == 'model_gen' %}
+                <img src="{% static 'images/map/icons/genius-lab.svg' %}"
+                     alt="{{ library.short_name|default:library.name }}"
+                     class="library-card__icon">
+                {% elif library.type == 'gen_lab' %}
+                <img src="{% static 'images/map/icons/genius.svg' %}"
+                     alt="{{ library.short_name|default:library.name }}"
+                     class="library-card__icon">
+                {% elif library.type == 'child_center' %}
+                <img src="{% static 'images/map/icons/children-center.svg' %}"
+                     alt="{{ library.short_name|default:library.name }}"
+                     class="library-card__icon">
+                {% endif %}
+                <div class="library-card__info">
+                    <span class="library-card__name">{{ library.short_name|default:library.name }}</span>
+                    <span class="library-card__type">{{ library.status }}</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</article>
+{% endfor %}
+{% endblock %}
