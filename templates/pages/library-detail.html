@@ -44,12 +44,12 @@
         <address class="library-contacts__info">
             {% if library.address %}
             <div class="library-contacts__item">
-                <span class="library-contacts__label">Адрес:</span> {{ library.address }}.
+                <span class="library-contacts__label">Адрес:</span> {{ library.address }}
             </div>
             {% endif %}
 
             <div class="library-contacts__item">
-                <span class="library-contacts__label">График работы:</span> {{ library.schedule }}.
+                <span class="library-contacts__label">График работы:</span> {{ library.schedule }}
             </div>
 
             {% if library.phones.all or library.emails.all %}
@@ -59,12 +59,12 @@
                 Телефон:
                 {% for phone in library.phones.all %}
                 <a href="tel:{{ phone.number }}" class="library-contacts__link">{{ phone.formatted_number }}</a>
-                {% if phone.owner %}({{ phone.owner }}){% endif %}{% if not forloop.last %}, {% endif %}
+                {% if phone.owner %}({{ phone.owner }}){% endif %}{% if not forloop.last or library.emails.all%}, {% endif %}
                 {% endfor %}
                 {% endif %}
-                {% if library.phones.all and library.emails.all %}<br>{% endif %}
+                {% if library.emails.all%}E-mail:{% endif %}
                 {% for email in library.emails.all %}
-                E-mail: <a href="mailto:{{ email.email }}" class="library-contacts__link">{{ email.email }}</a>
+                <a href="mailto:{{ email.email }}" class="library-contacts__link">{{ email.email }}</a>
                 {% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </div>
@@ -116,7 +116,7 @@
         <div class="library-features">
             {% for block in library.list_blocks.all %}
             <div class="library-features__group">
-                <h3 class="library-features__badge">{{ block.title }}:</h3>
+                <h3 class="library-features__badge">{{ block.title }}</h3>
                 <ul class="library-features__list">
                     {% for item in block.elements.all %}
                     <li>{{ item.text }}</li>
@@ -165,7 +165,7 @@
                 <div class="photo-album-card__content">
                     <h3 class="photo-album-card__title">{{ album.title }}</h3>
                     <a href="{{ cover.image.url }}" class="photo-album-card__btn" data-fancybox="album-{{ album.id }}">
-                        Посмотреть{% if album.photos.count > 1 %} ({{ album.photos.count }} фото){% endif %}
+                        Посмотреть
                         <svg class="photo-album-card__btn-arrow" width="22" height="10" viewBox="0 0 22 10" fill="none"
                              xmlns="http://www.w3.org/2000/svg">
                             <path d="M1 5H21M21 5L17 1M21 5L17 9" stroke="#382D0C" stroke-width="1.5"

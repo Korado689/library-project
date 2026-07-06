@@ -15,12 +15,18 @@
   box-sizing: border-box;
 }
 .about_text {
+  text-align: justify;
   color: var(--color-text-light);
   font-family: var(--font-jura);
-  font-weight: 400;
-  font-size: var(--text-clamp);
-  padding: 25px 50px 25px 50px;
-  letter-spacing: 0.3%;
+  /*font-size: var(--text-clamp);*/
+  padding: 30px 30px 30px 50px;
+  font-size: 26px;
+  line-height: 200%;
+  letter-spacing: 0.08em;
+  word-spacing: 0.1em;
+  max-width: 90%;
+  /*padding-left: 30px;*/
+  /*padding-right: 30px;*/
 }
 
 .proj-grid {
