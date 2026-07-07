@@ -81,4 +81,4 @@ class LibraryAdmin(NestedModelAdmin):
 
     @admin.display(description=_('Проекты'))
     def get_projects(self, obj):
-        return ", ".join([project.title for project in obj.projects.all()])
+        return ", ".join([str(project) for project in obj.projects.all()])
