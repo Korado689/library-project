@@ -2,7 +2,7 @@
 /* ---------- ПЕРЕМЕННЫЕ БРЕНДА ---------- */
 :root {
   --color-accent: #5d6939;      /* основной зелёный (шапка, кнопки) */
-  --color-accent-hover: #dbdaae; /* светло-зелёный, hover-состояния */
+  --color-accent-hover: #aab97e; /* светло-зелёный, hover-состояния */
   --color-bg: #faf2e5;          /* фон сайта */
   --color-text-light: #faf2e5;  /* светлый текст на тёмном фоне */
   --color-title: #000000;
@@ -45,7 +45,6 @@ body {
 a {
   font-family: var(--font-serif-tc);
   font-style: normal;
-  color: #ffffff;
   text-align: center;
   text-decoration: none;
 }
@@ -93,15 +92,27 @@ a {
   color: var(--color-text-light);
   text-decoration: none;
   transition: all 500ms ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   font-size: 22px;
   letter-spacing: 0.05em;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    0 3px 8px rgba(0, 0, 0, 0.1),
+    inset 20px 0 40px rgba(0, 0, 0, 0.06),
+    inset -20px 0 40px rgba(0, 0, 0, 0.06);
+  position: relative;
 }
+
 .circle-btn:hover {
   background: var(--color-accent-hover);
-  color: var(--color-card-beige);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+  color: #000000;
+  border-color: #2d3a1a;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 30px 0 60px rgba(0, 0, 0, 0.1),
+    inset -30px 0 60px rgba(0, 0, 0, 0.1);
+  transform: scale(1.02);
 }
+
 .logo {
   display: flex;
   align-items: center;
@@ -116,11 +127,21 @@ a {
   background-size: 50%;
   text-decoration: none;
   transition: background-color 500ms ease, box-shadow 500ms ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    0 3px 8px rgba(0, 0, 0, 0.1),
+    inset 20px 0 40px rgba(0, 0, 0, 0.06),
+    inset -20px 0 40px rgba(0, 0, 0, 0.06);
 }
+
 .logo:hover {
   background-color: var(--color-accent-hover);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+  border-color: var(--color-text-light);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    inset 30px 0 60px rgba(0, 0, 0, 0.1),
+    inset -30px 0 60px rgba(0, 0, 0, 0.1);
+  transform: scale(1.02);
 }
 
 
@@ -276,7 +297,7 @@ a {
   background-color: var(--color-footer-bg);
   padding: 40px 20px;
   width: 100%;
-  gap: 5px;
+  gap: 30px;
   margin: 0 auto;
   margin-top: 100px;
   box-sizing: border-box;
@@ -310,22 +331,41 @@ a {
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
-  gap: 50px;
+  gap: 30px;
+}
+.footer-row--bottom {
+  justify-content: center;
+  gap: 100px;
 }
 .footer-row img {
   flex-shrink: 0;
   width: auto;
-  height: auto;
-  max-width: 200px;
+  height: 150px;
+  max-width: 180px;
   object-fit: contain;
   transition: transform 0.3s ease;
 }
 .footer-row img:hover {
   transform: scale(1.05);
 }
-
+.footer-row img.ministry {
+    height: 220px !important;
+    width: auto !important;
+    max-width: 350px !important;
+    object-fit: contain;
+}
+.footer-row img.genius {
+    height: 180px !important;
+    width: auto !important;
+    max-width: 280px !important;
+    object-fit: contain;
+}
+.footer-row img.new_library {
+    max-width: 260px !important;
+    object-fit: contain;
+}
 
 @media (max-width: 1500px) {
   .header-container { max-width: 1200px; gap: 28px; padding: 0 16px; }
@@ -345,8 +385,10 @@ a {
   .simple-border h1 { font-size: 72px; max-width: 100%; }
   .simple-border p { font-size: 24px; max-width: 61%; }
   .contacts { max-width: 860px; font-size: 19px; padding: 0 10px; }
-  .footer-row { max-width: 860px; gap: 60px; }
-  .footer-row img { max-width: 180px; }
+  .footer-row { max-width: 860px; gap: 40px; }
+  .footer-row img { max-width: 120px; }
+  .footer-row img.ministry { height: 180px !important; }
+  .footer-row img.new_library { max-width: 180px !important; }
 }
 @media (max-width: 1200px) {
   .site-footer { padding: 35px 20px; gap: 28px; }
