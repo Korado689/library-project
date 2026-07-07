@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load library_extras %}
 
 {% block title %}Библиотеки на карте Тамбовской области{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'styles/libraries_overview.css' %}">
+<link rel="stylesheet" href="{% static 'styles/home.css' %}">
 {% endblock %}
 
 
@@ -17,8 +18,8 @@
 <article class="library-hero">
     <div class="library-hero__header">
         <div class="circle" aria-hidden="true"></div>
-        <h2>21 маяк культуры на карте Тамбовской области</h2>
-<!--         <h2>{{ libraries_count }} маяк{{ libraries_count|pluralize:",а,ов" }} культуры на карте Тамбовской области</h2>-->
+{#        <h2>21 маяк культуры на карте Тамбовской области</h2>#}
+         <h2>{{ libraries.count|pluralize_ru:"маяк,маяка,маяков" }} культуры на карте Тамбовской области</h2>
     </div>
     <p>Они зажглись, чтобы освещать путь в мир современных технологий,
         интеллектуального роста и культурного просвещения.

@@ -3,7 +3,11 @@ from .models import Library, District, Project
 
 
 def home(request):
-    return render(request, 'pages/home.html')
+
+    context = {
+        'libraries': Library.objects.all(),
+    }
+    return render(request, 'pages/home.html', context)
 
 
 def projects(request):

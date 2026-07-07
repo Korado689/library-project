@@ -53,3 +53,22 @@ def video_platform_label(url):
     if "vk.com" in url or "vkvideo.ru" in url:
         return "ВКонтакте"
     return "источнике"
+
+
+@register.filter
+def pluralize_ru(number, forms):
+    """ forms = "маяк,маяка,маяков" """
+    forms = forms.split(',')
+    number = abs(int(number))
+
+    if number % 100 in (11, 12, 13, 14):
+        return f"{number} {forms[2]}"
+
+    last_digit = number % 10
+
+    if last_digit == 1:
+        return f"{number} {forms[0]}"
+    elif last_digit in (2, 3, 4):
+        return f"{number} {forms[1]}"
+    else:
+        return f"{number} {forms[2]}"

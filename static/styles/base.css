@@ -327,18 +327,20 @@ a {
 .footer-row {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   gap: 30px;
+
+  /*flex: 0 0 calc(25% - 22.5px);*/
 }
-.footer-row--bottom {
-  justify-content: center;
-  gap: 100px;
-}
+/*.footer-row--bottom {*/
+/*  justify-content: center;*/
+/*  gap: 100px;*/
+/*}*/
 .footer-row img {
   flex-shrink: 0;
   width: auto;
@@ -351,21 +353,37 @@ a {
   transform: scale(1.05);
 }
 .footer-row img.ministry {
-    height: 220px !important;
-    width: auto !important;
+    /*height: 220px !important;*/
+    /*width: auto !important;*/
     max-width: 350px !important;
-    object-fit: contain;
+    /*object-fit: contain;*/
 }
 .footer-row img.genius {
-    height: 180px !important;
-    width: auto !important;
+    /*height: 180px !important;*/
+    /*width: auto !important;*/
     max-width: 280px !important;
-    object-fit: contain;
+    /*object-fit: contain;*/
 }
 .footer-row img.new_library {
     max-width: 260px !important;
-    object-fit: contain;
+    /*object-fit: contain;*/
 }
+
+/*.footer-row > a {*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*}*/
+
+/*!* По умолчанию: 4 в ряд *!*/
+/*.footer-row > a {*/
+/*  flex: 0 0 calc(25% - 22.5px);*/
+/*}*/
+
+/*!* Последние 3 — по 33% *!*/
+/*.footer-row > a:nth-child(n+5) {*/
+/*  flex: 0 0 calc(33.333% - 20px);*/
+/*}*/
+
 
 @media (max-width: 1500px) {
   .header-container { max-width: 1200px; gap: 28px; padding: 0 16px; }
@@ -461,6 +479,10 @@ a {
   .contacts { font-size: 17px; padding: 0 20px; }
   .footer-row { gap: 30px; }
   .footer-row img { max-width: 150px; }
+  .footer-row > a {
+    flex: 0 0 calc(50% - 15px) !important;
+    order: 0;
+  }
   .tambov-link { margin-left: 35px; }
 }
 @media (max-width: 650px) {
@@ -505,6 +527,9 @@ a {
   .contacts { font-size: 14px; }
   .footer-row { gap: 22px; }
   .footer-row img { max-width: 120px; }
+  .footer-row > a {
+    flex: 0 0 100% !important;
+  }
 }
 @media (max-width: 425px) {
   .header-container { padding: 0; display: flex; justify-content: space-between; gap: 0; }
