@@ -100,7 +100,7 @@
                     </span>
                 </summary>
                 <div class="library-accordion__content">
-                    <p>{{ block.text }}</p>
+                    {{ block.text|linebreaks }}
                 </div>
             </details>
             {% endfor %}

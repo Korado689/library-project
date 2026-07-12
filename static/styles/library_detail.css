@@ -8,16 +8,16 @@
   padding: 40px 24px;
 }
 .library-card-section__inner {
-  max-width: 1600px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 .library-card {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 30px;
 }
 .library-card__image-container {
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
   overflow: hidden;
   line-height: 0;
@@ -40,7 +40,7 @@
   letter-spacing: 0.02em;
   font-weight: 400;
   color: #000000;
-  padding: 6px 16px;
+  padding: 10px 16px;
   border-radius: 100px;
   display: inline-flex;
   align-items: center;
@@ -94,7 +94,7 @@
   text-align: justify;
 }
 .library-contacts__inner {
-  max-width: 1600px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 .library-contacts__info {
@@ -156,7 +156,7 @@
   padding-top: 40px;
 }
 .library-accordion-section__inner {
-  max-width: 1600px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 .library-accordion {
@@ -214,7 +214,10 @@
   font-size: 1.1rem;
   line-height: 1.5;
   color: #000000;
-  margin: 0;
+  margin: 0 0 12px 0;
+}
+.library-accordion__content p:last-child {
+  margin-bottom: 0;
 }
 
 /* ---------- СПИСКИ (ListBlock/ListElement) ---------- */
@@ -225,7 +228,7 @@
   padding: 20px 24px 40px 24px;
 }
 .library-features-section__inner {
-max-width: 1600px;
+max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 }
@@ -274,10 +277,10 @@ max-width: 1600px;
   background-color: var(--color-bg);
   width: 100%;
   box-sizing: border-box;
-  padding: 30px 24px 50px 24px;
+  padding: 30px 24px;
 }
 .library-project-section__inner {
-max-width: 1600px;
+max-width: 1400px;
   margin: 0 auto;
   width: 100%;
   display: flex;
@@ -318,16 +321,16 @@ max-width: 1600px;
   padding: 40px 24px 60px 24px;
 }
 .photo-albums-container {
-  max-width: 1600px;
+  max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 }
 .photo-albums-title {
   font-family: var(--font-jura);
-  font-size: 2.5rem;
+  font-size: 2.6rem;
   font-weight: 500;
   color: var(--color-card-green);
-  margin: 0 0 42px 0;
+  margin: 0 0 60px 0;
   text-align: left;
 }
 .photo-albums-grid {

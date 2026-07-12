@@ -1,6 +1,6 @@
 
 .library-hero {
-  padding: 30px 30px 30px 50px;
+  padding: 30px;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -58,10 +58,9 @@
   line-height: 200%;
   letter-spacing: 0.08em;
   word-spacing: 0.1em;
-  max-width: 90%;
+  max-width: 98%;
   text-align: justify;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding: 0 40px 0;
 }
 .question {
   display: flex;

@@ -1,0 +1,32 @@
+{% load static %}
+{% if libraries_list.exists %}
+<div class="settlement-types-container">
+    {% regroup libraries_list.all by type as type_list %}
+
+    {% for type_group in type_list %}
+    <div class="library-type-row" data-library-type="{{ type_group.grouper }}">
+        <div class="library-type-badge">
+            {% if type_group.grouper == 'model_lib' %}<img src="{% static 'images/map/icons/model-library.svg' %}" alt="Модельная библиотека">
+            {% elif type_group.grouper == 'model_gen' %}<img src="{% static 'images/map/icons/genius-lab.svg' %}" alt="Модельная библиотека + «Гений места»">
+            {% elif type_group.grouper == 'gen_lab' %}<img src="{% static 'images/map/icons/genius.svg' %}" alt="«Гений места»">
+            {% elif type_group.grouper == 'child_center' %}<img src="{% static 'images/map/icons/children-center.svg' %}" alt="Детский центр">
+            {% else %}<img src="{% static 'images/map/icons/default-lib.svg' %}">{% endif %}
+            <span class="badge-count">{{ type_group.list|length }}</span>
+        </div>
+
+        <div class="library-type-content">
+            <div class="libraries-grid">
+                {% for library in type_group.list %}
+                <a href="{% url 'library_detail' library.id %}" class="library-card">
+                    <div class="library-card__info">
+                        <span class="library-card__name">{{ library.short_name|default:library.name }}</span>
+                        <span class="library-card__type">{{ library.status }}</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}

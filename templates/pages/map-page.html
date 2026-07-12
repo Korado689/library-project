@@ -21,9 +21,9 @@
 </article>
 
 <article class="districts-list" id="districts-list">
-    <h2>Муниципальные округа</h2>
+    <h2>Городские и муниципальные округа</h2>
     <div class="districts-grid">
-        {% for district in districts %}
+        {% for district in districts|dictsort:"name" %}
         <div class="district-link" data-svg-id="{{ district.map_id }}">
             {{ district.name }}
         </div>
@@ -35,43 +35,100 @@
 {% for district in districts %}
 <article class="district-libraries" data-svg-id="{{ district.map_id }}" style="display: none;">
     <div class="district-libraries__header">
-        <h2>{{ district.name }} {% if 'округ' not in district.name %}округ{%endif%}</h2>
+        <h2>
+            {{ district.full_display_name }}
+        </h2>
         <button class="district-libraries__back">← К округам</button>
     </div>
-    {% for city in district.cities.all %}
-    {% if city.libraries.exists %}
-    <div class="settlement-group">
-        <h3 class="settlement-name">{{ city.name }}</h3>
-        <div class="libraries-grid">
-            {% for library in city.libraries.all %}
-            <a href="{% url 'library_detail' library.id %}" class="library-card">
-                {% if library.type == 'model_lib' %}
-                <img src="{% static 'images/map/icons/model-library.svg' %}"
-                     alt="{{ library.short_name|default:library.name }}"
-                     class="library-card__icon">
-                {% elif library.type == 'model_gen' %}
-                <img src="{% static 'images/map/icons/genius-lab.svg' %}"
-                     alt="{{ library.short_name|default:library.name }}"
-                     class="library-card__icon">
-                {% elif library.type == 'gen_lab' %}
-                <img src="{% static 'images/map/icons/genius.svg' %}"
-                     alt="{{ library.short_name|default:library.name }}"
-                     class="library-card__icon">
-                {% elif library.type == 'child_center' %}
-                <img src="{% static 'images/map/icons/children-center.svg' %}"
-                     alt="{{ library.short_name|default:library.name }}"
-                     class="library-card__icon">
-                {% endif %}
-                <div class="library-card__info">
-                    <span class="library-card__name">{{ library.short_name|default:library.name }}</span>
-                    <span class="library-card__type">{{ library.status }}</span>
-                </div>
-            </a>
-            {% endfor %}
+
+    <div class="dashboard-filters-title">Сортировать по типу:</div>
+
+    <div class="library-dashboard-filters">
+        <div class="dashboard-card active" data-type="all">
+            <span class="dashboard-card__count">{{ district.count_all_libraries }}</span>
+            <span class="dashboard-card__label">Показать все</span>
+        </div>
+        
+        <div class="dashboard-card" data-type="model_lib">
+            <span class="dashboard-card__count">{{ district.count_model_lib }}</span>
+            <span class="dashboard-card__label">Модельная библиотека</span>
+        </div>
+        
+        <div class="dashboard-card" data-type="model_gen">
+            <span class="dashboard-card__count">{{ district.count_model_gen }}</span>
+            <span class="dashboard-card__label">Модельная библиотека + «Гений места»</span>
+        </div>
+        
+        <div class="dashboard-card" data-type="gen_lab">
+            <span class="dashboard-card__count">{{ district.count_gen_lab }}</span>
+            <span class="dashboard-card__label">«Гений места»</span>
+        </div>
+        
+        <div class="dashboard-card" data-type="child_center">
+            <span class="dashboard-card__count">{{ district.count_child_center }}</span>
+            <span class="dashboard-card__label">Детский центр</span>
         </div>
     </div>
+
+    {% if district.capital %}
+        
+        {% if district.count_all_libraries > 0 %}
+            
+            {% if district.capital.libraries.exists %}
+            <div class="settlement-group capital-group">
+                <div class="sub-capital-title">
+                    <h3>{{ district.capital.name }}</h3>
+                </div>
+                {% include 'includes/settlement_libraries.html' with libraries_list=district.capital.libraries %}
+            </div>
+            {% endif %}
+
+            {% if district.count_all_libraries > district.capital.libraries.all.count %}
+                <div class="sub-district-title">
+                    <h3>{{ district.clean_sub_title }}</h3>
+                </div>
+
+                {% for city in district.cities.all %}
+                    {% if city != district.capital and city.libraries.exists %}
+                    <div class="settlement-group">
+                        <h3 class="settlement-name">{{ city.name }}</h3>
+                        {% include 'includes/settlement_libraries.html' with libraries_list=city.libraries %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="sub-district-title" style="display: none;"></div>
+            {% endif %}
+
+        {% else %}
+            <p class="empty-district-message">
+                В данном {{ district.get_district_type_display|lower }}е библиотеки временно не добавлены на карту.
+            </p>
+        {% endif %}
+
+    {% else %}
+        {% if district.count_all_libraries > 0 %}
+            {% for city in district.cities.all %}
+                {% if city.libraries.exists %}
+                <div class="settlement-group">
+                    <h3 class="settlement-name">{{ city.name }}</h3>
+                    {% include 'includes/settlement_libraries.html' with libraries_list=city.libraries %}
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p class="empty-district-message">
+                В данном {{ district.get_district_type_display|lower }}е библиотеки временно не добавлены на карту.
+            </p>
+        {% endif %}
     {% endif %}
-    {% endfor %}
+
+    <p class="filter-empty-message" style="display: none;">В данном округе отсутствуют библиотеки выбранного типа.</p>
+
 </article>
 {% endfor %}
+
+<div id="map-tooltip" class="map-tooltip"></div>
 {% endblock %}
+
+
