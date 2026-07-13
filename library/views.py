@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Library, District, Project
+from django.db.models import Prefetch
+from .models import Library, District, Project, City
 
 
 def home(request):
@@ -12,17 +13,23 @@ def home(request):
 
 def projects(request):
     context = {
-        'projects': Project.objects.order_by('position'),
+        'projects': Project.objects.prefetch_related('libraries').all(),
     }
     return render(request, 'pages/projects.html', context)
 
 
+
 def map_view(request):
     context = {
-        'districts': District.objects
-        .prefetch_related('cities__libraries').all(),
+        'districts': District.objects.prefetch_related(
+            Prefetch(
+                'cities',
+                queryset=City.objects.order_by('name').prefetch_related('libraries')
+            )
+        ).all().order_by('name'),
     }
     return render(request, 'pages/map-page.html', context)
+
 
 
 def library_detail(request, pk):

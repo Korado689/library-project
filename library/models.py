@@ -15,6 +15,9 @@ class Project(models.Model):
     text_split = models.BooleanField(verbose_name=_("Horizontal view"), default=False)
     url = models.URLField(verbose_name=_("URL"), null=True, blank=True)
 
+    class Meta:
+        ordering = ['position']
+
     def __str__(self):
         if self.title is not None:
             return self.title
@@ -22,11 +25,62 @@ class Project(models.Model):
             return super(Project, self).__str__()
 
 
+class DistrictType(models.TextChoices):
+    MUNICIPAL = 'municipal', 'муниципальном округ'
+    URBAN = 'urban', 'городском округ'
+
+
 class District(models.Model):
     name = models.CharField(verbose_name=_("District name"), max_length=255)
     map_id = models.CharField(verbose_name=_("Map ID"), max_length=255, null=True, blank=True)
     capital = models.OneToOneField('City', verbose_name=_("Capital"), on_delete=models.SET_NULL,
                                    null=True, blank=True, related_name='districts_capital')
+
+    district_type = models.CharField(
+        verbose_name="Тип округа",
+        max_length=20,
+        choices=DistrictType.choices,
+        default=DistrictType.MUNICIPAL
+    )
+
+    @property
+    def count_all_libraries(self):
+        return sum(city.libraries.count() for city in self.cities.all())
+
+    @property
+    def count_model_lib(self):
+        return sum(city.libraries.filter(type='model_lib').count() for city in self.cities.all())
+
+    @property
+    def count_model_gen(self):
+        return sum(city.libraries.filter(type='model_gen').count() for city in self.cities.all())
+
+    @property
+    def count_gen_lab(self):
+        return sum(city.libraries.filter(type='gen_lab').count() for city in self.cities.all())
+
+    @property
+    def count_child_center(self):
+        return sum(city.libraries.filter(type='child_center').count() for city in self.cities.all())
+
+    @property
+    def full_display_name(self):
+        if self.name == 'Котовск':
+            return 'Городской округ Котовск'
+        
+        if self.district_type == DistrictType.URBAN:
+            return f"Городской округ {self.name}"
+            
+        return f"{self.name} муниципальный округ"
+
+    @property
+    def clean_sub_title(self):
+        if ' и ' in self.name:
+            parts = self.name.split(' и ')
+            if len(parts) > 1:
+                clean_name = parts[1].split()[0]
+                return f"{clean_name} муниципальный округ"
+        return f"{self.name} муниципальный округ"
 
     def __str__(self):
         return self.name
@@ -36,6 +90,9 @@ class City(models.Model):
     name = models.CharField(verbose_name=_("City name"), max_length=255)
     district = models.ForeignKey(District, on_delete=models.CASCADE, related_name='cities')
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
 
@@ -43,7 +100,6 @@ class City(models.Model):
 class Phone(models.Model):
     number = PhoneNumberField(_("Phone"))
     owner = models.CharField(verbose_name=_("Owner"), max_length=255)
-
     library = models.ForeignKey('Library', on_delete=models.CASCADE, related_name='phones')
 
     def __str__(self):
@@ -51,8 +107,6 @@ class Phone(models.Model):
 
     @property
     def formatted_number(self):
-        """Возвращает отформатированный номер телефона"""
-
         cleaned = re.sub(r'[^\d+]', '', str(self.number))
         pattern = r'^(\+?\d{1})(\d{3})(\d{3})(\d{2})(\d{2})$'
         match = re.match(pattern, cleaned)
@@ -83,8 +137,7 @@ class Links(models.Model):
 class CollapsibleBlock(models.Model):
     title = models.CharField(verbose_name=_("Title"), max_length=255)
     text = models.TextField(verbose_name=_("Text"))
-    library = models.ForeignKey('Library', on_delete=models.CASCADE,
-                                related_name='collapsible_blocks')
+    library = models.ForeignKey('Library', on_delete=models.CASCADE, related_name='collapsible_blocks')
 
     def __str__(self):
         name = self.library.short_name if self.library.short_name else self.library.name
@@ -93,8 +146,7 @@ class CollapsibleBlock(models.Model):
 
 class ListBlock(models.Model):
     title = models.CharField(verbose_name=_("Title"), max_length=255)
-    library = models.ForeignKey('Library', on_delete=models.CASCADE,
-                                related_name='list_blocks')
+    library = models.ForeignKey('Library', on_delete=models.CASCADE, related_name='list_blocks')
 
     def __str__(self):
         name = self.library.short_name if self.library.short_name else self.library.name
@@ -103,8 +155,7 @@ class ListBlock(models.Model):
 
 class ListElement(models.Model):
     text = models.TextField(verbose_name=_("Text"))
-    block = models.ForeignKey('ListBlock', on_delete=models.CASCADE,
-                              related_name='elements')
+    block = models.ForeignKey('ListBlock', on_delete=models.CASCADE, related_name='elements')
 
     def __str__(self):
         return f"{self.block.title}: ListElement {self.id}"
@@ -118,8 +169,7 @@ class PhotoAlbum(models.Model):
 class Photo(models.Model):
     title = models.CharField(verbose_name=_("Title"), max_length=255, null=True, blank=True)
     image = models.ImageField(verbose_name=_("Image"), upload_to='lib/images/')
-    album = models.ForeignKey(PhotoAlbum, on_delete=models.CASCADE,
-                              related_name='photos')
+    album = models.ForeignKey(PhotoAlbum, on_delete=models.CASCADE, related_name='photos')
 
     def __str__(self):
         if self.title is not None:
@@ -136,24 +186,20 @@ class LibraryType(models.TextChoices):
 
 
 class Library(models.Model):
-    type = models.CharField(verbose_name=_("Type"), max_length=255,
-                            choices=LibraryType.choices, blank=True, null=True)
-    projects = models.ManyToManyField(Project, through='ProjectLibraryMembership',
-                                      related_name='libraries')
+    type = models.CharField(verbose_name=_("Type"), max_length=255, choices=LibraryType.choices, blank=True, null=True)
+    projects = models.ManyToManyField(Project, through='ProjectLibraryMembership', related_name='libraries')
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='libraries')
 
     image = models.ImageField(verbose_name=_("Image"), upload_to='library/images/', blank=True, null=True)
     name = models.TextField(verbose_name=_("Library name"))
-    short_name = models.CharField(verbose_name=_("Library short name"), max_length=255,
-                                  null=True, blank=True)
+    short_name = models.CharField(verbose_name=_("Library short name"), max_length=255, null=True, blank=True)
     status = models.TextField(verbose_name=_("Status"))
-    address = models.CharField(verbose_name=_("Address"), max_length=255, blank=True, null=True)
+    address = models.TextField(verbose_name=_("Address"), blank=True, null=True)
+    
     area = models.CharField(verbose_name=_("Area"), max_length=255)
     schedule = models.TextField(verbose_name=_("Work Schedule"), max_length=255)
 
-    design_project = models.FileField(verbose_name=_("Design project"),
-                                      upload_to='library/design_projects/',
-                                      null=True, blank=True)
+    design_project = models.FileField(verbose_name=_("Design project"), upload_to='library/design_projects/', null=True, blank=True)
     video = models.URLField(verbose_name=_("Video URL"), null=True, blank=True)
     video_desc = models.TextField(verbose_name=_("Video description"), null=True, blank=True)
 
@@ -162,10 +208,9 @@ class Library(models.Model):
 
 
 class ProjectLibraryMembership(models.Model):
-    class Meta:
-        unique_together = ['project', 'library']  # Нельзя дважды войти в один проект
-
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     library = models.ForeignKey(Library, on_delete=models.CASCADE)
-
     date_linked = YearField(verbose_name=_("Date linked"))
+
+    class Meta:
+        unique_together = ['project', 'library']

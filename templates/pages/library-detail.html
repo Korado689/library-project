@@ -100,7 +100,7 @@
                     </span>
                 </summary>
                 <div class="library-accordion__content">
-                    <p>{{ block.text }}</p>
+                    {{ block.text|linebreaks }}
                 </div>
             </details>
             {% endfor %}
@@ -146,37 +146,89 @@
     <div class="photo-albums-container">
         <h2 class="photo-albums-title">Фотоальбомы</h2>
         <div class="photo-albums-grid">
-            {% for album in library.albums.all %}
-            {% with cover=album.photos.first %}
-            {% if cover %}
-            <div class="photo-album-card">
-                <a href="{{ cover.image.url }}" class="photo-album-card__image-link"
-                   data-fancybox="album-{{ album.id }}" data-caption="{{ album.title }}">
-                    <div class="photo-album-card__image-wrapper">
-                        <img src="{{ cover.image.url }}" alt="{{ album.title }}" class="photo-album-card__img" loading="lazy">
+            {% if library.albums.all|length == 1 %}
+                {% with album=library.albums.first %}
+                <div class="photo-album-card photo-album-card--single">
+                    <div class="photo-album-card__triple-images">
+                        {% for photo in album.photos.all|slice:":3" %}
+                        <a href="javascript:;" class="photo-album-card__image-link" 
+                           onclick="document.querySelector('#album-start-{{ album.id }}').click(); return false;"
+                           role="button"
+                           aria-label="Открыть фото из альбома {{ album.title }}">
+                            <div class="photo-album-card__image-wrapper">
+                                <img src="{{ photo.image.url }}" alt="{{ album.title }}" class="photo-album-card__img" loading="lazy">
+                            </div>
+                        </a>
+                        {% endfor %}
                     </div>
-                </a>
-                {% for photo in album.photos.all %}
-                {% if not forloop.first %}
-                <a href="{{ photo.image.url }}" data-fancybox="album-{{ album.id }}"
-                   data-caption="{{ photo.title|default:album.title }}" style="display:none;"></a>
-                {% endif %}
-                {% endfor %}
-                <div class="photo-album-card__content">
-                    <h3 class="photo-album-card__title">{{ album.title }}</h3>
-                    <a href="{{ cover.image.url }}" class="photo-album-card__btn" data-fancybox="album-{{ album.id }}">
-                        Посмотреть
-                        <svg class="photo-album-card__btn-arrow" width="22" height="10" viewBox="0 0 22 10" fill="none"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 5H21M21 5L17 1M21 5L17 9" stroke="#382D0C" stroke-width="1.5"
-                                  stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </a>
+                    <div class="album-hidden-gallery" style="display:none;">
+                        {% for photo in album.photos.all %}
+                            <a href="{{ photo.image.url }}" 
+                               data-fancybox="album-{{ album.id }}"
+                               data-caption="{{ photo.title|default:album.title }}"
+                               {% if forloop.first %}id="album-start-{{ album.id }}"{% endif %}>
+                            </a>
+                        {% endfor %}
+                    </div>
+                    <div class="photo-album-card__content-single">
+                        <h3 class="photo-album-card__title">{{ album.title }}</h3>
+                        <a href="javascript:;" class="photo-album-card__btn" 
+                           onclick="document.querySelector('#album-start-{{ album.id }}').click(); return false;"
+                           role="button"
+                           aria-label="Открыть альбом {{ album.title }}">
+                            Посмотреть
+                            <svg class="photo-album-card__btn-arrow" width="22" height="10" viewBox="0 0 22 10" fill="none"
+                                 xmlns="http://w3.org">
+                                <path d="M1 5H21M21 5L17 1M21 5L17 9" stroke="#382D0C" stroke-width="1.5"
+                                      stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
-            </div>
+                {% endwith %}
+            {% else %}
+                {% for album in library.albums.all %}
+                {% with cover=album.photos.first %}
+                {% if cover %}
+                <div class="photo-album-card">
+                    <a href="javascript:;" class="photo-album-card__image-link" 
+                       onclick="document.querySelector('#album-start-{{ album.id }}').click(); return false;"
+                       role="button"
+                       aria-label="Открыть альбом {{ album.title }}">
+                        <div class="photo-album-card__image-wrapper">
+                            <img src="{{ cover.image.url }}" alt="{{ album.title }}" class="photo-album-card__img" loading="lazy">
+                        </div>
+                    </a>
+
+                    <div class="album-hidden-gallery" style="display:none;">
+                        {% for photo in album.photos.all %}
+                            <a href="{{ photo.image.url }}" 
+                               data-fancybox="album-{{ album.id }}"
+                               data-caption="{{ photo.title|default:album.title }}"
+                               {% if forloop.first %}id="album-start-{{ album.id }}"{% endif %}>
+                            </a>
+                        {% endfor %}
+                    </div>
+
+                    <div class="photo-album-card__content">
+                        <h3 class="photo-album-card__title">{{ album.title }}</h3>
+                        <a href="javascript:;" class="photo-album-card__btn" 
+                           onclick="document.querySelector('#album-start-{{ album.id }}').click(); return false;"
+                           role="button"
+                           aria-label="Открыть альбом {{ album.title }}">
+                            Посмотреть
+                            <svg class="photo-album-card__btn-arrow" width="22" height="10" viewBox="0 0 22 10" fill="none"
+                                 xmlns="http://w3.org">
+                                <path d="M1 5H21M21 5L17 1M21 5L17 9" stroke="#382D0C" stroke-width="1.5"
+                                      stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+                {% endwith %}
+                {% endfor %}
             {% endif %}
-            {% endwith %}
-            {% endfor %}
         </div>
     </div>
 </section>
