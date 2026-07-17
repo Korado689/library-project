@@ -21,13 +21,30 @@
 </article>
 
 <article class="districts-list" id="districts-list">
-    <h2>Городские и муниципальные округа</h2>
-    <div class="districts-grid">
-        {% for district in districts|dictsort:"name" %}
-        <div class="district-link" data-svg-id="{{ district.map_id }}">
-            {{ district.name }}
+    <div class="districts-group-block">
+        <h2 class="districts-group-heading">Городские округа</h2>
+        <div class="districts-grid">
+            {% for district in districts|dictsort:"name" %}
+                {% if district.district_type == 'urban' %}
+                <div class="district-link" data-svg-id="{{ district.map_id }}">
+                    {{ district.name }}
+                </div>
+                {% endif %}
+            {% endfor %}
         </div>
-        {% endfor %}
+    </div>
+
+    <div class="districts-group-block" style="margin-top: 35px;">
+        <h2 class="districts-group-heading">Муниципальные округа</h2>
+        <div class="districts-grid">
+            {% for district in districts|dictsort:"name" %}
+                {% if district.district_type == 'municipal' %}
+                <div class="district-link" data-svg-id="{{ district.map_id }}">
+                    {{ district.name }}
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
 </article>
 
@@ -70,57 +87,15 @@
         </div>
     </div>
 
-    {% if district.capital %}
-        
-        {% if district.count_all_libraries > 0 %}
-            
-            {% if district.capital.libraries.exists %}
-            <div class="settlement-group capital-group">
-                <div class="sub-capital-title">
-                    <h3>{{ district.capital.name }}</h3>
-                </div>
-                {% include 'includes/settlement_libraries.html' with libraries_list=district.capital.libraries %}
+    {% if district.count_all_libraries > 0 %}
+        {% for city in district.cities.all %}
+            {% if city.libraries.exists %}
+            <div class="settlement-group">
+                <h3 class="settlement-name">{{ city.name }}</h3>
+                {% include 'includes/settlement_libraries.html' with libraries_list=city.libraries %}
             </div>
             {% endif %}
-
-            {% if district.count_all_libraries > district.capital.libraries.all.count %}
-                <div class="sub-district-title">
-                    <h3>{{ district.clean_sub_title }}</h3>
-                </div>
-
-                {% for city in district.cities.all %}
-                    {% if city != district.capital and city.libraries.exists %}
-                    <div class="settlement-group">
-                        <h3 class="settlement-name">{{ city.name }}</h3>
-                        {% include 'includes/settlement_libraries.html' with libraries_list=city.libraries %}
-                    </div>
-                    {% endif %}
-                {% endfor %}
-            {% else %}
-                <div class="sub-district-title" style="display: none;"></div>
-            {% endif %}
-
-        {% else %}
-            <p class="empty-district-message">
-                В данном {{ district.get_district_type_display|lower }}е библиотеки временно не добавлены на карту.
-            </p>
-        {% endif %}
-
-    {% else %}
-        {% if district.count_all_libraries > 0 %}
-            {% for city in district.cities.all %}
-                {% if city.libraries.exists %}
-                <div class="settlement-group">
-                    <h3 class="settlement-name">{{ city.name }}</h3>
-                    {% include 'includes/settlement_libraries.html' with libraries_list=city.libraries %}
-                </div>
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            <p class="empty-district-message">
-                В данном {{ district.get_district_type_display|lower }}е библиотеки временно не добавлены на карту.
-            </p>
-        {% endif %}
+        {% endfor %}
     {% endif %}
 
     <p class="filter-empty-message" style="display: none;">В данном округе отсутствуют библиотеки выбранного типа.</p>
@@ -130,5 +105,6 @@
 
 <div id="map-tooltip" class="map-tooltip"></div>
 {% endblock %}
+
 
 

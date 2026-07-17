@@ -27,23 +27,18 @@
   width: 100%;
   height: auto;
 }
-
 .map-region--active { fill: #DBDAAE; }
-
 .map_wrapper svg path[id] {
   cursor: pointer;
   transition: fill 0.25s ease, stroke 0.25s ease;
 }
-
-.map_wrapper svg path[id]:not(.map-region--active):hover {
-  fill: #e6dfd3; 
-  /* stroke: #8b8273;
-  stroke-width: 1.5px; */
+.map_wrapper svg path[id]:hover,
+.map_wrapper svg path.map-region--hover {
+  fill: #d9ceb5; 
 }
-#main-map path:hover,
-.map-region--hover {
-  fill: #d9ceb5 !important;
-  transition: fill 0.2s ease;
+.map_wrapper svg path[id].map-region--active,
+.map_wrapper svg path[id].map-region--active:hover { 
+  fill: #DBDAAE; 
 }
 
 /* ---------- НАЗВАНИЯ ГОРОДОВ НА САМОЙ SVG-КАРТЕ ---------- */
@@ -91,6 +86,9 @@
 .city-dot--clickable {
   pointer-events: auto !important;
   cursor: pointer;
+  stroke: transparent !important;
+  stroke-width: 15px !important; 
+  paint-order: stroke fill;
 }
 .dot-pulse {
   fill: none;
@@ -225,7 +223,6 @@
 /* ---------- СПИСОК ОКРУГОВ ---------- */
 .districts-list {
   margin-top: 40px;
-  margin-bottom: 40px;
   padding: 0 20px;
   text-align: center;
 }
@@ -261,6 +258,14 @@
 .district-link.active {
   background-color: var(--color-accent);
   color: var(--color-text-light);
+}
+.districts-group-block {
+  width: 100%;
+}
+.districts-group-heading {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: var(--color-text-dark);
 }
 
 /* ---------- СТРУКТУРНЫЕ ЗАГОЛОВКИ И РАЗДЕЛИТЕЛИ ВНУТРИ ОКРУГА ---------- */
@@ -471,28 +476,6 @@
 }
 .library-type-content {
   flex-grow: 1;
-}
-
-/* ---------- СЧЁТЧИКИ ---------- */
-.badge-count {
-  position: absolute;
-  top: -7px;
-  right: -7px;
-  background-color: #b19c5d;
-  color: var(--color-text-light);
-  font-family: var(--font-jost);
-  font-size: 11px;
-  font-weight: 600;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  border: 1.5px solid #ffffff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
 /* ---------- ПЛАШКА ПУСТОТЫ ---------- */

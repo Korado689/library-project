@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const badgeObjects = document.querySelectorAll('.map-district-badge');
     const tooltip = document.getElementById('map-tooltip');
     const pulses = document.querySelectorAll('.dot-pulse');
+    const clickableDots = document.querySelectorAll('.city-dot--clickable');
     const badgeSize = 36;
 
     // Всплывающая подсказка
@@ -19,24 +20,63 @@ document.addEventListener('DOMContentLoaded', function () {
         moveTooltip(e);
     }
 
+    // Движение подсказки за курсором
     function moveTooltip(e) {
         if (!tooltip) return;
         tooltip.style.left = (e.clientX + 15) + 'px';
         tooltip.style.top = (e.clientY + 15) + 'px';
     }
 
+    // Скрытие подсказки
     function hideTooltip() {
         if (tooltip) tooltip.style.opacity = '0';
     }
 
-    // Включение пульсации точек района
-    function activatePulses(regionId) {
-        const targetPulses = document.querySelectorAll(`.dot-pulse[data-svg-id="${regionId}"]`);
-        targetPulses.forEach(pulse => pulse.classList.add('active'));
+    // Включение пульсации точек района (Ищет пульсар по data-svg-id)
+    function activatePulses(pulseId) {
+        if (pulseId) {
+            const targetPulses = document.querySelectorAll(`.dot-pulse[data-svg-id="${pulseId}"]`);
+            targetPulses.forEach(pulse => pulse.classList.add('active'));
+        }
     }
 
     function deactivateAllPulses() {
         pulses.forEach(p => p.classList.remove('active'));
+    }
+
+    function getDistrictId(element) {
+        let id = element.getAttribute('data-svg-id');
+        if (id) return id;
+        
+        id = element.getAttribute('data-click-id');
+        if (id) {
+            if (id === 'kotovsk') {
+                return 'tmb+kotovsk';
+            }
+            return id;
+        }
+        
+        return null;
+    }
+
+    function highlightRegion(svgId, addClass = true) {
+        paths.forEach(p => {
+            if (p.id === svgId) {
+                p.classList.toggle('map-region--hover', addClass);
+            } else {
+                if (!p.classList.contains('map-region--active')) {
+                    p.classList.remove('map-region--hover');
+                }
+            }
+        });
+    }
+
+    function clearAllHighlights() {
+        paths.forEach(p => {
+            if (!p.classList.contains('map-region--active')) {
+                p.classList.remove('map-region--hover');
+            }
+        });
     }
 
     // Автоматический расчет центров с защитой от изменения размеров окна
@@ -59,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Расчет центров, событие изменения размеров экрана
     updateBadgePositions();
     window.addEventListener('resize', updateBadgePositions);
 
@@ -76,65 +115,77 @@ document.addEventListener('DOMContentLoaded', function () {
     paths.forEach(path => {
         path.style.cursor = 'pointer';
 
+        // Наведение на район: показываем подсказку и подсвечиваем район
         path.addEventListener('mouseenter', function (e) {
             const title = this.getAttribute('data-title');
             if (title) showTooltip(title, e);
-            activatePulses(this.id);
+
+            if (!this.classList.contains('map-region--active')) {
+                this.classList.add('map-region--hover');
+            }
         });
 
         path.addEventListener('mousemove', moveTooltip);
+
         path.addEventListener('mouseleave', function () {
             hideTooltip();
-            deactivateAllPulses();
+            if (!this.classList.contains('map-region--active')) {
+                this.classList.remove('map-region--hover');
+            }
         });
 
+        // Клик по району
         path.addEventListener('click', function (e) {
             e.stopPropagation();
             showDistrict(this.id);
         });
     });
-
-    // Интерактивность для точки с Котовском
-    const clickableDots = document.querySelectorAll('.city-dot[data-click-id]');
     
     clickableDots.forEach(dot => {
-        dot.addEventListener('click', function (e) {
-            e.stopPropagation();
-            const targetId = this.getAttribute('data-click-id');
-            showDistrict(targetId);
+        dot.style.pointerEvents = 'auto';
+        dot.style.cursor = 'pointer';
 
-            const parentPulse = this.previousElementSibling;
-            if (parentPulse) {
-                const regionId = parentPulse.getAttribute('data-svg-id');
-                highlightRegion(regionId);
-                highlightLink(regionId);
-            }
-        });
-
+        // Наведение на точку
         dot.addEventListener('mouseenter', function (e) {
-            showTooltip("Городской округ Котовск", e);
+            const title = this.getAttribute('data-title') || 'Городской округ';
+            showTooltip(title, e);
 
-            const parentPulse = this.previousElementSibling; 
-            if (parentPulse) {
-                const regionId = parentPulse.getAttribute('data-svg-id');
+            const pulseId = this.getAttribute('data-pulse-id');
+            if (pulseId) {
+                activatePulses(pulseId);
+            }
+
+            const regionId = this.getAttribute('data-click-id');
+            if (regionId) {
                 activatePulses(regionId);
-
-                const mapPath = document.getElementById(regionId);
-                if (mapPath) mapPath.classList.add('map-region--hover');
+                clearAllHighlights();
+                highlightRegion(regionId, true);
             }
         });
 
         dot.addEventListener('mousemove', moveTooltip);
 
+        // Уход с точки
         dot.addEventListener('mouseleave', function () {
             hideTooltip();
+
             deactivateAllPulses();
-            
-            const parentPulse = this.previousElementSibling;
-            if (parentPulse) {
-                const regionId = parentPulse.getAttribute('data-svg-id');
-                const mapPath = document.getElementById(regionId);
-                if (mapPath) mapPath.classList.remove('map-region--hover');
+
+            const regionId = this.getAttribute('data-click-id');
+            if (regionId) {
+                const path = document.getElementById(regionId);
+                if (path && !path.contains('map-region--active')) {
+                    path.classList.remove('map-region--hover');
+                }
+            }
+        });
+
+        // Клик по точке
+        dot.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const targetId = this.getAttribute('data-click-id');
+            if (targetId) {
+                showDistrict(targetId);
             }
         });
     });
@@ -193,7 +244,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Интерактивная связь легенды и карты по клику
     const legendItems = document.querySelectorAll('.legend-item');
 
     legendItems.forEach(item => {
@@ -209,23 +259,24 @@ document.addEventListener('DOMContentLoaded', function () {
             legendItems.forEach(i => i.classList.remove('legend-item--active'));
             this.classList.add('legend-item--active');
 
-            paths.forEach(p => p.classList.remove('map-region--active'));
+            paths.forEach(p => {
+                p.classList.remove('map-region--active', 'map-region--hover');
+            });
 
             badgeObjects.forEach(badge => {
                 const districtId = badge.getAttribute('data-district-id');
                 const count = parseInt(badge.getAttribute(`data-count-${selectedType}`)) || 0;
                 const path = document.getElementById(districtId);
+                const circle = badge.querySelector('.map-badge-circle');
 
                 if (count > 0) {
                     if (path) path.classList.add('map-region--active');
-                    const circle = badge.querySelector('.map-badge-circle');
                     if (circle) circle.textContent = count;
                     badge.style.display = 'block';
                 } else {
-                    const libraryBlock = document.querySelector(`.district-libraries[data-svg-id="${districtId}"]`);
-                    const isCurrentlyOpen = libraryBlock && libraryBlock.style.display === 'block';
-                    if (path && !isCurrentlyOpen) path.classList.remove('map-region--active');
+                    if (circle) circle.textContent = '0';
                     badge.style.display = 'none';
+                    if (path) path.classList.remove('map-region--active');
                 }
             });
         });
@@ -236,20 +287,32 @@ document.addEventListener('DOMContentLoaded', function () {
         badgeObjects.forEach(badge => {
             const districtId = badge.getAttribute('data-district-id');
             const path = document.getElementById(districtId);
-            
             const libraryBlock = document.querySelector(`.district-libraries[data-svg-id="${districtId}"]`);
             const isCurrentlyOpen = libraryBlock && libraryBlock.style.display === 'block';
 
             if (path && !isCurrentlyOpen) path.classList.remove('map-region--active');
-            badge.style.display = 'none';
+            badgeObjects.forEach(badge => badge.style.display = 'none');
         });
     }
 
     svg.addEventListener('click', function(e) {
-        if (e.target === svg) {
-            resetLegendFilter();
-            paths.forEach(p => p.classList.remove('map-region--active'));
-            districtLinks.forEach(l => l.classList.remove('active'));
+        if (e.target === svg || e.target === this) {
+            const isPath = e.target.closest('path');
+            const isDot = e.target.closest('.city-dot--clickable');
+            
+            if (!isPath && !isDot) {
+                paths.forEach(p => {
+                    p.classList.remove('map-region--active', 'map-region--hover');
+                });
+                
+                districtLinks.forEach(l => l.classList.remove('active'));
+                deactivateAllPulses();
+                
+                resetLegendFilter();
+                
+                if (districtsList) districtsList.style.display = 'block';
+                document.querySelectorAll('.district-libraries').forEach(el => el.style.display = 'none');
+            }
         }
     });
 
@@ -259,13 +322,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function highlightRegion(svgId) {
-        paths.forEach(p => {
-            p.classList.toggle('map-region--active', p.id === svgId);
-        });
-    }
-
-    function showDistrict(svgId) {
+    const originalShowDistrict = window.showDistrict || function() {};
+    window.showDistrict = function(svgId) {
         document.querySelectorAll('.district-libraries').forEach(el => el.style.display = 'none');
 
         const block = document.querySelector(`.district-libraries[data-svg-id="${svgId}"]`);
@@ -273,27 +331,47 @@ document.addEventListener('DOMContentLoaded', function () {
         if (districtsList) districtsList.style.display = 'none';
 
         highlightLink(svgId);
-        highlightRegion(svgId);
+
+        paths.forEach(p => {
+            p.classList.toggle('map-region--active', p.id === svgId);
+            if (p.id !== svgId) {
+                p.classList.remove('map-region--hover');
+            }
+        });
 
         if (block) {
             setTimeout(() => {
                 block.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 10);
         }
-    }
+    };
 
-    function showAllDistricts() {
+    window.showAllDistricts = function() {
         document.querySelectorAll('.district-libraries').forEach(el => el.style.display = 'none');
         if (districtsList) districtsList.style.display = 'block';
 
         districtLinks.forEach(l => l.classList.remove('active'));
-        paths.forEach(p => p.classList.remove('map-region--active'));
+        paths.forEach(p => {
+            p.classList.remove('map-region--active');
+            p.classList.remove('map-region--hover');
+        });
 
-        resetLegendFilter();
+        document.querySelectorAll('.legend-item').forEach(i => i.classList.remove('legend-item--active'));
         document.querySelectorAll('.dashboard-card[data-type="all"]').forEach(card => card.click());
-    }
+        deactivateAllPulses();
+    };
 
+    window.showDistrict = window.showDistrict;
+    window.showAllDistricts = window.showAllDistricts;
+
+    svg.addEventListener('click', function(e) {
+        if (e.target === svg || e.target.tagName === 'svg') {
+            if (!e.target.closest('path') && !e.target.closest('.city-dot--clickable')) {
+            }
+        }
+    });
 });
+
 
 
 

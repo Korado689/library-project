@@ -11,7 +11,6 @@
             {% elif type_group.grouper == 'gen_lab' %}<img src="{% static 'images/map/icons/genius.svg' %}" alt="«Гений места»">
             {% elif type_group.grouper == 'child_center' %}<img src="{% static 'images/map/icons/children-center.svg' %}" alt="Детский центр">
             {% else %}<img src="{% static 'images/map/icons/default-lib.svg' %}">{% endif %}
-            <span class="badge-count">{{ type_group.list|length }}</span>
         </div>
 
         <div class="library-type-content">

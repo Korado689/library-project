@@ -43,48 +43,38 @@ class District(models.Model):
         default=DistrictType.MUNICIPAL
     )
 
-    @property
-    def count_all_libraries(self):
+    def _count_by_type(self, lib_type=None):
+        if lib_type:
+            return sum(city.libraries.filter(type=lib_type).count() for city in self.cities.all())
         return sum(city.libraries.count() for city in self.cities.all())
 
     @property
-    def count_model_lib(self):
-        return sum(city.libraries.filter(type='model_lib').count() for city in self.cities.all())
-
+    def count_all_libraries(self): return self._count_by_type()
+    
     @property
-    def count_model_gen(self):
-        return sum(city.libraries.filter(type='model_gen').count() for city in self.cities.all())
-
+    def count_model_lib(self): return self._count_by_type('model_lib')
+    
     @property
-    def count_gen_lab(self):
-        return sum(city.libraries.filter(type='gen_lab').count() for city in self.cities.all())
-
+    def count_model_gen(self): return self._count_by_type('model_gen')
+    
     @property
-    def count_child_center(self):
-        return sum(city.libraries.filter(type='child_center').count() for city in self.cities.all())
+    def count_gen_lab(self): return self._count_by_type('gen_lab')
+    
+    @property
+    def count_child_center(self): return self._count_by_type('child_center')
 
     @property
     def full_display_name(self):
-        if self.name == 'Котовск':
-            return 'Городской округ Котовск'
-        
         if self.district_type == DistrictType.URBAN:
             return f"Городской округ {self.name}"
-            
         return f"{self.name} муниципальный округ"
 
     @property
     def clean_sub_title(self):
-        if ' и ' in self.name:
-            parts = self.name.split(' и ')
-            if len(parts) > 1:
-                clean_name = parts[1].split()[0]
-                return f"{clean_name} муниципальный округ"
-        return f"{self.name} муниципальный округ"
+        return self.full_display_name
 
     def __str__(self):
         return self.name
-
 
 class City(models.Model):
     name = models.CharField(verbose_name=_("City name"), max_length=255)
