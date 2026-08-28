@@ -7,5 +7,16 @@
 /venv
 /.venv
 __pycache__/
-/config/
+
+# Local app env and data
+/config.json
+/config
+/.env
+/*.sqlite
+
+# Local copy of media and static files
+/library/static/
 /media/
+
+# ISPManager local configuration
+ecosystem.config.js
