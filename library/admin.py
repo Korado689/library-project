@@ -165,7 +165,7 @@ class PhotoAlbumAdmin(admin.ModelAdmin):
     def photos_count(self, obj):
         return obj.photos.count()
 
-    photos_count.short_description = _('Кол-во фото')
+    photos_count.short_description = _('Photo amount')
 
     def save_model(self, request, obj, form, change):
         # This actually persists album to DB (obj.pk is guaranteed after this)
@@ -219,6 +219,7 @@ class ProjectAdmin(admin.ModelAdmin):
 @admin.register(District)
 class DistrictAdmin(admin.ModelAdmin):
     list_display = ('name', 'district_type')
+    exclude = ('map_id',)
 
 
 @admin.register(City)
@@ -231,7 +232,7 @@ class LibraryAdmin(NestedModelAdmin):
     list_display = ('name', 'city', 'get_projects')
     inlines = [ProjectInline, PhoneInline, EmailInline, LinksInline, CollapsibleBlockInline, ListBlockInline]
 
-    @admin.display(description=_('Проекты'))
+    @admin.display(description=_('Projects'))
     def get_projects(self, obj):
         return ", ".join([str(project) for project in obj.projects.all()])
 

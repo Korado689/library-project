@@ -13,6 +13,11 @@ def project_upload_path(instance: Project, filename: str) -> str:
 
 
 class Project(models.Model):
+    class Meta:
+        ordering = ['position']
+        verbose_name = _("Project")
+        verbose_name_plural = _("Projects")
+
     title = models.CharField(verbose_name=_("Title of project"), max_length=100, null=True, blank=True)
     image = models.ImageField(verbose_name=_("Image"), upload_to=project_upload_path)
     description = models.TextField(verbose_name=_("Description of project"))
@@ -20,9 +25,6 @@ class Project(models.Model):
     position = models.PositiveIntegerField(verbose_name=_("Position on page"), )
     text_split = models.BooleanField(verbose_name=_("Horizontal view"), default=False)
     url = models.URLField(verbose_name=_("URL"), null=True, blank=True)
-
-    class Meta:
-        ordering = ['position']
 
     def __str__(self):
         if self.title is not None:
@@ -32,21 +34,28 @@ class Project(models.Model):
 
 
 class DistrictType(models.TextChoices):
-    MUNICIPAL = 'municipal', _('муниципальный округ')
-    URBAN = 'urban', _('городской округ')
+    class Meta:
+        verbose_name = _("District Type")
+        verbose_name_plural = _("District Types")
+
+    MUNICIPAL = 'municipal', _('Municipal district')
+    URBAN = 'urban', _('Urban district')
 
 
 class District(models.Model):
+    class Meta:
+        verbose_name = _("District")
+        verbose_name_plural = _("Districts")
+
     name = models.CharField(verbose_name=_("District name"), max_length=255)
     map_id = models.CharField(verbose_name=_("Map ID"), max_length=255, null=True, blank=True)
 
     district_type = models.CharField(
-        verbose_name=_("Тип округа"),
-        max_length=20,
+        verbose_name=_("District type"),
+        max_length=200,
         choices=DistrictType.choices,
         default=DistrictType.MUNICIPAL
     )
-
 
     @property
     def count_all_libraries(self):
@@ -67,20 +76,26 @@ class District(models.Model):
 
 
 class City(models.Model):
-    name = models.CharField(verbose_name=_("City name"), max_length=255)
-    district = models.ForeignKey(District, on_delete=models.CASCADE, related_name='cities')
-
     class Meta:
         ordering = ['name']
+        verbose_name = _("City")
+        verbose_name_plural = _("Cities")
+
+    name = models.CharField(verbose_name=_("City name"), max_length=255)
+    district = models.ForeignKey(District,verbose_name=_("District"), on_delete=models.CASCADE, related_name='cities')
 
     def __str__(self):
         return self.name
 
 
 class Phone(models.Model):
+    class Meta:
+        verbose_name = _("Phone")
+        verbose_name_plural = _("Phones")
+
     number = PhoneNumberField(_("Phone"))
     owner = models.CharField(verbose_name=_("Owner"), max_length=255, null=True, blank=True)
-    library = models.ForeignKey('Library', on_delete=models.CASCADE, related_name='phones')
+    library = models.ForeignKey('Library',verbose_name=_("Library"), on_delete=models.CASCADE, related_name='phones')
 
     def __str__(self):
         return str(self.number)
@@ -98,26 +113,38 @@ class Phone(models.Model):
 
 
 class Email(models.Model):
+    class Meta:
+        verbose_name = _("Email")
+        verbose_name_plural = _("Emails")
+
     email = models.EmailField(verbose_name=_("Email"), max_length=255)
-    library = models.ForeignKey('Library', on_delete=models.CASCADE, related_name='emails')
+    library = models.ForeignKey('Library',verbose_name=_("Library"), on_delete=models.CASCADE, related_name='emails')
 
     def __str__(self):
         return self.email
 
 
 class Links(models.Model):
+    class Meta:
+        verbose_name = _("Link")
+        verbose_name_plural = _("Links")
+
     title = models.CharField(verbose_name=_("Title"), max_length=255)
     url = models.URLField(verbose_name=_("URL"))
-    library = models.ForeignKey('Library', on_delete=models.CASCADE, related_name='links')
+    library = models.ForeignKey('Library',verbose_name=_("Library"), on_delete=models.CASCADE, related_name='links')
 
     def __str__(self):
         return self.title
 
 
 class CollapsibleBlock(models.Model):
+    class Meta:
+        verbose_name = _("Collapsible Block")
+        verbose_name_plural = _("Collapsible Blocks")
+
     title = models.CharField(verbose_name=_("Title"), max_length=255)
     text = models.TextField(verbose_name=_("Text"))
-    library = models.ForeignKey('Library', on_delete=models.CASCADE, related_name='collapsible_blocks')
+    library = models.ForeignKey('Library',verbose_name=_("Library"), on_delete=models.CASCADE, related_name='collapsible_blocks')
 
     def __str__(self):
         name = self.library.short_name if self.library.short_name else self.library.name
@@ -125,8 +152,12 @@ class CollapsibleBlock(models.Model):
 
 
 class ListBlock(models.Model):
+    class Meta:
+        verbose_name = _("List Block")
+        verbose_name_plural = _("List Blocks")
+
     title = models.CharField(verbose_name=_("Title"), max_length=255)
-    library = models.ForeignKey('Library', on_delete=models.CASCADE, related_name='list_blocks')
+    library = models.ForeignKey('Library',verbose_name=_("Library"), on_delete=models.CASCADE, related_name='list_blocks')
 
     def __str__(self):
         name = self.library.short_name if self.library.short_name else self.library.name
@@ -134,16 +165,24 @@ class ListBlock(models.Model):
 
 
 class ListElement(models.Model):
+    class Meta:
+        verbose_name = _("List Element")
+        verbose_name_plural = _("List Element")
+
     text = models.TextField(verbose_name=_("Text"))
-    block = models.ForeignKey('ListBlock', on_delete=models.CASCADE, related_name='elements')
+    block = models.ForeignKey('ListBlock',verbose_name=_("List Block"), on_delete=models.CASCADE, related_name='elements')
 
     def __str__(self):
         return f"{self.block.title}: ListElement {self.id}"
 
 
 class PhotoAlbum(models.Model):
+    class Meta:
+        verbose_name = _("Photo Album")
+        verbose_name_plural = _("Photo Albums")
+
     title = models.CharField(verbose_name=_("Title"), max_length=255)
-    library = models.ForeignKey('Library', on_delete=models.CASCADE, related_name='albums')
+    library = models.ForeignKey('Library', verbose_name=_("Library"), on_delete=models.CASCADE, related_name='albums')
 
 
 def photo_upload_path(instance: Photo, filename: str) -> str:
@@ -164,6 +203,10 @@ def type_icon_upload_path(instance: LibraryType, filename: str) -> str:
 
 
 class LibraryType(models.Model):
+    class Meta:
+        verbose_name = _("Library Type")
+        verbose_name_plural = _("Library Types")
+
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     type = models.CharField(verbose_name=_("Type"), max_length=255)
     icon = models.FileField(verbose_name=_("Icon"), upload_to=type_icon_upload_path,
@@ -175,9 +218,13 @@ class LibraryType(models.Model):
 
 
 class Photo(models.Model):
+    class Meta:
+        verbose_name = _("Photo")
+        verbose_name_plural = _("Photos")
+
     title = models.CharField(verbose_name=_("Title"), max_length=255, null=True, blank=True)
     image = models.ImageField(verbose_name=_("Image"), upload_to=photo_upload_path)
-    album = models.ForeignKey(PhotoAlbum, on_delete=models.CASCADE, related_name='photos')
+    album = models.ForeignKey(PhotoAlbum, verbose_name=_("Photo Album"), on_delete=models.CASCADE, related_name='photos')
 
     def __str__(self):
         if self.title is not None:
@@ -205,9 +252,13 @@ def design_upload_path(instance: Library, filename: str) -> str:
 
 
 class Library(models.Model):
-    type = models.ForeignKey(LibraryType, verbose_name=_("Type"), on_delete=models.PROTECT)
+    class Meta:
+        verbose_name = _("Library")
+        verbose_name_plural = _("Libraries")
+
+    type = models.ForeignKey(LibraryType, verbose_name=_("Library Type"), on_delete=models.PROTECT)
     projects = models.ManyToManyField(Project, through='ProjectLibraryMembership', related_name='libraries')
-    city = models.ForeignKey(City, on_delete=models.PROTECT, related_name='libraries')
+    city = models.ForeignKey(City, verbose_name=_("City"), on_delete=models.PROTECT, related_name='libraries')
 
     image = models.ImageField(verbose_name=_("Image"), upload_to=lib_upload_path, blank=True, null=True)
     name = models.TextField(verbose_name=_("Library name"))
@@ -229,16 +280,21 @@ class Library(models.Model):
 
 
 class ProjectLibraryMembership(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    library = models.ForeignKey(Library, on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = _("Project Library Membership")
+        verbose_name_plural = _("Project Library Memberships")
+        unique_together = ['project', 'library']
+
+    project = models.ForeignKey(Project, verbose_name=_("Project"), on_delete=models.CASCADE)
+    library = models.ForeignKey(Library, verbose_name=_("Library"), on_delete=models.CASCADE)
     date_linked = YearField(verbose_name=_("Date linked"))
 
-    class Meta:
-        unique_together = ['project', 'library']
+
 
 from django.db.models.signals import pre_save, post_delete
 from django.dispatch import receiver
 from django.core.files.storage import default_storage
+
 
 def _delete_file(field_file):
     """Удаляет файл из storage, если он существует."""
@@ -267,7 +323,6 @@ def delete_image_icon_on_change(sender, instance, **kwargs):
 @receiver(post_delete, sender=Photo)
 def delete_image_on_delete(sender, instance, **kwargs):
     _delete_file(instance.image)
-
 
 
 @receiver(pre_save, sender=LibraryType)
@@ -310,7 +365,6 @@ def delete_old_icon_on_change(sender, instance, **kwargs):
     if old_file and old_file.name != getattr(new_file, "name", None):
         _delete_file(old_file)
 
-
     old_file = old.design_project
     new_file = instance.design_project
 
@@ -318,6 +372,8 @@ def delete_old_icon_on_change(sender, instance, **kwargs):
     if old_file and old_file.name != getattr(new_file, "name", None):
         _delete_file(old_file)
 
+
 @receiver(post_delete, sender=Library)
-def delete_icon_on_delete(sender, instance, **kwargs):
-    _delete_file(instance.icon)
+def delete_library_on_delete(sender, instance, **kwargs):
+    _delete_file(instance.image)
+    _delete_file(instance.design_project)

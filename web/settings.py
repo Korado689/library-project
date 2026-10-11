@@ -141,6 +141,11 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_TZ = True
 
+LOCALE_PATHS = [
+    BASE_DIR / 'locale'
+]
+
+
 # Static files (CSS, JavaScript, Images)
 MEDIA_ROOT = BASE_DIR / config.get('media_root', 'media')
 STATIC_ROOT = BASE_DIR / config.get('static_root', 'static')

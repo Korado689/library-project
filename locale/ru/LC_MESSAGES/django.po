@@ -1,0 +1,264 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-11 20:05+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: .\library\admin.py:168
+msgid "Photo amount"
+msgstr "Количество фотографий"
+
+#: .\library\admin.py:235 .\library\models.py:19
+msgid "Projects"
+msgstr "Проекты"
+
+#: .\library\models.py:18 .\library\models.py:288
+msgid "Project"
+msgstr "Проект"
+
+#: .\library\models.py:21
+msgid "Title of project"
+msgstr "Название проекта"
+
+#: .\library\models.py:22 .\library\models.py:226 .\library\models.py:263
+msgid "Image"
+msgstr "Изображение"
+
+#: .\library\models.py:23
+msgid "Description of project"
+msgstr "Описание проекта"
+
+#: .\library\models.py:24
+msgid "Description showing in library"
+msgstr "Описание внутри библиотеки"
+
+#: .\library\models.py:25
+msgid "Position on page"
+msgstr "Позиция на странице"
+
+#: .\library\models.py:26
+msgid "Horizontal view"
+msgstr "Горизонтальное отображение"
+
+#: .\library\models.py:27 .\library\models.py:133
+msgid "URL"
+msgstr "Ссылка"
+
+#: .\library\models.py:38
+msgid "District Type"
+msgstr "Тип округа"
+
+#: .\library\models.py:39
+msgid "District Types"
+msgstr "Типы округов"
+
+#: .\library\models.py:41
+msgid "Municipal district"
+msgstr "Муниципальный округ"
+
+#: .\library\models.py:42
+msgid "Urban district"
+msgstr "Городской округ"
+
+#: .\library\models.py:47 .\library\models.py:85
+msgid "District"
+msgstr "Округ"
+
+#: .\library\models.py:48
+msgid "Districts"
+msgstr "Округа"
+
+#: .\library\models.py:50
+msgid "District name"
+msgstr "Название округа"
+
+#: .\library\models.py:51
+msgid "Map ID"
+msgstr ""
+
+#: .\library\models.py:54
+msgid "District type"
+msgstr "Тип округа"
+
+#: .\library\models.py:81 .\library\models.py:261
+msgid "City"
+msgstr "Город"
+
+#: .\library\models.py:82
+msgid "Cities"
+msgstr "Города"
+
+#: .\library\models.py:84
+msgid "City name"
+msgstr "Название города"
+
+#: .\library\models.py:93 .\library\models.py:96
+msgid "Phone"
+msgstr "Телефон"
+
+#: .\library\models.py:94
+msgid "Phones"
+msgstr "Телефоны"
+
+#: .\library\models.py:97
+msgid "Owner"
+msgstr "Владелец"
+
+#: .\library\models.py:98 .\library\models.py:121 .\library\models.py:134
+#: .\library\models.py:147 .\library\models.py:160 .\library\models.py:185
+#: .\library\models.py:256 .\library\models.py:289
+msgid "Library"
+msgstr "Библиотека"
+
+#: .\library\models.py:117 .\library\models.py:120
+msgid "Email"
+msgstr "Электронная почта"
+
+#: .\library\models.py:118
+msgid "Emails"
+msgstr "Электронные почты"
+
+#: .\library\models.py:129
+msgid "Link"
+msgstr "Ссылка"
+
+#: .\library\models.py:130
+msgid "Links"
+msgstr "Ссылки"
+
+#: .\library\models.py:132 .\library\models.py:145 .\library\models.py:159
+#: .\library\models.py:184 .\library\models.py:225
+msgid "Title"
+msgstr "Заголовок"
+
+#: .\library\models.py:142
+msgid "Collapsible Block"
+msgstr "Сворачиваемый блок"
+
+#: .\library\models.py:143
+msgid "Collapsible Blocks"
+msgstr "Сворачиваемые блоки"
+
+#: .\library\models.py:146 .\library\models.py:172
+msgid "Text"
+msgstr "Текст"
+
+#: .\library\models.py:156 .\library\models.py:173
+msgid "List Block"
+msgstr "Маркированный список"
+
+#: .\library\models.py:157
+msgid "List Blocks"
+msgstr "Маркированные списки"
+
+#: .\library\models.py:169 .\library\models.py:170
+msgid "List Element"
+msgstr "Элемент списка"
+
+#: .\library\models.py:181 .\library\models.py:227
+msgid "Photo Album"
+msgstr "Фотоальбом"
+
+#: .\library\models.py:182
+msgid "Photo Albums"
+msgstr "Фотоальбомы"
+
+#: .\library\models.py:207 .\library\models.py:259
+msgid "Library Type"
+msgstr "Тип библиотеки"
+
+#: .\library\models.py:208
+msgid "Library Types"
+msgstr "Типы библиотек"
+
+#: .\library\models.py:211
+msgid "Type"
+msgstr "Тип"
+
+#: .\library\models.py:212
+msgid "Icon"
+msgstr "Иконка"
+
+#: .\library\models.py:214
+msgid "Legend Text"
+msgstr "Текст на карте"
+
+#: .\library\models.py:222
+msgid "Photo"
+msgstr "Фотография"
+
+#: .\library\models.py:223
+msgid "Photos"
+msgstr "Фотографии"
+
+#: .\library\models.py:257
+msgid "Libraries"
+msgstr "Библиотеки"
+
+#: .\library\models.py:264
+msgid "Library name"
+msgstr "Название библиотеки"
+
+#: .\library\models.py:265
+msgid "Library short name"
+msgstr "Короткое название библиотеки"
+
+#: .\library\models.py:266
+msgid "Status"
+msgstr "Статус"
+
+#: .\library\models.py:267
+msgid "Creative Industry"
+msgstr "Креативные индустрии"
+
+#: .\library\models.py:268
+msgid "Address"
+msgstr "Адрес"
+
+#: .\library\models.py:270
+msgid "Area"
+msgstr "Площадь"
+
+#: .\library\models.py:271
+msgid "Work Schedule"
+msgstr "График работы"
+
+#: .\library\models.py:273
+msgid "Design project"
+msgstr "Дизайн-проект"
+
+#: .\library\models.py:275
+msgid "Video URL"
+msgstr "Ссылка на видео"
+
+#: .\library\models.py:276
+msgid "Video description"
+msgstr "Описание видео"
+
+#: .\library\models.py:284
+msgid "Project Library Membership"
+msgstr "Связь проекта с библиотекой"
+
+#: .\library\models.py:285
+msgid "Project Library Memberships"
+msgstr "Связи проектов с библиотеками"
+
+#: .\library\models.py:290
+msgid "Date linked"
+msgstr "Дата связи"
