@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const clickableDots = document.querySelectorAll('.city-dot--clickable');
     const badgeSize = 36;
 
-    // Всплывающая подсказка
+    // ─────────────────────────────────────────────
+    // Тултип
+    // ─────────────────────────────────────────────
     function showTooltip(text, e) {
         if (!tooltip) return;
         tooltip.textContent = text;
@@ -20,53 +22,38 @@ document.addEventListener('DOMContentLoaded', function () {
         moveTooltip(e);
     }
 
-    // Движение подсказки за курсором
     function moveTooltip(e) {
         if (!tooltip) return;
         tooltip.style.left = (e.clientX + 15) + 'px';
         tooltip.style.top = (e.clientY + 15) + 'px';
     }
 
-    // Скрытие подсказки
     function hideTooltip() {
         if (tooltip) tooltip.style.opacity = '0';
     }
 
-    // Включение пульсации точек района (Ищет пульсар по data-svg-id)
+    // ─────────────────────────────────────────────
+    // Пульсации
+    // ─────────────────────────────────────────────
     function activatePulses(pulseId) {
-        if (pulseId) {
-            const targetPulses = document.querySelectorAll(`.dot-pulse[data-svg-id="${pulseId}"]`);
-            targetPulses.forEach(pulse => pulse.classList.add('active'));
-        }
+        if (!pulseId) return;
+        const targetPulses = document.querySelectorAll(`.dot-pulse[data-svg-id="${pulseId}"]`);
+        targetPulses.forEach(pulse => pulse.classList.add('active'));
     }
 
     function deactivateAllPulses() {
         pulses.forEach(p => p.classList.remove('active'));
     }
 
-    function getDistrictId(element) {
-        let id = element.getAttribute('data-svg-id');
-        if (id) return id;
-        
-        id = element.getAttribute('data-click-id');
-        if (id) {
-            if (id === 'kotovsk') {
-                return 'tmb+kotovsk';
-            }
-            return id;
-        }
-        
-        return null;
-    }
-
+    // ─────────────────────────────────────────────
+    // Хелперы подсветки
+    // ─────────────────────────────────────────────
     function highlightRegion(svgId, addClass = true) {
         paths.forEach(p => {
             if (p.id === svgId) {
                 p.classList.toggle('map-region--hover', addClass);
-            } else {
-                if (!p.classList.contains('map-region--active')) {
-                    p.classList.remove('map-region--hover');
-                }
+            } else if (!p.classList.contains('map-region--active')) {
+                p.classList.remove('map-region--hover');
             }
         });
     }
@@ -79,7 +66,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Автоматический расчет центров с защитой от изменения размеров окна
+    // ─────────────────────────────────────────────
+    // Позиционирование бейджей по центрам регионов
+    // ─────────────────────────────────────────────
     function updateBadgePositions() {
         badgeObjects.forEach(badge => {
             badge.setAttribute('width', badgeSize);
@@ -102,20 +91,23 @@ document.addEventListener('DOMContentLoaded', function () {
     updateBadgePositions();
     window.addEventListener('resize', updateBadgePositions);
 
-    // Клик по кнопкам-ссылкам под картой
+    // ─────────────────────────────────────────────
+    // Клики по списку районов под картой
+    // ─────────────────────────────────────────────
     districtLinks.forEach(link => {
         link.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            showDistrict(this.dataset.svgId);
+            window.showDistrict(this.dataset.svgId);
         });
     });
 
-    // Наведение мышки на районы карты
+    // ─────────────────────────────────────────────
+    // Наведение/клик по регионам карты
+    // ─────────────────────────────────────────────
     paths.forEach(path => {
         path.style.cursor = 'pointer';
 
-        // Наведение на район: показываем подсказку и подсвечиваем район
         path.addEventListener('mouseenter', function (e) {
             const title = this.getAttribute('data-title');
             if (title) showTooltip(title, e);
@@ -134,26 +126,26 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Клик по району
         path.addEventListener('click', function (e) {
             e.stopPropagation();
-            showDistrict(this.id);
+            window.showDistrict(this.id);
         });
     });
-    
+
+    // ─────────────────────────────────────────────
+    // Точки городов
+    // ─────────────────────────────────────────────
+
     clickableDots.forEach(dot => {
         dot.style.pointerEvents = 'auto';
         dot.style.cursor = 'pointer';
 
-        // Наведение на точку
         dot.addEventListener('mouseenter', function (e) {
             const title = this.getAttribute('data-title') || 'Городской округ';
             showTooltip(title, e);
 
             const pulseId = this.getAttribute('data-pulse-id');
-            if (pulseId) {
-                activatePulses(pulseId);
-            }
+            if (pulseId) activatePulses(pulseId);
 
             const regionId = this.getAttribute('data-click-id');
             if (regionId) {
@@ -165,46 +157,47 @@ document.addEventListener('DOMContentLoaded', function () {
 
         dot.addEventListener('mousemove', moveTooltip);
 
-        // Уход с точки
         dot.addEventListener('mouseleave', function () {
             hideTooltip();
-
             deactivateAllPulses();
 
             const regionId = this.getAttribute('data-click-id');
             if (regionId) {
                 const path = document.getElementById(regionId);
-                if (path && !path.contains('map-region--active')) {
+                if (path && !path.classList.contains('map-region--active')) {
                     path.classList.remove('map-region--hover');
                 }
             }
         });
 
-        // Клик по точке
         dot.addEventListener('click', function (e) {
             e.stopPropagation();
             const targetId = this.getAttribute('data-click-id');
-            if (targetId) {
-                showDistrict(targetId);
-            }
+            if (targetId) window.showDistrict(targetId);
+
         });
     });
 
+    // ─────────────────────────────────────────────
     // Кнопки "Назад" внутри карточек библиотек
+    // ─────────────────────────────────────────────
     document.querySelectorAll('.district-libraries__back').forEach(btn => {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            showAllDistricts();
+            window.showAllDistricts();
         });
     });
 
-    // Фильтр по типам библиотек (Плитки Дашбоорда)
+    // ─────────────────────────────────────────────
+    // Фильтр по типам библиотек (плитки-дашборды)
+    // ─────────────────────────────────────────────
     const filterCards = document.querySelectorAll('.dashboard-card');
 
     filterCards.forEach(card => {
-        card.addEventListener('click', function(e) {
+        card.addEventListener('click', function (e) {
             e.stopPropagation();
+
             const currentDistrict = this.closest('.district-libraries');
             if (!currentDistrict) return;
 
@@ -215,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const typeRows = currentDistrict.querySelectorAll('.library-type-row');
             const settlementGroups = currentDistrict.querySelectorAll('.settlement-group');
             const emptyMessage = currentDistrict.querySelector('.filter-empty-message');
-            const subTitle = currentDistrict.querySelector('.sub-district-title'); 
+            const subTitle = currentDistrict.querySelector('.sub-district-title');
 
             typeRows.forEach(row => {
                 const rowType = row.getAttribute('data-library-type');
@@ -224,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             settlementGroups.forEach(group => {
                 const visibleRows = Array.from(group.querySelectorAll('.library-type-row'))
-                                         .filter(row => row.style.display !== 'none');
+                    .filter(row => row.style.display !== 'none');
                 group.style.display = (selectedType !== 'all' && visibleRows.length === 0) ? 'none' : 'block';
             });
 
@@ -244,13 +237,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // ─────────────────────────────────────────────
+    // Легенда (фильтр по типу библиотеки на карте)
+    // Работает динамически: типы и счётчики приходят из шаблона
+    // через data-legend-type и data-count-<type>.
+    // ─────────────────────────────────────────────
     const legendItems = document.querySelectorAll('.legend-item');
 
     legendItems.forEach(item => {
         item.addEventListener('click', function (e) {
             e.stopPropagation();
             const selectedType = this.getAttribute('data-legend-type');
-            
+
+            // Повторный клик по активному элементу → сброс
             if (this.classList.contains('legend-item--active')) {
                 resetLegendFilter();
                 return;
@@ -268,7 +267,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const count = parseInt(badge.getAttribute(`data-count-${selectedType}`)) || 0;
                 const path = document.getElementById(districtId);
                 const circle = badge.querySelector('.map-badge-circle');
-
                 if (count > 0) {
                     if (path) path.classList.add('map-region--active');
                     if (circle) circle.textContent = count;
@@ -284,46 +282,59 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function resetLegendFilter() {
         legendItems.forEach(i => i.classList.remove('legend-item--active'));
+
+        // Районы, у которых открыта карточка библиотек — оставляем активными
+        const openIds = new Set(
+            Array.from(document.querySelectorAll('.district-libraries'))
+                .filter(el => el.style.display === 'block')
+                .map(el => el.getAttribute('data-svg-id'))
+        );
+
         badgeObjects.forEach(badge => {
             const districtId = badge.getAttribute('data-district-id');
             const path = document.getElementById(districtId);
-            const libraryBlock = document.querySelector(`.district-libraries[data-svg-id="${districtId}"]`);
-            const isCurrentlyOpen = libraryBlock && libraryBlock.style.display === 'block';
 
-            if (path && !isCurrentlyOpen) path.classList.remove('map-region--active');
-            badgeObjects.forEach(badge => badge.style.display = 'none');
+            if (path && !openIds.has(districtId)) {
+                path.classList.remove('map-region--active');
+                path.classList.remove('map-region--hover');
+            }
+            badge.style.display = 'none';
         });
     }
 
-    svg.addEventListener('click', function(e) {
+    // ─────────────────────────────────────────────
+    // Клик по пустому месту SVG — сброс всего
+    // ─────────────────────────────────────────────
+    svg.addEventListener('click', function (e) {
         if (e.target === svg || e.target === this) {
             const isPath = e.target.closest('path');
             const isDot = e.target.closest('.city-dot--clickable');
-            
+
             if (!isPath && !isDot) {
                 paths.forEach(p => {
                     p.classList.remove('map-region--active', 'map-region--hover');
                 });
-                
+
                 districtLinks.forEach(l => l.classList.remove('active'));
                 deactivateAllPulses();
-                
                 resetLegendFilter();
-                
+
                 if (districtsList) districtsList.style.display = 'block';
                 document.querySelectorAll('.district-libraries').forEach(el => el.style.display = 'none');
             }
         }
     });
 
+    // ─────────────────────────────────────────────
+    // Показ/скрытие районов
+    // ─────────────────────────────────────────────
     function highlightLink(svgId) {
         districtLinks.forEach(l => {
             l.classList.toggle('active', l.dataset.svgId === svgId);
         });
     }
 
-    const originalShowDistrict = window.showDistrict || function() {};
-    window.showDistrict = function(svgId) {
+    window.showDistrict = function (svgId) {
         document.querySelectorAll('.district-libraries').forEach(el => el.style.display = 'none');
 
         const block = document.querySelector(`.district-libraries[data-svg-id="${svgId}"]`);
@@ -346,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    window.showAllDistricts = function() {
+    window.showAllDistricts = function () {
         document.querySelectorAll('.district-libraries').forEach(el => el.style.display = 'none');
         if (districtsList) districtsList.style.display = 'block';
 
@@ -360,43 +371,32 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.dashboard-card[data-type="all"]').forEach(card => card.click());
         deactivateAllPulses();
     };
-
-    window.showDistrict = window.showDistrict;
-    window.showAllDistricts = window.showAllDistricts;
-
-    svg.addEventListener('click', function(e) {
-        if (e.target === svg || e.target.tagName === 'svg') {
-            if (!e.target.closest('path') && !e.target.closest('.city-dot--clickable')) {
-            }
-        }
-    });
 });
 
 
-
-
-//     //По нажатию на карту появится точка и в консоли будут её координаты на карте
-//     (function() {
-//     let svg = document.querySelector('#main-map');
+// ─────────────────────────────────────────────
+// DEV: по клику на карту выводит координаты в консоль.
+// Раскомментируйте при подгонке координат новых точек.
+// ─────────────────────────────────────────────
+// (function () {
+//     const svg = document.querySelector('#main-map');
 //     if (!svg) return console.log('SVG не найден');
-
-//     // Создаем кружок для визуального указателя
-//     let dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+//
+//     const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 //     dot.setAttribute('r', '5');
 //     dot.setAttribute('fill', 'red');
 //     dot.setAttribute('id', 'temp-dot');
 //     svg.appendChild(dot);
-
-//     svg.addEventListener('click', function(e) {
-//         let pt = svg.createSVGPoint();
+//
+//     svg.addEventListener('click', function (e) {
+//         const pt = svg.createSVGPoint();
 //         pt.x = e.clientX;
 //         pt.y = e.clientY;
-//         let svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
-
+//         const svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
+//
 //         dot.setAttribute('cx', svgPt.x);
 //         dot.setAttribute('cy', svgPt.y);
-
+//
 //         console.log('x:', Math.round(svgPt.x), 'y:', Math.round(svgPt.y));
 //     });
-
 // })();

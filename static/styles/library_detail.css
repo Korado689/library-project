@@ -63,6 +63,32 @@
   margin: 0;
 }
 
+.library-creative-badge {
+    background-color: var(--color-card-green);
+    padding: 12px 20px;
+    width: 50%;
+    border-radius: 100px;
+
+    display: flex;
+    align-items: center;
+
+    margin-left: auto;          /* прижимаем блок к правому краю */
+    margin-top: -4px;           /* схлопывание с предыдущей плашкой, если нужно */
+    margin-right: 8%;           /* схлопывание с предыдущей плашкой, если нужно */
+    box-sizing: border-box;
+}
+
+.library-card__creative {
+    font-family: var(--font-jura);
+    font-size: 1.5rem;
+    line-height: 1.4;
+    margin: 0;
+    color: #000000;
+    text-align: left;           /* или center / right — по макету */
+    width: 100%;                /* чтобы text-align работал на всю ширину блока */
+}
+
+
 .library-card__footer {
   background-color: var(--color-card-beige);
   padding: 12px 20px;

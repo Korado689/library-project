@@ -60,32 +60,23 @@
 
     <div class="dashboard-filters-title">Сортировать по типу:</div>
 
-    <div class="library-dashboard-filters">
-        <div class="dashboard-card active" data-type="all">
-            <span class="dashboard-card__count">{{ district.count_all_libraries }}</span>
-            <span class="dashboard-card__label">Показать все</span>
-        </div>
-        
-        <div class="dashboard-card" data-type="model_lib">
-            <span class="dashboard-card__count">{{ district.count_model_lib }}</span>
-            <span class="dashboard-card__label">Модельная библиотека</span>
-        </div>
-        
-        <div class="dashboard-card" data-type="model_gen">
-            <span class="dashboard-card__count">{{ district.count_model_gen }}</span>
-            <span class="dashboard-card__label">Модельная библиотека + «Гений места»</span>
-        </div>
-        
-        <div class="dashboard-card" data-type="gen_lab">
-            <span class="dashboard-card__count">{{ district.count_gen_lab }}</span>
-            <span class="dashboard-card__label">«Гений места»</span>
-        </div>
-        
-        <div class="dashboard-card" data-type="child_center">
-            <span class="dashboard-card__count">{{ district.count_child_center }}</span>
-            <span class="dashboard-card__label">Детский центр</span>
-        </div>
+<div class="library-dashboard-filters">
+    <div class="dashboard-card active" data-type="all">
+        <span class="dashboard-card__count">{{ district.count_all_libraries }}</span>
+        <span class="dashboard-card__label">Показать все</span>
     </div>
+
+    {% for c in district.library_counts %}
+    <div class="dashboard-card" data-type="{{ c.slug }}">
+        <span class="dashboard-card__count">{{ c.count }}</span>
+        <span class="dashboard-card__label">
+            {% for lt in library_types %}
+                {% if lt.pk == c.slug %}{{ lt.type }}{% endif %}
+            {% endfor %}
+        </span>
+    </div>
+    {% endfor %}
+</div>
 
     {% if district.count_all_libraries > 0 %}
         {% for city in district.cities.all %}

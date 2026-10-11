@@ -1,6 +1,7 @@
 from __future__ import annotations
 import re
-
+import uuid
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from djangoyearlessdate.models import YearField
 from phonenumber_field.modelfields import PhoneNumberField
@@ -46,30 +47,10 @@ class District(models.Model):
         default=DistrictType.MUNICIPAL
     )
 
-    def _count_by_type(self, lib_type=None):
-        if lib_type:
-            return sum(city.libraries.filter(type=lib_type).count() for city in self.cities.all())
-        return sum(city.libraries.count() for city in self.cities.all())
 
     @property
     def count_all_libraries(self):
-        return self._count_by_type()
-
-    @property
-    def count_model_lib(self):
-        return self._count_by_type('model_lib')
-
-    @property
-    def count_model_gen(self):
-        return self._count_by_type('model_gen')
-
-    @property
-    def count_gen_lab(self):
-        return self._count_by_type('gen_lab')
-
-    @property
-    def count_child_center(self):
-        return self._count_by_type('child_center')
+        return sum(city.libraries.count() for city in self.cities.all())
 
     @property
     def full_display_name(self):
@@ -170,7 +151,27 @@ def photo_upload_path(instance: Photo, filename: str) -> str:
         title = instance.title
     else:
         title = filename
-    return f"libraries/{instance.album.library.pk}/{instance.album.title}/{title}"
+    end = filename.rfind('.')
+    if end >= 0:
+        end = filename[end:]
+    else:
+        end = ""
+    return f"libraries/{instance.album.library.pk}/{instance.album.title}/{title}{end}"
+
+
+def type_icon_upload_path(instance: LibraryType, filename: str) -> str:
+    return f"map/{instance.uuid}/icons/{filename}"
+
+
+class LibraryType(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    type = models.CharField(verbose_name=_("Type"), max_length=255)
+    icon = models.FileField(verbose_name=_("Icon"), upload_to=type_icon_upload_path,
+                            validators=[FileExtensionValidator(['png', 'webp', 'svg', 'jpg', 'jpeg'])])
+    legend = models.TextField(verbose_name=_("Legend Text"))
+
+    def __str__(self):
+        return self.type
 
 
 class Photo(models.Model):
@@ -185,30 +186,34 @@ class Photo(models.Model):
             return f"{self.album.title}: Photo {self.id}"
 
 
-class LibraryType(models.TextChoices):
-    MODEL_LIB = 'model_lib', _('Model library')
-    MODEL_GEN = 'model_gen', _('Model library with Genius Place')
-    GEN_LAB = 'gen_lab', _('Genius Place')
-    CHILD = 'child_center', _('Children center')
-
-
 def lib_upload_path(instance: Library, filename: str) -> str:
-    return f"libraries/{instance.pk}/main-photo"
+    end = filename.rfind('.')
+    if end >= 0:
+        end = filename[end:]
+    else:
+        end = ""
+    return f"libraries/{instance.pk}/main-photo{end}"
 
 
 def design_upload_path(instance: Library, filename: str) -> str:
-    return f"libraries/{instance.pk}/design-project"
+    end = filename.rfind('.')
+    if end >= 0:
+        end = filename[end:]
+    else:
+        end = ""
+    return f"libraries/{instance.pk}/design-project{end}"
 
 
 class Library(models.Model):
-    type = models.CharField(verbose_name=_("Type"), max_length=255, choices=LibraryType.choices, blank=True, null=True)
+    type = models.ForeignKey(LibraryType, verbose_name=_("Type"), on_delete=models.PROTECT)
     projects = models.ManyToManyField(Project, through='ProjectLibraryMembership', related_name='libraries')
-    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='libraries')
+    city = models.ForeignKey(City, on_delete=models.PROTECT, related_name='libraries')
 
     image = models.ImageField(verbose_name=_("Image"), upload_to=lib_upload_path, blank=True, null=True)
     name = models.TextField(verbose_name=_("Library name"))
     short_name = models.CharField(verbose_name=_("Library short name"), max_length=255, null=True, blank=True)
     status = models.TextField(verbose_name=_("Status"))
+    creative = models.TextField(verbose_name=_("Creative Industry"), blank=True, null=True)
     address = models.TextField(verbose_name=_("Address"), blank=True, null=True)
 
     area = models.CharField(verbose_name=_("Area"), max_length=255)
@@ -230,3 +235,89 @@ class ProjectLibraryMembership(models.Model):
 
     class Meta:
         unique_together = ['project', 'library']
+
+from django.db.models.signals import pre_save, post_delete
+from django.dispatch import receiver
+from django.core.files.storage import default_storage
+
+def _delete_file(field_file):
+    """Удаляет файл из storage, если он существует."""
+    if field_file and default_storage.exists(field_file.name):
+        default_storage.delete(field_file.name)
+
+
+@receiver(pre_save, sender=Photo)
+def delete_image_icon_on_change(sender, instance, **kwargs):
+    if not instance.pk:
+        return  # новый объект — удалять нечего
+
+    try:
+        old = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        return
+
+    old_file = old.image
+    new_file = instance.image
+
+    # файл заменили или очистили
+    if old_file and old_file.name != getattr(new_file, "name", None):
+        _delete_file(old_file)
+
+
+@receiver(post_delete, sender=Photo)
+def delete_image_on_delete(sender, instance, **kwargs):
+    _delete_file(instance.image)
+
+
+
+@receiver(pre_save, sender=LibraryType)
+def delete_old_icon_on_change(sender, instance, **kwargs):
+    if not instance.pk:
+        return  # новый объект — удалять нечего
+
+    try:
+        old = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        return
+
+    old_file = old.icon
+    new_file = instance.icon
+
+    # файл заменили или очистили
+    if old_file and old_file.name != getattr(new_file, "name", None):
+        _delete_file(old_file)
+
+
+@receiver(post_delete, sender=LibraryType)
+def delete_icon_on_delete(sender, instance, **kwargs):
+    _delete_file(instance.icon)
+
+
+@receiver(pre_save, sender=Library)
+def delete_old_icon_on_change(sender, instance, **kwargs):
+    if not instance.pk:
+        return  # новый объект — удалять нечего
+
+    try:
+        old = sender.objects.get(pk=instance.pk)
+    except sender.DoesNotExist:
+        return
+
+    old_file = old.image
+    new_file = instance.image
+
+    # файл заменили или очистили
+    if old_file and old_file.name != getattr(new_file, "name", None):
+        _delete_file(old_file)
+
+
+    old_file = old.design_project
+    new_file = instance.design_project
+
+    # файл заменили или очистили
+    if old_file and old_file.name != getattr(new_file, "name", None):
+        _delete_file(old_file)
+
+@receiver(post_delete, sender=Library)
+def delete_icon_on_delete(sender, instance, **kwargs):
+    _delete_file(instance.icon)

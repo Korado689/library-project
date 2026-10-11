@@ -118,7 +118,7 @@
     <!-- Котовск -->
     <circle cx="539" cy="608" r="6" class="dot-pulse" data-svg-id="city-kotovsk" />
     <circle cx="539" cy="608" r="6" class="city-dot" />
-    <circle cx="539" cy="608" r="6" class="city-dot--clickable" data-pulse-id="city-kotovsk" data-click-id="tmb+kotovsk" data-title="Городской округ Котовск" />
+    <circle cx="539" cy="608" r="6" class="city-dot--clickable" data-pulse-id="city-kotovsk" data-click-id="city-kotovsk" data-title="Городской округ Котовск" />
     
     <!-- Мичуринск -->
     <circle cx="178" cy="441" r="6" class="dot-pulse" data-svg-id="city-michurinsk" />
@@ -138,7 +138,7 @@
     <!-- Тамбов -->
     <circle cx="490" cy="538" r="6" class="dot-pulse" data-svg-id="city-tambov" />
     <circle cx="490" cy="538" r="6" class="city-dot" />
-    <circle cx="490" cy="538" r="6" class="city-dot--clickable" data-pulse-id="city-tambov" data-click-id="tmb+kotovsk" data-title="Городской округ Тамбов" />
+    <circle cx="490" cy="538" r="6" class="city-dot--clickable" data-pulse-id="city-tambov" data-click-id="city-tambov" data-title="Городской округ Тамбов" />
     
     <!-- Уварово -->
     <circle cx="799" cy="851" r="6" class="dot-pulse" data-svg-id="city-uvarovskiy" />
@@ -149,16 +149,15 @@
 
 <g class="map-dynamic-badges">
     {% for district in districts %}
-        <foreignObject class="map-district-badge" 
-                        data-district-id="{{ district.map_id }}"
-                        data-count-model_lib="{{ district.count_model_lib }}"
-                        data-count-model_gen="{{ district.count_model_gen }}"
-                        data-count-gen_lab="{{ district.count_gen_lab }}"
-                        data-count-child_center="{{ district.count_child_center }}"
-                        width="40" height="40"
-                        style="display: none; pointer-events: none; overflow: visible;">
-            <div xmlns="http://w3.org" class="map-badge-circle">0</div>
-        </foreignObject>
+<foreignObject class="map-district-badge"
+               data-district-id="{{ district.map_id }}"
+               {% for c in district.library_counts %}
+               data-count-{{ c.slug }} ="{{ c.count }}"
+               {% endfor %}
+               width="40" height="40"
+               style="display: none; pointer-events: none; overflow: visible;">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="map-badge-circle">0</div>
+</foreignObject>
     {% endfor %}
 </g>
 
@@ -167,33 +166,16 @@
     <g id="library-markers-container"></g>
 </svg>
 <div class="map-legend">
-    <div class="legend-item" data-legend-type="model_lib">
-        <div class="legend-icon-wrapper">
-            <img src="{% static 'images/map/icons/model-library.svg' %}" alt="Модельная библиотека" class="legend-icon">
+    {% for lt in library_types %}
+        <div class="legend-item" data-legend-type="{{ lt.pk }}">
+            <div class="legend-icon-wrapper">
+                <img src="{{ lt.icon.url }}"
+                     alt="{{ lt.legend }}"
+                     class="legend-icon">
+            </div>
+            <span class="legend-text">{{ lt.legend }}</span>
         </div>
-        <span class="legend-text">Модельная библиотека</span>
-    </div>
-    
-    <div class="legend-item" data-legend-type="model_gen">
-        <div class="legend-icon-wrapper">
-            <img src="{% static 'images/map/icons/genius-lab.svg' %}" alt="Модельная библиотека + Гений места" class="legend-icon">
-        </div>
-        <span class="legend-text">Модельная библиотека, в которой открыта творческая лаболатория «Гений места»</span>
-    </div>
-    
-    <div class="legend-item" data-legend-type="gen_lab">
-        <div class="legend-icon-wrapper">
-            <img src="{% static 'images/map/icons/genius.svg' %}" alt="Гений места" class="legend-icon">
-        </div>
-        <span class="legend-text">Творческие лаборатории «Гений места»</span>
-    </div>
-    
-    <div class="legend-item" data-legend-type="child_center">
-        <div class="legend-icon-wrapper">
-            <img src="{% static 'images/map/icons/children-center.svg' %}" alt="Детский центр" class="legend-icon">
-        </div>
-        <span class="legend-text">Детские культурно-просветительские центры</span>
-    </div>
+    {% endfor %}
 </div>
 
 <div id="map-tooltip" class="map-tooltip"></div>

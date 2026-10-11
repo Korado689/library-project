@@ -143,18 +143,6 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **options):
-        if options['clear_existing']:
-            confirm = input(
-                'Вы уверены, что хотите удалить ВСЕ округа и города? [y/N]: '
-            )
-            if confirm.lower() != 'y':
-                self.stdout.write(self.style.WARNING('Операция отменена'))
-                return
-
-            # Удаляем в правильном порядке из-за связей
-            City.objects.all().delete()
-            District.objects.all().delete()
-            self.stdout.write(self.style.WARNING('Все округа и города удалены'))
 
         total_districts = 0
         total_cities = 0

@@ -14,7 +14,7 @@ from nested_admin.nested import NestedModelAdmin, NestedTabularInline, NestedSta
 
 from .models import (
     District, Library, Project, Photo, City, Phone, Email, Links, CollapsibleBlock, ListBlock, ListElement,
-    ProjectLibraryMembership, PhotoAlbum
+    ProjectLibraryMembership, PhotoAlbum, LibraryType
 )
 
 
@@ -234,3 +234,7 @@ class LibraryAdmin(NestedModelAdmin):
     @admin.display(description=_('Проекты'))
     def get_projects(self, obj):
         return ", ".join([str(project) for project in obj.projects.all()])
+
+@admin.register(LibraryType)
+class LibraryType(admin.ModelAdmin):
+    list_display = ('type', 'legend')

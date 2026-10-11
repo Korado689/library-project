@@ -33,6 +33,11 @@
                     <p>{{ membership.project.lib_desc }}: {{ membership.date_linked }}.</p>
                 </div>
                 {% endfor %}
+                {% if library.creative %}
+                <div class="library-creative-badge">
+                    <p class="library-card__creative">{{ library.creative }}</p>
+                </div>
+                {% endif %}
             </div>
         </article>
     </div>
@@ -151,7 +156,7 @@
                 <div class="photo-album-card photo-album-card--single">
                     <div class="photo-album-card__triple-images">
                         {% for photo in album.photos.all|slice:":3" %}
-                        <a href="javascript:;" class="photo-album-card__image-link" 
+                        <a href="javascript:;" class="photo-album-card__image-link"
                            onclick="document.querySelector('#album-start-{{ album.id }}').click(); return false;"
                            role="button"
                            aria-label="Открыть фото из альбома {{ album.title }}">
@@ -163,7 +168,7 @@
                     </div>
                     <div class="album-hidden-gallery" style="display:none;">
                         {% for photo in album.photos.all %}
-                            <a href="{{ photo.image.url }}" 
+                            <a href="{{ photo.image.url }}"
                                data-fancybox="album-{{ album.id }}"
                                data-caption="{{ photo.title|default:album.title }}"
                                {% if forloop.first %}id="album-start-{{ album.id }}"{% endif %}>
@@ -172,7 +177,7 @@
                     </div>
                     <div class="photo-album-card__content-single">
                         <h3 class="photo-album-card__title">{{ album.title }}</h3>
-                        <a href="javascript:;" class="photo-album-card__btn" 
+                        <a href="javascript:;" class="photo-album-card__btn"
                            onclick="document.querySelector('#album-start-{{ album.id }}').click(); return false;"
                            role="button"
                            aria-label="Открыть альбом {{ album.title }}">
@@ -191,7 +196,7 @@
                 {% with cover=album.photos.first %}
                 {% if cover %}
                 <div class="photo-album-card">
-                    <a href="javascript:;" class="photo-album-card__image-link" 
+                    <a href="javascript:;" class="photo-album-card__image-link"
                        onclick="document.querySelector('#album-start-{{ album.id }}').click(); return false;"
                        role="button"
                        aria-label="Открыть альбом {{ album.title }}">
@@ -202,7 +207,7 @@
 
                     <div class="album-hidden-gallery" style="display:none;">
                         {% for photo in album.photos.all %}
-                            <a href="{{ photo.image.url }}" 
+                            <a href="{{ photo.image.url }}"
                                data-fancybox="album-{{ album.id }}"
                                data-caption="{{ photo.title|default:album.title }}"
                                {% if forloop.first %}id="album-start-{{ album.id }}"{% endif %}>
@@ -212,7 +217,7 @@
 
                     <div class="photo-album-card__content">
                         <h3 class="photo-album-card__title">{{ album.title }}</h3>
-                        <a href="javascript:;" class="photo-album-card__btn" 
+                        <a href="javascript:;" class="photo-album-card__btn"
                            onclick="document.querySelector('#album-start-{{ album.id }}').click(); return false;"
                            role="button"
                            aria-label="Открыть альбом {{ album.title }}">

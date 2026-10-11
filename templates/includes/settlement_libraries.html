@@ -4,13 +4,15 @@
     {% regroup libraries_list.all by type as type_list %}
 
     {% for type_group in type_list %}
-    <div class="library-type-row" data-library-type="{{ type_group.grouper }}">
+    <div class="library-type-row" data-library-type="{{ type_group.grouper.pk }}">
         <div class="library-type-badge">
-            {% if type_group.grouper == 'model_lib' %}<img src="{% static 'images/map/icons/model-library.svg' %}" alt="Модельная библиотека">
-            {% elif type_group.grouper == 'model_gen' %}<img src="{% static 'images/map/icons/genius-lab.svg' %}" alt="Модельная библиотека + «Гений места»">
-            {% elif type_group.grouper == 'gen_lab' %}<img src="{% static 'images/map/icons/genius.svg' %}" alt="«Гений места»">
-            {% elif type_group.grouper == 'child_center' %}<img src="{% static 'images/map/icons/children-center.svg' %}" alt="Детский центр">
-            {% else %}<img src="{% static 'images/map/icons/default-lib.svg' %}">{% endif %}
+            {% if type_group.grouper.icon %}
+                <img src="{{ type_group.grouper.icon.url }}"
+                     alt="{{ type_group.grouper.type }}">
+            {% else %}
+                <img src="{% static 'images/map/icons/default-lib.svg' %}"
+                     alt="{{ type_group.grouper.type }}">
+            {% endif %}
         </div>
 
         <div class="library-type-content">
