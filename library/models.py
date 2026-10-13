@@ -34,10 +34,6 @@ class Project(models.Model):
 
 
 class DistrictType(models.TextChoices):
-    class Meta:
-        verbose_name = _("District Type")
-        verbose_name_plural = _("District Types")
-
     MUNICIPAL = 'municipal', _('Municipal district')
     URBAN = 'urban', _('Urban district')
 
