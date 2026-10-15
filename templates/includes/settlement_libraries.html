@@ -1,0 +1,33 @@
+{% load static %}
+{% if libraries_list.exists %}
+<div class="settlement-types-container">
+    {% regroup libraries_list.all by type as type_list %}
+
+    {% for type_group in type_list %}
+    <div class="library-type-row" data-library-type="{{ type_group.grouper.pk }}">
+        <div class="library-type-badge">
+            {% if type_group.grouper.icon %}
+                <img src="{{ type_group.grouper.icon.url }}"
+                     alt="{{ type_group.grouper.type }}">
+            {% else %}
+                <img src="{% static 'images/map/icons/default-lib.svg' %}"
+                     alt="{{ type_group.grouper.type }}">
+            {% endif %}
+        </div>
+
+        <div class="library-type-content">
+            <div class="libraries-grid">
+                {% for library in type_group.list %}
+                <a href="{% url 'library_detail' library.id %}" class="library-card">
+                    <div class="library-card__info">
+                        <span class="library-card__name">{{ library.short_name|default:library.name }}</span>
+                        <span class="library-card__type">{{ library.status }}</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}

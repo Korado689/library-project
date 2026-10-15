@@ -1,0 +1,28 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Модельные библиотеки Тамбовской области{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'fonts/fonts.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles/base.css' %}" />
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% include 'includes/header.html' %}
+
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include 'includes/footer.html' %}
+
+    <!-- Общий скрипт: раскрытие/закрытие мобильного меню и бургера -->
+    <script type="text/javascript" src="{% static 'scripts/main.js' %}"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
