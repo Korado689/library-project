@@ -1,4 +1,3 @@
-
 /* ---------- ПЕРЕМЕННЫЕ БРЕНДА ---------- */
 :root {
   --color-accent: #5d6939;      /* основной зелёный (шапка, кнопки) */
@@ -323,6 +322,14 @@ a {
 .contacts a:hover {
   color: var(--color-accent-hover);
   text-decoration: underline;
+}
+/* Три ссылки в подвале на узких экранах: перенос по центру, без «прижатия» к краям */
+@media (max-width: 768px) {
+  .contacts {
+    justify-content: center;
+    gap: 12px 28px;
+    text-align: center;
+  }
 }
 .footer-row {
   display: flex;

@@ -19,6 +19,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from library import views
+from django.utils.translation import gettext_lazy as _
+
+admin.site.site_header = _("Model Libraries")                    # Большой заголовок вверху
+admin.site.site_title = _("Model Libraries")                     # Заголовок вкладки браузера
+admin.site.index_title = _("Model library management panel") # Заголовок на главной странице админки
+
 
 urlpatterns = [
     # Админ панель
